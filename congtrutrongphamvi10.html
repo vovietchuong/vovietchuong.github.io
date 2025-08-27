@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Toán Lớp 1 - MathHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f7fa 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .home-btn {
+            position: relative;
+            margin-bottom: 15px;
+            background: linear-gradient(145deg, #a29bfe, #6c5ce7);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .home-btn i {
+            margin-right: 8px;
+        }
+        
+        h1 {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #74b9ff;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .score-container {
+            background: linear-gradient(145deg, #ffeaa7, #fdcb6e);
+            border-radius: 50px;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            display: inline-block;
+            font-size: 1.2rem;
+            color: #d63031;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .question-container {
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question {
+            font-size: 3rem;
+            color: #2d3436;
+            margin: 10px 0;
+            transition: transform 0.3s;
+        }
+        
+        .answer-display {
+            font-size: 2.5rem;
+            color: #74b9ff;
+            margin: 15px 0;
+            min-height: 60px;
+            transition: all 0.3s;
+        }
+        
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .number-btn {
+            background: linear-gradient(145deg, #74b9ff, #0984e3);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.8rem;
+            height: 60px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .number-btn:active {
+            transform: scale(0.95);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, #55efc4, #00b894);
+            border: none;
+            border-radius: 10px;
+            color: #2d3436;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 12px 25px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            max-width: 150px;
+        }
+        
+        .control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        #clear-btn {
+            background: linear-gradient(145deg, #fab1a0, #e17055);
+        }
+        
+        .feedback {
+            font-size: 1.5rem;
+            min-height: 40px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .correct {
+            color: #00b894;
+            background-color: rgba(0, 184, 148, 0.1);
+        }
+        
+        .incorrect {
+            color: #d63031;
+            background-color: rgba(214, 48, 49, 0.1);
+        }
+        
+        .keyboard-hints {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .key-hint {
+            display: flex;
+            align-items: center;
+            background-color: #f3f3f3;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .key-icon {
+            background: linear-gradient(145deg, #ddd, #eee);
+            border-radius: 5px;
+            padding: 3px 8px;
+            margin-right: 5px;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+            min-width: 28px;
+            text-align: center;
+        }
+        
+        /* Animation for new question */
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .pop-in {
+            animation: popIn 0.5s ease forwards;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 500px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 2.5rem;
+            }
+            
+            .number-btn {
+                height: 50px;
+                font-size: 1.5rem;
+            }
+            
+            .control-btn {
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+            
+            .answer-display {
+                font-size: 2rem;
+                min-height: 50px;
+            }
+            
+            .keyboard-hints {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 Game Toán Lớp 1 🎮</h1>
+            <p class="subtitle">Luyện tập cộng trừ thật vui!</p>
+            <button class="home-btn" id="home-btn">
+                <i class="fas fa-home"></i> Về trang chủ MathHub
+            </button>
+        </div>
+        
+        <div class="score-container">
+            Điểm: <span id="score">0</span>
+        </div>
+        
+        <div class="question-container">
+            <div class="question" id="question">5 + 3 = ?</div>
+            <div class="answer-display" id="answer-display">?</div>
+        </div>
+        
+        <div class="answer-buttons" id="answer-buttons">
+            <button class="number-btn" data-number="1">1</button>
+            <button class="number-btn" data-number="2">2</button>
+            <button class="number-btn" data-number="3">3</button>
+            <button class="number-btn" data-number="4">4</button>
+            <button class="number-btn" data-number="5">5</button>
+            <button class="number-btn" data-number="6">6</button>
+            <button class="number-btn" data-number="7">7</button>
+            <button class="number-btn" data-number="8">8</button>
+            <button class="number-btn" data-number="9">9</button>
+            <button class="number-btn" data-number="0">0</button>
+        </div>
+        
+        <div class="control-buttons">
+            <button class="control-btn" id="clear-btn">Xóa</button>
+            <button class="control-btn" id="submit-btn">Trả lời</button>
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+        
+        <div class="keyboard-hints">
+            <div class="key-hint">
+                <span class="key-icon">0-9</span>
+                <span>Nhập số</span>
+            </div>
+            <div class="key-hint">
+                <span class="key-icon">⌫</span>
+                <span>Xóa</span>
+            </div>
+            <div class="key-hint">
+                <span class="key-icon">Enter</span>
+                <span>Trả lời</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            currentAnswer: '',
+            currentQuestion: {},
+            score: 0,
+            isWaiting: false
+        };
+
+        // DOM Elements
+        const elements = {
+            question: document.getElementById('question'),
+            answerDisplay: document.getElementById('answer-display'),
+            score: document.getElementById('score'),
+            feedback: document.getElementById('feedback'),
+            answerButtons: document.getElementById('answer-buttons'),
+            clearButton: document.getElementById('clear-btn'),
+            submitButton: document.getElementById('submit-btn'),
+            homeButton: document.getElementById('home-btn')
+        };
+
+        // Initialize game
+        function initGame() {
+            generateQuestion();
+            setupEventListeners();
+            updateScoreDisplay();
+        }
+
+        // Generate a new math question
+        function generateQuestion() {
+            const isAddition = Math.random() > 0.5;
+            let num1, num2, answer;
+
+            if (isAddition) {
+                // Phép cộng: kết quả không vượt quá 10
+                num1 = Math.floor(Math.random() * 8) + 1;
+                num2 = Math.floor(Math.random() * (10 - num1)) + 1;
+                answer = num1 + num2;
+                elements.question.textContent = `${num1} + ${num2} = ?`;
+            } else {
+                // Phép trừ: kết quả không âm
+                num1 = Math.floor(Math.random() * 9) + 2;
+                num2 = Math.floor(Math.random() * (num1 - 1)) + 1;
+                answer = num1 - num2;
+                elements.question.textContent = `${num1} - ${num2} = ?`;
+            }
+
+            gameState.currentQuestion = { num1, num2, answer, operator: isAddition ? '+' : '-' };
+            resetAnswer();
+            
+            // Add animation
+            elements.question.classList.remove('pop-in');
+            void elements.question.offsetWidth; // Trigger reflow
+            elements.question.classList.add('pop-in');
+        }
+
+        // Reset answer
+        function resetAnswer() {
+            gameState.currentAnswer = '';
+            updateAnswerDisplay();
+            hideFeedback();
+        }
+
+        // Update answer display
+        function updateAnswerDisplay() {
+            elements.answerDisplay.textContent = gameState.currentAnswer || '?';
+            elements.answerDisplay.style.color = gameState.currentAnswer ? '#2d3436' : '#74b9ff';
+        }
+
+        // Update score display
+        function updateScoreDisplay() {
+            elements.score.textContent = gameState.score;
+        }
+
+        // Show feedback
+        function showFeedback(message, isCorrect) {
+            elements.feedback.textContent = message;
+            elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+        }
+
+        // Hide feedback
+        function hideFeedback() {
+            elements.feedback.className = 'feedback';
+        }
+
+        // Handle number input
+        function handleNumberInput(number) {
+            if (gameState.isWaiting) return;
+            
+            if (gameState.currentAnswer.length < 2) {
+                gameState.currentAnswer += number;
+                updateAnswerDisplay();
+            }
+        }
+
+        // Handle clear input
+        function handleClearInput() {
+            if (gameState.isWaiting) return;
+            
+            gameState.currentAnswer = '';
+            updateAnswerDisplay();
+        }
+
+        // Handle submit answer
+        function handleSubmitAnswer() {
+            if (gameState.isWaiting || !gameState.currentAnswer) {
+                showFeedback('Hãy nhập câu trả lời!', false);
+                return;
+            }
+
+            const userAnswer = parseInt(gameState.currentAnswer);
+            gameState.isWaiting = true;
+
+            if (userAnswer === gameState.currentQuestion.answer) {
+                // Correct answer
+                gameState.score += 10;
+                updateScoreDisplay();
+                showFeedback('Chính xác! 👏', true);
+            } else {
+                // Incorrect answer
+                showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.answer}`, false);
+            }
+
+            // Generate new question after delay
+            setTimeout(() => {
+                gameState.isWaiting = false;
+                generateQuestion();
+            }, 2000);
+        }
+
+        // Handle home button click
+        function handleHomeButton() {
+            const confirmLeave = confirm("Bạn có muốn quay về trang chủ MathHub không?");
+            if (confirmLeave) {
+                window.location.href = "index.html";
+            }
+        }
+
+        // Handle keyboard input
+        function handleKeyboardInput(event) {
+            if (gameState.isWaiting) return;
+            
+            const key = event.key;
+            
+            // Number keys (0-9)
+            if (key >= '0' && key <= '9') {
+                handleNumberInput(key);
+            } 
+            // Backspace and Delete keys
+            else if (key === 'Backspace' || key === 'Delete') {
+                handleClearInput();
+            } 
+            // Enter key
+            else if (key === 'Enter') {
+                handleSubmitAnswer();
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Event delegation for number buttons
+            elements.answerButtons.addEventListener('click', (event) => {
+                if (event.target.classList.contains('number-btn')) {
+                    handleNumberInput(event.target.getAttribute('data-number'));
+                }
+            });
+
+            // Clear button
+            elements.clearButton.addEventListener('click', handleClearInput);
+            
+            // Submit button
+            elements.submitButton.addEventListener('click', handleSubmitAnswer);
+            
+            // Home button
+            elements.homeButton.addEventListener('click', handleHomeButton);
+            
+            // Keyboard support
+            document.addEventListener('keydown', handleKeyboardInput);
+        }
+
+        // Initialize the game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>

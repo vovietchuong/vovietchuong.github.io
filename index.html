@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathHub - Trang chủ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -62,6 +63,25 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
+        .game-card.featured {
+            border: 3px solid #ff6b6b;
+            position: relative;
+        }
+        
+        .featured-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 10;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
         .game-card-img {
             height: 180px;
             background-color: #1cc88a;
@@ -106,6 +126,14 @@
             background: #2e59d9;
         }
         
+        .game-card-btn.featured {
+            background: #ff6b6b;
+        }
+        
+        .game-card-btn.featured:hover {
+            background: #e55656;
+        }
+        
         .footer {
             margin-top: 40px;
             color: white;
@@ -126,6 +154,19 @@
     </div>
     
     <div class="container">
+        <!-- Game Toán lớp 1 - Nổi bật -->
+        <div class="game-card featured">
+            <div class="featured-badge">Nổi bật</div>
+            <div class="game-card-img" style="background-color: #ff6b6b;">
+                <i class="fas fa-child"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Cộng trừ trong phạm vi 10</h3>
+                <p>Game toán học dành cho học sinh lớp 1. Luyện tập các phép tính cộng trừ cơ bản với giao diện thân thiện và vui nhộn.</p>
+                <a href="congtrutrongphamvi10.html" class="game-card-btn featured">Chơi ngay</a>
+            </div>
+        </div>
+        
         <div class="game-card">
             <div class="game-card-img">
                 <i class="fas fa-flag-checkered"></i>
