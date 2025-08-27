@@ -1,218 +1,102 @@
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MathHub - Học Toán qua Trò chơi</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f8f9fc;color:#333;margin:0}
-header{position:sticky;top:0;background:linear-gradient(135deg,#4e73df,#2e59d9);color:#fff;padding:1rem 2rem;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,.1)}
-nav{display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;font-size:1.4rem;display:flex;align-items:center;gap:.6rem}
-.nav-links{display:flex;list-style:none}
-.nav-links a{color:#fff;text-decoration:none;padding:.5rem .7rem;border-radius:.5rem}
-.nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#f6c23e}
-.user-menu{display:flex;align-items:center;gap:.6rem}
-.btn{background:#1cc88a;color:#fff;border:none;border-radius:999px;padding:.6rem 1rem;font-weight:700;cursor:pointer}
-.mobile-menu{display:none;background:transparent;color:#fff;border:none;font-size:1.4rem}
-.hero{background:linear-gradient(rgba(78,115,223,.85),rgba(46,89,217,.9)),url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1350&q=80');background-size:cover;background-position:center;color:#fff;text-align:center;padding:6rem 1.4rem}
-section{padding:4rem 1.4rem}
-.section-header{text-align:center;margin-bottom:2rem}
-.features-grid,.topics-grid,.games-grid,.testimonials-grid{display:grid;gap:1rem;max-width:1200px;margin:0 auto}
-.features-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.topics-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.games-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.testimonials-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.feature-card,.topic-card,.game-card,.testimonial-card{background:#fff;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.06);padding:1.2rem}
-.feature-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;color:#4e73df;font-size:1.6rem}
-.topic-img,.game-img{height:160px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;background:linear-gradient(to right,#4e73df,#2e59d9);margin-bottom:.8rem}
-.progress-bar{height:8px;background:#e9ecef;border-radius:999px;overflow:hidden;margin:.6rem 0}
-.progress-fill{height:100%;background:#1cc88a;width:60%}
-.leaderboard{background:#fff}
-.leaderboard-table{width:100%;max-width:900px;margin:0 auto;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.06)}
-.leaderboard-table th,.leaderboard-table td{padding:1rem;border-bottom:1px solid #eee}
-.leaderboard-table th{background:#4e73df;color:#fff;text-align:left}
-.testimonial-text{font-style:italic;position:relative;padding-left:18px}
-/* FIX: proper decorative quote */
-.testimonial-text::before{content:"“";position:absolute;left:0;top:-6px;font-size:2rem;color:#4e73df;opacity:.3}
-footer{background:#2e59d9;color:#fff;padding:2rem 1.4rem}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:1200px;margin:0 auto}
-.scroll-to-top{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:#4e73df;color:#fff;border:none;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.12)}
-.scroll-to-top.visible{display:flex}
-@media(max-width:992px){.nav-links{display:none;position:absolute;left:0;right:0;top:100%;background:#2e59d9;padding:1rem;gap:.4rem;flex-direction:column}.nav-links.active{display:flex}.mobile-menu{display:block}}
-</style>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MathHub - Học Toán qua Trò chơi</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <!-- MathJax -->
+  <script>
+    window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" defer></script>
 </head>
 <body>
-<header>
-  <nav>
-    <div class="logo"><i class="fas fa-square-root-alt"></i><span>MathHub</span></div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home" class="active"><i class="fas fa-home"></i> Trang chủ</a></li>
-      <li><a href="#features"><i class="fas fa-book"></i> Tính năng</a></li>
-      <li><a href="#grades"><i class="fas fa-layer-group"></i> Khối lớp</a></li>
-      <li><a href="#games"><i class="fas fa-gamepad"></i> Trò chơi</a></li>
-      <li><a href="#leaderboard"><i class="fas fa-chart-line"></i> Xếp hạng</a></li>
-      <li><a href="#testimonials"><i class="fas fa-comment-dots"></i> Đánh giá</a></li>
-    </ul>
-    <div class="user-menu">
-      <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
-      <button class="mobile-menu" id="mobileMenu" aria-controls="navLinks" aria-expanded="false"><i class="fas fa-bars"></i></button>
-    </div>
-  </nav>
-</header>
-
-<main id="home">
-  <section class="hero">
-    <h1>Học Toán qua Trò chơi Thú vị</h1>
-    <p>Khám phá thế giới Toán học với hàng trăm trò chơi và bài tập tương tác dành cho học sinh từ lớp 1 đến 12</p>
-    <p>
-      <a href="#games" class="btn"><i class="fas fa-play-circle"></i> Bắt đầu ngay</a>
-      <a href="#features" class="btn" style="background:transparent;border:2px solid #fff"><i class="fas fa-book-open"></i> Khám phá tính năng</a>
-    </p>
-  </section>
-
-  <section id="features">
-    <div class="section-header">
-      <h2>Tại sao chọn MathHub?</h2>
-      <p>Chúng tôi mang đến phương pháp học Toán mới, kết hợp giữa kiến thức và trò chơi.</p>
-    </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
-        <h3>Học qua trò chơi</h3>
-        <p>Hàng trăm trò chơi Toán học thú vị giúp tiếp thu kiến thức tự nhiên và hiệu quả.</p>
+  <!-- HEADER -->
+  <header>
+    <nav>
+      <div class="logo"><i class="fas fa-square-root-alt"></i><span>MathHub</span></div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">Trang chủ</a></li>
+        <li><a href="#features">Tính năng</a></li>
+        <li><a href="#grades">Khối lớp</a></li>
+        <li><a href="#games">Trò chơi</a></li>
+        <li><a href="#quiz">Mini Quiz</a></li>
+        <li><a href="#latex">Soạn công thức</a></li>
+        <li><a href="#leaderboard">Xếp hạng</a></li>
+        <li><a href="#testimonials">Đánh giá</a></li>
+      </ul>
+      <div class="user-menu">
+        <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
+        <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+        <button class="mobile-menu" id="mobileMenu"><i class="fas fa-bars"></i></button>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
-        <h3>Chương trình chuẩn</h3>
-        <p>Nội dung bám sát chương trình GDPT 2018 từ lớp 1 đến lớp 12.</p>
+    </nav>
+  </header>
+
+  <main id="home">
+    <!-- HERO -->
+    <section class="hero">
+      <h1>Học Toán qua Trò chơi</h1>
+      <p>Khám phá Toán học với trò chơi, Quiz, và LaTeX trực tiếp</p>
+      <a href="#quiz" class="btn">Bắt đầu Mini Quiz</a>
+    </section>
+
+    <!-- FEATURES -->
+    <section id="features">
+      <div class="section-header"><h2>Tính năng nổi bật</h2></div>
+      <div class="features-grid">
+        <div class="feature-card"><i class="fas fa-gamepad feature-icon"></i><h3>Trò chơi</h3></div>
+        <div class="feature-card"><i class="fas fa-pen feature-icon"></i><h3>Soạn công thức LaTeX</h3></div>
+        <div class="feature-card"><i class="fas fa-chart-line feature-icon"></i><h3>Theo dõi tiến độ</h3></div>
       </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-        <h3>Theo dõi tiến độ</h3>
-        <p>Hệ thống theo dõi, báo cáo chi tiết tiến độ học tập của từng học sinh.</p>
+    </section>
+
+    <!-- MINI QUIZ -->
+    <section id="quiz">
+      <div class="section-header"><h2>Mini Quiz</h2><p>Trắc nghiệm nhanh, chấm điểm tự động</p></div>
+      <div class="quiz-box">
+        <p><b>Câu 1:</b> Hàm số $y = x^2$ có đồ thị là?</p>
+        <label><input type="radio" name="q1" value="A"> Đường thẳng</label>
+        <label><input type="radio" name="q1" value="B"> Parabol</label>
+        <label><input type="radio" name="q1" value="C"> Hyperbol</label>
+        <button class="btn" onclick="submitQuiz()">Nộp bài</button>
+        <p id="quizResult"></p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section id="grades">
-    <div class="section-header">
-      <h2>Chọn khối lớp của bạn</h2>
-      <p>Nội dung được phân theo từng khối lớp với các chủ đề phù hợp.</p>
-    </div>
-    <div class="topics-grid">
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-plus-circle"></i></div>
-        <h3>Phép cộng trong phạm vi 10</h3>
-        <p>Làm quen phép cộng qua trò chơi vui nhộn.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
-      </article>
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-minus-circle"></i></div>
-        <h3>Phép trừ trong phạm vi 10</h3>
-        <p>Học phép trừ với hình minh họa trực quan.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
-      </article>
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-shapes"></i></div>
-        <h3>Hình học cơ bản</h3>
-        <p>Nhận biết các hình khối cơ bản và đặc điểm.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-      </article>
-    </div>
-  </section>
+    <!-- LIVE LATEX EDITOR -->
+    <section id="latex">
+      <div class="section-header"><h2>Soạn công thức LaTeX</h2><p>Nhập công thức và xem hiển thị ngay</p></div>
+      <textarea id="latexInput" rows="3" placeholder="Nhập LaTeX, ví dụ: y = x^3 - 3x + 2"></textarea>
+      <div id="latexPreview" class="preview-box"></div>
+    </section>
 
-  <section id="games">
-    <div class="section-header">
-      <h2>Trò chơi Toán học nổi bật</h2>
-      <p>Học Toán thật vui với các trò chơi tương tác thiết kế riêng cho từng chủ đề.</p>
-    </div>
-    <div class="games-grid">
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-dragon"></i></div>
-        <h3>Rồng săn số</h3>
-        <p>Giúp chú rồng tìm số đúng để giải cứu công chúa.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-puzzle-piece"></i></div>
-        <h3>Ghép hình Toán học</h3>
-        <p>Ghép các mảnh bằng cách giải bài Toán đơn giản.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-chess-knight"></i></div>
-        <h3>Kỳ thủ Toán học</h3>
-        <p>Chiến thắng ván cờ bằng cách giải các bài hình học.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-    </div>
-  </section>
+    <!-- LEADERBOARD -->
+    <section class="leaderboard" id="leaderboard">
+      <div class="section-header"><h2>Bảng xếp hạng</h2></div>
+      <table class="leaderboard-table">
+        <thead><tr><th>Hạng</th><th>Học sinh</th><th>Điểm</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Minh Anh</td><td>4800</td></tr>
+          <tr><td>2</td><td>Tuấn</td><td>4720</td></tr>
+        </tbody>
+      </table>
+    </section>
 
-  <section class="leaderboard" id="leaderboard">
-    <div class="section-header">
-      <h2>Bảng xếp hạng</h2>
-      <p>Xem những người dùng dẫn đầu trên MathHub.</p>
-    </div>
-    <table class="leaderboard-table">
-      <thead><tr><th>Hạng</th><th>Học sinh</th><th>Lớp</th><th>Điểm</th><th>Huy hiệu</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>Nguyễn Minh Anh</td><td>Lớp 5</td><td>4,850</td><td><i class="fas fa-medal"></i> 12</td></tr>
-        <tr><td>2</td><td>Trần Quốc Bảo</td><td>Lớp 4</td><td>4,720</td><td><i class="fas fa-medal"></i> 10</td></tr>
-        <tr><td>3</td><td>Lê Thanh Chi</td><td>Lớp 3</td><td>4,580</td><td><i class="fas fa-medal"></i> 9</td></tr>
-      </tbody>
-    </table>
-  </section>
+    <!-- TESTIMONIALS -->
+    <section id="testimonials">
+      <div class="section-header"><h2>Đánh giá</h2></div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card"><div class="testimonial-text">MathHub giúp em yêu Toán hơn!</div><p><b>Ngọc</b> – Học sinh lớp 6</p></div>
+      </div>
+    </section>
+  </main>
 
-  <section id="testimonials">
-    <div class="section-header">
-      <h2>Phụ huynh và học sinh nói gì về MathHub</h2>
-      <p>Những trải nghiệm thực tế từ người dùng của chúng tôi.</p>
-    </div>
-    <div class="testimonials-grid">
-      <article class="testimonial-card">
-        <div class="testimonial-text">Con tôi đã cải thiện điểm Toán đáng kể từ khi sử dụng MathHub.</div>
-        <div class="author"><strong>Chị Minh</strong> — Phụ huynh</div>
-      </article>
-      <article class="testimonial-card">
-        <div class="testimonial-text">MathHub giúp em học Toán dễ dàng hơn bao giờ hết.</div>
-        <div class="author"><strong>Nguyễn Tuấn</strong> — Học sinh lớp 5</div>
-      </article>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="footer-grid">
-    <div>
-      <h3>Về MathHub</h3>
-      <p>Học Toán qua trò chơi, bám sát chương trình GDPT 2018.</p>
-    </div>
-    <div>
-      <h3>Kết nối</h3>
-      <p><i class="fab fa-facebook"></i> <i class="fab fa-youtube"></i> <i class="fab fa-tiktok"></i></p>
-    </div>
-  </div>
-  <p style="text-align:center;margin-top:1rem">&copy; 2025 MathHub</p>
-</footer>
-
-<button class="scroll-to-top" id="scrollTopBtn" aria-label="Lên đầu trang"><i class="fas fa-arrow-up"></i></button>
-
-<script>
-// Mobile nav
-const mobileMenuBtn = document.getElementById('mobileMenu');
-const navLinks = document.getElementById('navLinks');
-if(mobileMenuBtn){
-  mobileMenuBtn.addEventListener('click', () => {
-    const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-    mobileMenuBtn.setAttribute('aria-expanded', (!expanded).toString());
-    navLinks.classList.toggle('active');
-  });
-}
-// Scroll top
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) scrollBtn.classList.add('visible');
-  else scrollBtn.classList.remove('visible');
-});
-scrollBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
-</script>
-</body></html>
+  <!-- FOOTER -->
+  <footer><p>&copy; 2025 MathHub</p></footer>
+  <button class="scroll-to-top" id="scrollTopBtn"><i class="fas fa-arrow-up"></i></button>
+  <script src="app.js"></script>
+</body>
+</html>
