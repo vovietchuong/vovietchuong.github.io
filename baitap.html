@@ -1,66 +1,62 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <title>Ngân hàng câu hỏi - MathHub</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    .question {margin: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #fff;}
-    .question h3 {margin-bottom: 10px; color: #2c3e50;}
-    .choice {margin-left: 20px;}
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bài tập Toán</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- MathJax -->
+  <script>
+    MathJax = {
+      tex: {inlineMath: [['$', '$'], ['\\(', '\\)']]},
+      svg: {fontCache: 'global'}
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" async></script>
 </head>
 <body>
   <header>
+    <h1>Bài tập Toán</h1>
     <nav>
-      <div class="logo">📘 MathHub</div>
-      <ul>
-        <li><a href="index.html">Trang chủ</a></li>
-        <li><a href="baitap.html">Ngân hàng câu hỏi</a></li>
-        <li><a href="tailieu.html">Tài liệu</a></li>
-        <li><a href="game.html">Mini Game</a></li>
-        <li><a href="lienhe.html">Liên hệ</a></li>
-      </ul>
+      <a href="index.html">Trang chủ</a>
+      <a href="baitap.html">Bài tập</a>
+      <a href="tailieu.html">Tài liệu</a>
+      <a href="game.html">Trò chơi</a>
+      <a href="lienhe.html">Liên hệ</a>
     </nav>
   </header>
-
-  <section class="hero">
-    <h1>Ngân hàng câu hỏi Toán học</h1>
-    <p>Dưới đây là một số câu hỏi trắc nghiệm mẫu (lớp 10):</p>
-  </section>
-
-  <section class="questions">
+  <main>
+    <h2>Ngân hàng câu hỏi Toán 10</h2>
     <div class="question">
-      <h3>Câu 1: Hàm số $y = x^2 - 2x + 1$ có đồ thị là?</h3>
-      <div class="choice">A. Parabol nhận trục $x=1$ làm trục đối xứng</div>
-      <div class="choice">B. Parabol nhận trục $y=1$ làm trục đối xứng</div>
-      <div class="choice">C. Parabol nhận trục $x=-1$ làm trục đối xứng</div>
-      <div class="choice">D. Đường thẳng $y=x$</div>
+      <p><b>Câu 1:</b> Hàm số $y = x^2 - 2x + 1$ có đồ thị là?</p>
+      <ul>
+        <li>A. Parabol có đỉnh tại $(0;1)$</li>
+        <li><b>B. Parabol có đỉnh tại $(1;0)$</b></li>
+        <li>C. Parabol có đỉnh tại $(2;-1)$</li>
+        <li>D. Đáp án khác</li>
+      </ul>
     </div>
-
     <div class="question">
-      <h3>Câu 2: Phương trình $2x - 3 = 7$ có nghiệm là?</h3>
-      <div class="choice">A. $x = 2$</div>
-      <div class="choice">B. $x = 5$</div>
-      <div class="choice">C. $x = -2$</div>
-      <div class="choice">D. $x = -5$</div>
+      <p><b>Câu 2:</b> Nghiệm của phương trình $x^2 - 5x + 6 = 0$ là?</p>
+      <ul>
+        <li>A. $x=1, x=6$</li>
+        <li><b>B. $x=2, x=3$</b></li>
+        <li>C. $x=-2, x=-3$</li>
+        <li>D. Không có nghiệm</li>
+      </ul>
     </div>
-
     <div class="question">
-      <h3>Câu 3: Giá trị của $\sqrt{50}$ bằng:</h3>
-      <div class="choice">A. $5\sqrt{2}$</div>
-      <div class="choice">B. $10\sqrt{2}$</div>
-      <div class="choice">C. $2\sqrt{5}$</div>
-      <div class="choice">D. $25$</div>
+      <p><b>Câu 3:</b> Cho tam giác vuông cân tại $A$, cạnh $AB = AC = 1$. Độ dài cạnh huyền $BC$ bằng?</p>
+      <ul>
+        <li>A. $1$</li>
+        <li>B. $2$</li>
+        <li><b>C. $\sqrt{2}$</b></li>
+        <li>D. $\dfrac{1}{\sqrt{2}}$</li>
+      </ul>
     </div>
-
-    <div class="question">
-      <h3>Câu 4: Cho $A(1,2), B(3,6)$. Độ dài đoạn thẳng $AB$ là:</h3>
-      <div class="choice">A. $2$</div>
-      <div class="choice">B. $4$</div>
-      <div class="choice">C. $\sqrt{20}$</div>
-      <div class="choice">D. $5$</div>
-    </div>
-  </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 MathHub</p>
+  </footer>
 </body>
 </html>
