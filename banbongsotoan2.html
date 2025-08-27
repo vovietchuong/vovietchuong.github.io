@@ -67,19 +67,31 @@
     .balloon {
       position: absolute;
       bottom: -100px;
-      width: 70px;
-      height: 90px;
+      width: 80px;  /* Tăng kích thước bóng */
+      height: 100px; /* Tăng kích thước bóng */
       background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><path fill="%23ff6b6b" d="M50 10 C70 10 85 30 85 60 C85 90 70 110 50 110 C30 110 15 90 15 60 C15 30 30 10 50 10 Z"/><path fill="%23ffffff" d="M40 40 C45 35 55 35 60 40 C55 45 45 45 40 40 Z"/></svg>');
       background-size: contain;
       background-repeat: no-repeat;
       text-align: center;
-      line-height: 90px;
-      font-size: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 18px; /* Giảm kích thước font */
       font-weight: bold;
       color: #fff;
       text-shadow: 1px 1px 2px #000;
       transition: transform 0.2s;
       cursor: pointer;
+      padding: 5px;
+      box-sizing: border-box;
+    }
+    
+    .expression {
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+      padding: 0 5px;
     }
     
     .balloon:hover {
@@ -245,10 +257,9 @@
       }
       
       .balloon {
-        width: 60px;
-        height: 80px;
-        line-height: 80px;
-        font-size: 18px;
+        width: 70px;
+        height: 90px;
+        font-size: 16px;
       }
     }
     
@@ -272,6 +283,12 @@
         left: 10px;
         padding: 8px 15px;
         font-size: 0.9rem;
+      }
+      
+      .balloon {
+        width: 65px;
+        height: 85px;
+        font-size: 14px;
       }
     }
   </style>
@@ -425,7 +442,13 @@
       let balloon = document.createElement("div");
       balloon.classList.add("balloon");
       balloon.style.left = Math.random() * (window.innerWidth - 100) + "px";
-      balloon.textContent = expression;
+      
+      // Thêm biểu thức toán học vào bóng
+      let expressionDiv = document.createElement("div");
+      expressionDiv.classList.add("expression");
+      expressionDiv.textContent = expression;
+      balloon.appendChild(expressionDiv);
+      
       balloon.dataset.answer = result;
       
       // Màu sắc ngẫu nhiên cho bóng
