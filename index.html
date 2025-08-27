@@ -1,218 +1,1915 @@
+
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MathHub - Học Toán qua Trò chơi</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:#f8f9fc;color:#333;margin:0}
-header{position:sticky;top:0;background:linear-gradient(135deg,#4e73df,#2e59d9);color:#fff;padding:1rem 2rem;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,.1)}
-nav{display:flex;justify-content:space-between;align-items:center}
-.logo{font-weight:700;font-size:1.4rem;display:flex;align-items:center;gap:.6rem}
-.nav-links{display:flex;list-style:none}
-.nav-links a{color:#fff;text-decoration:none;padding:.5rem .7rem;border-radius:.5rem}
-.nav-links a:hover,.nav-links a.active{background:rgba(255,255,255,.12);color:#f6c23e}
-.user-menu{display:flex;align-items:center;gap:.6rem}
-.btn{background:#1cc88a;color:#fff;border:none;border-radius:999px;padding:.6rem 1rem;font-weight:700;cursor:pointer}
-.mobile-menu{display:none;background:transparent;color:#fff;border:none;font-size:1.4rem}
-.hero{background:linear-gradient(rgba(78,115,223,.85),rgba(46,89,217,.9)),url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=1350&q=80');background-size:cover;background-position:center;color:#fff;text-align:center;padding:6rem 1.4rem}
-section{padding:4rem 1.4rem}
-.section-header{text-align:center;margin-bottom:2rem}
-.features-grid,.topics-grid,.games-grid,.testimonials-grid{display:grid;gap:1rem;max-width:1200px;margin:0 auto}
-.features-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
-.topics-grid{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-.games-grid{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
-.testimonials-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.feature-card,.topic-card,.game-card,.testimonial-card{background:#fff;border-radius:12px;box-shadow:0 5px 15px rgba(0,0,0,.06);padding:1.2rem}
-.feature-icon{width:64px;height:64px;border-radius:50%;background:rgba(0,0,0,.05);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;color:#4e73df;font-size:1.6rem}
-.topic-img,.game-img{height:160px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:2rem;background:linear-gradient(to right,#4e73df,#2e59d9);margin-bottom:.8rem}
-.progress-bar{height:8px;background:#e9ecef;border-radius:999px;overflow:hidden;margin:.6rem 0}
-.progress-fill{height:100%;background:#1cc88a;width:60%}
-.leaderboard{background:#fff}
-.leaderboard-table{width:100%;max-width:900px;margin:0 auto;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:0 5px 15px rgba(0,0,0,.06)}
-.leaderboard-table th,.leaderboard-table td{padding:1rem;border-bottom:1px solid #eee}
-.leaderboard-table th{background:#4e73df;color:#fff;text-align:left}
-.testimonial-text{font-style:italic;position:relative;padding-left:18px}
-/* FIX: proper decorative quote */
-.testimonial-text::before{content:"“";position:absolute;left:0;top:-6px;font-size:2rem;color:#4e73df;opacity:.3}
-footer{background:#2e59d9;color:#fff;padding:2rem 1.4rem}
-.footer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;max-width:1200px;margin:0 auto}
-.scroll-to-top{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;background:#4e73df;color:#fff;border:none;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,.12)}
-.scroll-to-top.visible{display:flex}
-@media(max-width:992px){.nav-links{display:none;position:absolute;left:0;right:0;top:100%;background:#2e59d9;padding:1rem;gap:.4rem;flex-direction:column}.nav-links.active{display:flex}.mobile-menu{display:block}}
-</style>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathHub - Học Toán qua Trò chơi</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #1cc88a;
+            --accent: #f6c23e;
+            --danger: #e74a3b;
+            --dark: #2e59d9;
+            --light: #f8f9fc;
+            --text: #333;
+            --text-light: #858796;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        header.scrolled {
+            padding: 0.5rem 2rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-links a.active {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            position: relative;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .user-level {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: var(--danger);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid white;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 200px;
+            padding: 1rem;
+            margin-top: 10px;
+            display: none;
+            z-index: 1000;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .user-dropdown .user-info {
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+        }
+        
+        .user-dropdown .user-info h4 {
+            color: var(--dark);
+        }
+        
+        .user-dropdown .user-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .user-dropdown-links {
+            list-style: none;
+        }
+        
+        .user-dropdown-links li {
+            margin-bottom: 8px;
+        }
+        
+        .user-dropdown-links a {
+            color: var(--text);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        .user-dropdown-links a:hover {
+            color: var(--primary);
+            background: var(--light);
+        }
+        
+        .btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background-color: #17a673;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+        }
+        
+        .btn-outline:hover {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark);
+        }
+        
+        .btn-accent {
+            background-color: var(--accent);
+            color: var(--text);
+        }
+        
+        .btn-accent:hover {
+            background-color: #e6b333;
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            color: white;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(78, 115, 223, 0.85), rgba(46, 89, 217, 0.9)), url('https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            padding: 7rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 5rem 2rem;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .feature-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2rem;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover .feature-icon {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        /* Grade Selection */
+        .grade-section {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+        
+        .grade-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 3rem;
+        }
+        
+        .grade-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--primary);
+            border-radius: 50px;
+            background: white;
+            color: var(--primary);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .grade-btn.active, .grade-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .topics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .topic-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .topic-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .topic-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent);
+            color: var(--text);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .topic-img {
+            height: 160px;
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .topic-card:hover .topic-img::after {
+            opacity: 1;
+        }
+        
+        .topic-content {
+            padding: 1.5rem;
+        }
+        
+        .topic-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .topic-content p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .topic-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--secondary);
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+        
+        /* Games Section */
+        .games-section {
+            padding: 5rem 2rem;
+        }
+        
+        .games-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .game-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 2;
+        }
+        
+        .game-img {
+            height: 200px;
+            background: linear-gradient(to right, var(--secondary), #17a673);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .game-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .game-card:hover .game-img::after {
+            opacity: 1;
+        }
+        
+        .game-content {
+            padding: 1.5rem;
+        }
+        
+        .game-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .game-content p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .game-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-card {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .testimonial-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: """;
+            font-size: 3rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: -20px;
+            left: -10px;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .author-info h4 {
+            color: var(--dark);
+        }
+        
+        .author-info p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(to right, var(--primary), var(--dark));
+            color: white;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-content p {
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        /* New Sections */
+        .achievements {
+            padding: 5rem 2rem;
+            background: white;
+        }
+        
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .badge:hover {
+            transform: scale(1.1);
+        }
+        
+        .badge i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .badge span {
+            font-size: 0.8rem;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+        
+        .badge.locked {
+            opacity: 0.5;
+        }
+        
+        .badge.locked i {
+            color: var(--text-light);
+        }
+        
+        .badge.locked::after {
+            content: "\f023";
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: var(--text-light);
+        }
+        
+        .learning-path {
+            padding: 5rem 2rem;
+            background: var(--light);
+        }
+        
+        .path-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .path-item {
+            display: flex;
+            margin-bottom: 2rem;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .path-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .path-icon {
+            width: 80px;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .path-content {
+            padding: 1.5rem;
+            flex: 1;
+        }
+        
+        .path-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .path-content p {
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+        
+        .path-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        /* Leaderboard Section */
+        .leaderboard {
+            padding: 5rem 2rem;
+            background: white;
+        }
+        
+        .leaderboard-table {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .leaderboard-table th {
+            background: var(--primary);
+            color: white;
+            font-weight: 500;
+        }
+        
+        .leaderboard-table tr:nth-child(even) {
+            background: var(--light);
+        }
+        
+        .leaderboard-table tr:hover {
+            background: #e6f7ff;
+        }
+        
+        .rank {
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .top-1 .rank {
+            color: gold;
+        }
+        
+        .top-2 .rank {
+            color: silver;
+        }
+        
+        .top-3 .rank {
+            color: #cd7f32; /* bronze */
+        }
+        
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
+            padding: 2rem;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .modal-header h2 {
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .form-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+        
+        .form-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 2rem 2rem;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Scroll to top button */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+            z-index: 999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-to-top:hover {
+            background: var(--dark);
+            transform: translateY(-5px);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 992px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--dark);
+                flex-direction: column;
+                padding: 1rem;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .nav-links li {
+                margin: 10px 0;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .features, .grade-section, .games-section, .testimonials, .achievements, .learning-path, .leaderboard {
+                padding: 3rem 1.5rem;
+            }
+            
+            .user-menu span {
+                display: none;
+            }
+            
+            .path-item {
+                flex-direction: column;
+            }
+            
+            .path-icon {
+                width: 100%;
+                height: 60px;
+            }
+            
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animated {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+    </style>
 </head>
 <body>
-<header>
-  <nav>
-    <div class="logo"><i class="fas fa-square-root-alt"></i><span>MathHub</span></div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home" class="active"><i class="fas fa-home"></i> Trang chủ</a></li>
-      <li><a href="#features"><i class="fas fa-book"></i> Tính năng</a></li>
-      <li><a href="#grades"><i class="fas fa-layer-group"></i> Khối lớp</a></li>
-      <li><a href="#games"><i class="fas fa-gamepad"></i> Trò chơi</a></li>
-      <li><a href="#leaderboard"><i class="fas fa-chart-line"></i> Xếp hạng</a></li>
-      <li><a href="#testimonials"><i class="fas fa-comment-dots"></i> Đánh giá</a></li>
-    </ul>
-    <div class="user-menu">
-      <button class="btn" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
-      <button class="mobile-menu" id="mobileMenu" aria-controls="navLinks" aria-expanded="false"><i class="fas fa-bars"></i></button>
-    </div>
-  </nav>
-</header>
+    <header>
+        <nav>
+            <div class="logo">
+                <i class="fas fa-square-root-alt"></i>
+                <span>MathHub</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active"><i class="fas fa-home"></i> Trang chủ</a></li>
+                <li><a href="#"><i class="fas fa-book"></i> Bài học</a></li>
+                <li><a href="#"><i class="fas fa-gamepad"></i> Trò chơi</a></li>
+                <li><a href="#"><i class="fas fa-tasks"></i> Luyện tập</a></li>
+                <li><a href="#"><i class="fas fa-chart-line"></i> Tiến độ</a></li>
+                <li><a href="#"><i class="fas fa-info-circle"></i> Về chúng tôi</a></li>
+            </ul>
+            <div class="user-menu">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        NT
+                        <div class="user-level">12</div>
+                    </div>
+                    <span>Nguyễn Tuấn</span>
+                </div>
+                <div class="user-dropdown">
+                    <div class="user-info">
+                        <h4>Nguyễn Tuấn</h4>
+                        <p>Cấp độ: 12 - Học sinh</p>
+                    </div>
+                    <ul class="user-dropdown-links">
+                        <li><a href="#"><i class="fas fa-user"></i> Hồ sơ</a></li>
+                        <li><a href="#"><i class="fas fa-cog"></i> Cài đặt</a></li>
+                        <li><a href="#"><i class="fas fa-trophy"></i> Thành tích</a></li>
+                        <li><a href="#"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                    </ul>
+                </div>
+                                <button class="btn btn-sm" id="loginBtn"><i class="fas fa-sign-in-alt"></i> Đăng nhập</button>
+            </div>
+            <div class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
 
-<main id="home">
-  <section class="hero">
-    <h1>Học Toán qua Trò chơi Thú vị</h1>
-    <p>Khám phá thế giới Toán học với hàng trăm trò chơi và bài tập tương tác dành cho học sinh từ lớp 1 đến 12</p>
-    <p>
-      <a href="#games" class="btn"><i class="fas fa-play-circle"></i> Bắt đầu ngay</a>
-      <a href="#features" class="btn" style="background:transparent;border:2px solid #fff"><i class="fas fa-book-open"></i> Khám phá tính năng</a>
-    </p>
-  </section>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Học Toán qua Trò chơi Thú vị</h1>
+            <p>Khám phá thế giới Toán học với hàng trăm trò chơi và bài tập tương tác dành cho học sinh từ lớp 1 đến 12</p>
+            <div class="hero-buttons">
+                <button class="btn"><i class="fas fa-play-circle"></i> Bắt đầu ngay</button>
+                <button class="btn btn-outline"><i class="fas fa-book-open"></i> Khám phá bài học</button>
+            </div>
+        </div>
+    </section>
 
-  <section id="features">
+    <section class="features">
+        <div class="section-header">
+            <h2>Tại sao chọn MathHub?</h2>
+            <p>Chúng tôi mang đến phương pháp học Toán hoàn toàn mới, kết hợp giữa kiến thức và trò chơi</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3>Học qua trò chơi</h3>
+                <p>Hàng trăm trò chơi Toán học thú vị giúp tiếp thu kiến thức một cách tự nhiên và hiệu quả</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Chương trình chuẩn</h3>
+                <p>Nội dung bám sát chương trình của Bộ Giáo dục từ lớp 1 đến lớp 12</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Theo dõi tiến độ</h3>
+                <p>Hệ thống theo dõi và đánh giá chi tiết tiến độ học tập của từng học sinh</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="grade-section">
+        <div class="section-header">
+            <h2>Chọn khối lớp của bạn</h2>
+            <p>Nội dung được phân theo từng khối lớp với các chủ đề phù hợp</p>
+        </div>
+        <div class="grade-buttons">
+            <button class="grade-btn active">Lớp 1</button>
+            <button class="grade-btn">Lớp 2</button>
+            <button class="grade-btn">Lớp 3</button>
+            <button class="grade-btn">Lớp 4</button>
+            <button class="grade-btn">Lớp 5</button>
+            <button class="grade-btn">Lớp 6</button>
+            <button class="grade-btn">Lớp 7</button>
+            <button class="grade-btn">Lớp 8</button>
+            <button class="grade-btn">Lớp 9</button>
+            <button class="grade-btn">Lớp 10</button>
+            <button class="grade-btn">Lớp 11</button>
+            <button class="grade-btn">Lớp 12</button>
+        </div>
+        <div class="topics-grid">
+            <div class="topic-card">
+                <div class="topic-badge">Mới</div>
+                <div class="topic-img">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="topic-content">
+                    <h3>Phép cộng trong phạm vi 10</h3>
+                    <p>Làm quen với phép cộng thông qua các trò chơi vui nhộn</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                    <div class="topic-stats">
+                        <span><i class="fas fa-gamepad"></i> 5 trò chơi</span>
+                        <span><i class="fas fa-users"></i> 2.4k học</span>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-img">
+                    <i class="fas fa-minus-circle"></i>
+                </div>
+                <div class="topic-content">
+                    <h3>Phép trừ trong phạm vi 10</h3>
+                    <p>Học phép trừ với hình ảnh minh họa trực quan sinh động</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 30%"></div>
+                    </div>
+                    <div class="topic-stats">
+                        <span><i class="fas fa-gamepad"></i> 4 trò chơi</span>
+                        <span><i class="fas fa-users"></i> 1.8k học</span>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-badge">Phổ biến</div>
+                <div class="topic-img">
+                    <i class="fas fa-shapes"></i>
+                </div>
+                <div class="topic-content">
+                    <h3>Hình học cơ bản</h3>
+                    <p>Nhận biết các hình khối cơ bản và đặc điểm của chúng</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                    <div class="topic-stats">
+                        <span><i class="fas fa-gamepad"></i> 6 trò chơi</span>
+                        <span><i class="fas fa-users"></i> 3.1k học</span>
+                    </div>
+                </div>
+            </div>
+            <div class="topic-card">
+                <div class="topic-img">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="topic-content">
+                    <h3>Xem giờ và thời gian</h3>
+                    <p>Học cách xem giờ và các khái niệm về thời gian</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%"></div>
+                    </div>
+                    <div class="topic-stats">
+                        <span><i class="fas fa-gamepad"></i> 3 trò chơi</span>
+                        <span><i class="fas fa-users"></i> 1.5k học</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="games-section">
+
+<!-- Thêm sau section games-section -->
+<section class="interactive-game">
     <div class="section-header">
-      <h2>Tại sao chọn MathHub?</h2>
-      <p>Chúng tôi mang đến phương pháp học Toán mới, kết hợp giữa kiến thức và trò chơi.</p>
+        <h2>Thử sức với trò chơi Toán học</h2>
+        <p>Luyện tập phép cộng với trò chơi tương tác</p>
     </div>
-    <div class="features-grid">
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
-        <h3>Học qua trò chơi</h3>
-        <p>Hàng trăm trò chơi Toán học thú vị giúp tiếp thu kiến thức tự nhiên và hiệu quả.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
-        <h3>Chương trình chuẩn</h3>
-        <p>Nội dung bám sát chương trình GDPT 2018 từ lớp 1 đến lớp 12.</p>
-      </div>
-      <div class="feature-card">
-        <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
-        <h3>Theo dõi tiến độ</h3>
-        <p>Hệ thống theo dõi, báo cáo chi tiết tiến độ học tập của từng học sinh.</p>
-      </div>
+    <div class="game-container">
+        <div class="game-question">
+            <span id="num1">5</span> + <span id="num2">3</span> = ?
+        </div>
+        <div class="game-options">
+            <button class="answer-btn">7</button>
+            <button class="answer-btn">8</button>
+            <button class="answer-btn">9</button>
+            <button class="answer-btn">10</button>
+        </div>
+        <div class="game-feedback" id="feedback"></div>
+        <div class="game-score">Điểm: <span id="score">0</span></div>
     </div>
-  </section>
+</section>
 
-  <section id="grades">
-    <div class="section-header">
-      <h2>Chọn khối lớp của bạn</h2>
-      <p>Nội dung được phân theo từng khối lớp với các chủ đề phù hợp.</p>
-    </div>
-    <div class="topics-grid">
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-plus-circle"></i></div>
-        <h3>Phép cộng trong phạm vi 10</h3>
-        <p>Làm quen phép cộng qua trò chơi vui nhộn.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:65%"></div></div>
-      </article>
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-minus-circle"></i></div>
-        <h3>Phép trừ trong phạm vi 10</h3>
-        <p>Học phép trừ với hình minh họa trực quan.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:30%"></div></div>
-      </article>
-      <article class="topic-card">
-        <div class="topic-img"><i class="fas fa-shapes"></i></div>
-        <h3>Hình học cơ bản</h3>
-        <p>Nhận biết các hình khối cơ bản và đặc điểm.</p>
-        <div class="progress-bar"><div class="progress-fill" style="width:80%"></div></div>
-      </article>
-    </div>
-  </section>
+<style>
+.interactive-game {
+    padding: 5rem 2rem;
+    background: var(--light);
+    text-align: center;
+}
 
-  <section id="games">
-    <div class="section-header">
-      <h2>Trò chơi Toán học nổi bật</h2>
-      <p>Học Toán thật vui với các trò chơi tương tác thiết kế riêng cho từng chủ đề.</p>
-    </div>
-    <div class="games-grid">
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-dragon"></i></div>
-        <h3>Rồng săn số</h3>
-        <p>Giúp chú rồng tìm số đúng để giải cứu công chúa.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-puzzle-piece"></i></div>
-        <h3>Ghép hình Toán học</h3>
-        <p>Ghép các mảnh bằng cách giải bài Toán đơn giản.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-      <article class="game-card">
-        <div class="game-img"><i class="fas fa-chess-knight"></i></div>
-        <h3>Kỳ thủ Toán học</h3>
-        <p>Chiến thắng ván cờ bằng cách giải các bài hình học.</p>
-        <button class="btn">Chơi ngay</button>
-      </article>
-    </div>
-  </section>
+.game-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
 
-  <section class="leaderboard" id="leaderboard">
-    <div class="section-header">
-      <h2>Bảng xếp hạng</h2>
-      <p>Xem những người dùng dẫn đầu trên MathHub.</p>
-    </div>
-    <table class="leaderboard-table">
-      <thead><tr><th>Hạng</th><th>Học sinh</th><th>Lớp</th><th>Điểm</th><th>Huy hiệu</th></tr></thead>
-      <tbody>
-        <tr><td>1</td><td>Nguyễn Minh Anh</td><td>Lớp 5</td><td>4,850</td><td><i class="fas fa-medal"></i> 12</td></tr>
-        <tr><td>2</td><td>Trần Quốc Bảo</td><td>Lớp 4</td><td>4,720</td><td><i class="fas fa-medal"></i> 10</td></tr>
-        <tr><td>3</td><td>Lê Thanh Chi</td><td>Lớp 3</td><td>4,580</td><td><i class="fas fa-medal"></i> 9</td></tr>
-      </tbody>
-    </table>
-  </section>
+.game-question {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: var(--dark);
+}
 
-  <section id="testimonials">
-    <div class="section-header">
-      <h2>Phụ huynh và học sinh nói gì về MathHub</h2>
-      <p>Những trải nghiệm thực tế từ người dùng của chúng tôi.</p>
-    </div>
-    <div class="testimonials-grid">
-      <article class="testimonial-card">
-        <div class="testimonial-text">Con tôi đã cải thiện điểm Toán đáng kể từ khi sử dụng MathHub.</div>
-        <div class="author"><strong>Chị Minh</strong> — Phụ huynh</div>
-      </article>
-      <article class="testimonial-card">
-        <div class="testimonial-text">MathHub giúp em học Toán dễ dàng hơn bao giờ hết.</div>
-        <div class="author"><strong>Nguyễn Tuấn</strong> — Học sinh lớp 5</div>
-      </article>
-    </div>
-  </section>
-</main>
+.game-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
 
-<footer>
-  <div class="footer-grid">
-    <div>
-      <h3>Về MathHub</h3>
-      <p>Học Toán qua trò chơi, bám sát chương trình GDPT 2018.</p>
-    </div>
-    <div>
-      <h3>Kết nối</h3>
-      <p><i class="fab fa-facebook"></i> <i class="fab fa-youtube"></i> <i class="fab fa-tiktok"></i></p>
-    </div>
-  </div>
-  <p style="text-align:center;margin-top:1rem">&copy; 2025 MathHub</p>
-</footer>
+.answer-btn {
+    padding: 1rem;
+    font-size: 1.5rem;
+    border: 2px solid var(--primary);
+    background: white;
+    color: var(--primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
 
-<button class="scroll-to-top" id="scrollTopBtn" aria-label="Lên đầu trang"><i class="fas fa-arrow-up"></i></button>
+.answer-btn:hover {
+    background: var(--primary);
+    color: white;
+}
+
+.game-feedback {
+    min-height: 2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.correct {
+    color: var(--secondary);
+}
+
+.incorrect {
+    color: var(--danger);
+}
+
+.game-score {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--dark);
+}
+</style>
 
 <script>
-// Mobile nav
-const mobileMenuBtn = document.getElementById('mobileMenu');
-const navLinks = document.getElementById('navLinks');
-if(mobileMenuBtn){
-  mobileMenuBtn.addEventListener('click', () => {
-    const expanded = mobileMenuBtn.getAttribute('aria-expanded') === 'true';
-    mobileMenuBtn.setAttribute('aria-expanded', (!expanded).toString());
-    navLinks.classList.toggle('active');
-  });
-}
-// Scroll top
-const scrollBtn = document.getElementById('scrollTopBtn');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 300) scrollBtn.classList.add('visible');
-  else scrollBtn.classList.remove('visible');
+// Game logic
+document.addEventListener('DOMContentLoaded', function() {
+    let score = 0;
+    const scoreElement = document.getElementById('score');
+    const feedbackElement = document.getElementById('feedback');
+    
+    // Generate new question
+    function generateQuestion() {
+        const num1 = Math.floor(Math.random() * 10) + 1;
+        const num2 = Math.floor(Math.random() * 10) + 1;
+        document.getElementById('num1').textContent = num1;
+        document.getElementById('num2').textContent = num2;
+        
+        return num1 + num2;
+    }
+    
+    let correctAnswer = generateQuestion();
+    
+    // Setup answer buttons
+    const answerButtons = document.querySelectorAll('.answer-btn');
+    const answers = [
+        correctAnswer - 1,
+        correctAnswer,
+        correctAnswer + 2,
+        correctAnswer + 1
+    ].sort(() => Math.random() - 0.5);
+    
+    answerButtons.forEach((button, index) => {
+        button.textContent = answers[index];
+        
+        button.addEventListener('click', function() {
+            const selectedAnswer = parseInt(this.textContent);
+            
+            if (selectedAnswer === correctAnswer) {
+                feedbackElement.textContent = 'Chính xác! 🎉';
+                feedbackElement.className = 'game-feedback correct';
+                score += 10;
+                scoreElement.textContent = score;
+            } else {
+                feedbackElement.textContent = 'Sai rồi! 😢 Thử lại nhé!';
+                feedbackElement.className = 'game-feedback incorrect';
+            }
+            
+            // New question after delay
+            setTimeout(() => {
+                correctAnswer = generateQuestion();
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'game-feedback';
+                
+                // Regenerate answers
+                const newAnswers = [
+                    correctAnswer - 1,
+                    correctAnswer,
+                    correctAnswer + 2,
+                    correctAnswer + 1
+                ].sort(() => Math.random() - 0.5);
+                
+                answerButtons.forEach((btn, idx) => {
+                    btn.textContent = newAnswers[idx];
+                });
+            }, 1500);
+        });
+    });
 });
-scrollBtn.addEventListener('click', () => window.scrollTo({top:0,behavior:'smooth'}));
 </script>
-</body></html>
+
+
+        <div class="section-header">
+            <h2>Trò chơi Toán học nổi bật</h2>
+            <p>Học Toán thật vui với các trò chơi tương tác được thiết kế riêng cho từng chủ đề</p>
+        </div>
+        <div class="games-filter">
+            <button class="filter-btn active">Tất cả</button>
+            <button class="filter-btn">Số học</button>
+            <button class="filter-btn">Hình học</button>
+            <button class="filter-btn">Đại số</button>
+            <button class="filter-btn">Đo lường</button>
+            <button class="filter-btn">Logic</button>
+        </div>
+        <div class="games-grid">
+            <div class="game-card">
+                <div class="game-badge">Hot</div>
+                <div class="game-img">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <div class="game-content">
+                    <h3>Rồng săn số</h3>
+                    <p>Giúp chú rồng tìm ra các con số đúng để giải cứu công chúa</p>
+                    <div class="game-meta">
+                        <span><i class="fas fa-star"></i> 4.8 (2.1k)</span>
+                        <span><i class="fas fa-user-graduate"></i> Lớp 1-3</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary">Chơi ngay</button>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-img">
+                    <i class="fas fa-puzzle-piece"></i>
+                </div>
+                <div class="game-content">
+                    <h3>Ghép hình Toán học</h3>
+                    <p>Ghép các mảnh ghép bằng cách giải các bài Toán đơn giản</p>
+                    <div class="game-meta">
+                        <span><i class="fas fa-star"></i> 4.6 (1.5k)</span>
+                        <span><i class="fas fa-user-graduate"></i> Lớp 1-2</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary">Chơi ngay</button>
+                </div>
+            </div>
+            <div class="game-card">
+                <div class="game-badge">Mới</div>
+                <div class="game-img">
+                    <i class="fas fa-chess-knight"></i>
+                </div>
+                <div class="game-content">
+                    <h3>Kỳ thủ Toán học</h3>
+                    <p>Chiến thắng các ván cờ bằng cách giải các bài Toán hình học</p>
+                    <div class="game-meta">
+                        <span><i class="fas fa-star"></i> 4.9 (3.2k)</span>
+                        <span><i class="fas fa-user-graduate"></i> Lớp 4-6</span>
+                    </div>
+                    <button class="btn btn-sm btn-primary">Chơi ngay</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="achievements">
+        <div class="section-header">
+            <h2>Hệ thống thành tích</h2>
+            <p>Thu thập huy hiệu và phần thưởng khi hoàn thành các thử thách</p>
+        </div>
+        <div class="badges-container">
+            <div class="badge">
+                <i class="fas fa-calculator"></i>
+                <span>Nhà Toán học</span>
+            </div>
+            <div class="badge">
+                <i class="fas fa-lightbulb"></i>
+                <span>Giải đố</span>
+            </div>
+            <div class="badge locked">
+                <i class="fas fa-rocket"></i>
+                <span>Tốc độ</span>
+            </div>
+            <div class="badge">
+                <i class="fas fa-trophy"></i>
+                <span>Vô địch</span>
+            </div>
+            <div class="badge locked">
+                <i class="fas fa-brain"></i>
+                <span>Thiên tài</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="leaderboard">
+        <div class="section-header">
+            <h2>Bảng xếp hạng</h2>
+            <p>Xem những người dùng dẫn đầu trên MathHub</p>
+        </div>
+        <table class="leaderboard-table">
+            <thead>
+                <tr>
+                    <th>Hạng</th>
+                    <th>Học sinh</th>
+                    <th>Lớp</th>
+                    <th>Điểm</th>
+                    <th>Huy hiệu</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="top-1">
+                    <td class="rank">1</td>
+                    <td>Nguyễn Minh Anh</td>
+                    <td>Lớp 5</td>
+                    <td>4,850</td>
+                    <td><i class="fas fa-medal" style="color: gold;"></i> 12</td>
+                </tr>
+                <tr class="top-2">
+                    <td class="rank">2</td>
+                    <td>Trần Quốc Bảo</td>
+                    <td>Lớp 4</td>
+                    <td>4,720</td>
+                    <td><i class="fas fa-medal" style="color: silver;"></i> 10</td>
+                </tr>
+                <tr class="top-3">
+                    <td class="rank">3</td>
+                    <td>Lê Thanh Chi</td>
+                    <td>Lớp 3</td>
+                    <td>4,580</td>
+                    <td><i class="fas fa-medal" style="color: #cd7f32;"></i> 9</td>
+                </tr>
+                <tr>
+                    <td class="rank">4</td>
+                    <td>Phạm Đức Duy</td>
+                    <td>Lớp 6</td>
+                    <td>4,420</td>
+                    <td><i class="fas fa-star" style="color: var(--primary);"></i> 8</td>
+                </tr>
+                <tr>
+                    <td class="rank">5</td>
+                    <td>Hoàng Kim Em</td>
+                    <td>Lớp 5</td>
+                    <td>4,350</td>
+                    <td><i class="fas fa-star" style="color: var(--primary);"></i> 7</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="testimonials">
+        <div class="section-header">
+            <h2>Phụ huynh và học sinh nói gì về MathHub</h2>
+            <p>Những trải nghiệm thực tế từ người dùng của chúng tôi</p>
+        </div>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    Con tôi đã cải thiện điểm Toán đáng kể từ khi sử dụng MathHub. Cháu hào hứng học mỗi ngày và luôn mong chờ được khám phá các trò chơi mới.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">CM</div>
+                    <div class="author-info">
+                        <h4>Chị Minh</h4>
+                        <p>Phụ huynh học sinh lớp 3</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    MathHub giúp em học Toán dễ dàng hơn bao giờ hết. Các trò chơi vui nhộn khiến em không cảm thấy nhàm chán như học trong sách giáo khoa.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">NT</div>
+                    <div class="author-info">
+                        <h4>Nguyễn Tuấn</h4>
+                        <p>Học sinh lớp 5</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-text">
+                    Là một giáo viên, tôi đánh giá cao nội dung giáo dục của MathHub. Các bài học được thiết kế khoa học, bám sát chương trình và phù hợp với từng độ tuổi.
+                </div>
+                <div class="testimonial-author">
+                    <div class="author-avatar">TH</div>
+                    <div class="author-info">
+                        <h4>Thầy Hiếu</h4>
+                        <p>Giáo viên Tiểu học</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Sẵn sàng khám phá thế giới Toán học?</h2>
+            <p>Đăng ký tài khoản ngay hôm nay để bắt đầu hành trình học Toán đầy thú vị</p>
+            <button class="btn btn-accent"><i class="fas fa-user-plus"></i> Đăng ký miễn phí</button>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-column">
+                <h3>Về MathHub</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Giới thiệu</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Đội ngũ</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Phương pháp</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Blog</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Chương trình học</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Lớp 1-3</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Lớp 4-5</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Lớp 6-9</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Lớp 10-12</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Hỗ trợ</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Câu hỏi thường gặp</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Hướng dẫn sử dụng</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Liên hệ</a></li>
+                    <li><a href="#"><i class="fas fa-angle-right"></i> Chính sách bảo mật</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Kết nối với chúng tôi</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="#"><i class="fab fa-tiktok"></i> TikTok</a></li>
+                    <li><a href="#"><i class="fas fa-envelope"></i> Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 MathHub. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <div class="scroll-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-header">
+                <h2>Đăng nhập</h2>
+                <p>Đăng nhập để tiếp tục học tập</p>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Email của bạn">
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Mật khẩu">
+                </div>
+                <div class="form-options">
+                    <label>
+                        <input type="checkbox"> Ghi nhớ đăng nhập
+                    </label>
+                    <a href="#">Quên mật khẩu?</a>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Đăng nhập</button>
+            </form>
+            <div class="form-footer">
+                <p>Chưa có tài khoản? <a href="#">Đăng ký ngay</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sticky Header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // User Dropdown
+        const userProfile = document.querySelector('.user-profile');
+        const userDropdown = document.querySelector('.user-dropdown');
+        
+        userProfile.addEventListener('click', function() {
+            userDropdown.classList.toggle('show');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!userProfile.contains(event.target) && !userDropdown.contains(event.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+
+        // Mobile Menu
+        const mobileMenuBtn = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+        });
+
+        // Login Modal
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.querySelector('.close-modal');
+        
+        loginBtn.addEventListener('click', function() {
+            loginModal.style.display = 'flex';
+        });
+        
+        closeModal.addEventListener('click', function() {
+            loginModal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', function(event) {
+            if (event.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+
+        // Scroll animations
+        function checkVisibility() {
+            const elements = document.querySelectorAll('.feature-card, .topic-card, .game-card, .testimonial-card');
+            
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                
+                // If the element is in the viewport
+                if(position.top < window.innerHeight - 100 && position.bottom >= 0) {
+                    element.classList.add('visible');
+                }
+            });
+        }
+        
+        // Check on load and scroll
+        window.addEventListener('load', checkVisibility);
+        window.addEventListener('scroll', checkVisibility);
+
+        // Scroll to top button
+        const scrollToTopBtn = document.querySelector('.scroll-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+        
+        scrollToTopBtn.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Grade buttons
+        const gradeButtons = document.querySelectorAll('.grade-btn');
+        
+        gradeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                gradeButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Filter buttons
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
