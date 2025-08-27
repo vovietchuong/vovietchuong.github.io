@@ -40,6 +40,23 @@
             opacity: 0.9;
         }
         
+        .section-title {
+            color: white;
+            margin: 30px 0 15px;
+            text-align: center;
+            font-size: 1.8rem;
+            width: 100%;
+            max-width: 1000px;
+        }
+        
+        .section-divider {
+            width: 100%;
+            max-width: 1000px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 10px 0 30px;
+        }
+        
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -178,6 +195,15 @@
             background: #e6b02a;
         }
         
+        .game-card-btn.coming-soon {
+            background: #858796;
+            cursor: not-allowed;
+        }
+        
+        .game-card-btn.coming-soon:hover {
+            background: #858796;
+        }
+        
         .footer {
             margin-top: 40px;
             color: white;
@@ -197,6 +223,9 @@
         <h1><i class="fas fa-calculator"></i> MathHub</h1>
         <p>Trang web giáo dục toán học - vừa CHƠI vừa HỌC - HỌC qua TRÒ CHƠI</p>
     </div>
+    
+    <h2 class="section-title">Trò chơi hiện có</h2>
+    <div class="section-divider"></div>
     
     <div class="container">
         <!-- Game Toán lớp 1 - Nổi bật -->
@@ -249,7 +278,12 @@
                 <a href="duongduapheptinh.html" class="game-card-btn">Chơi ngay</a>
             </div>
         </div>
-        
+    </div>
+    
+    <h2 class="section-title">Trò chơi sắp ra mắt</h2>
+    <div class="section-divider"></div>
+    
+    <div class="container">
         <!-- Toán đố vui -->
         <div class="game-card">
             <div class="game-card-img" style="background-color: #f6c23e;">
@@ -258,7 +292,7 @@
             <div class="game-card-content">
                 <h3>Toán đố vui</h3>
                 <p>Giải các bài toán đố thú vị và rèn luyện tư duy logic. Phù hợp với mọi lứa tuổi.</p>
-                <a href="#" class="game-card-btn">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
         
@@ -270,7 +304,7 @@
             <div class="game-card-content">
                 <h3>Cờ toán học</h3>
                 <p>Kết hợp giữa cờ vua và toán học. Chiến thắng bằng cách giải các phép tính.</p>
-                <a href="#" class="game-card-btn">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
         
@@ -282,7 +316,19 @@
             <div class="game-card-content">
                 <h3>Đấu trường toán học</h3>
                 <p>Thi đấu với bạn bè và người chơi khác để trở thành nhà vô địch toán học.</p>
-                <a href="#" class="game-card-btn">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+            </div>
+        </div>
+
+        <!-- Nhân chia nâng cao -->
+        <div class="game-card">
+            <div class="game-card-img" style="background-color: #6f42c1;">
+                <i class="fas fa-divide"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Nhân chia nâng cao</h3>
+                <p>Rèn luyện kỹ năng nhân chia với các số lớn hơn. Dành cho học sinh lớp 3-4.</p>
+                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
     </div>
