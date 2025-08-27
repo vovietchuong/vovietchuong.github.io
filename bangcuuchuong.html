@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Bảng Cửu Chương - MathHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4a00e0;
+            --secondary: #8e2de2;
+            --accent: #00b894;
+            --danger: #ff6b6b;
+            --warning: #fdcb6e;
+            --light: #f8f9fa;
+            --dark: #2d3436;
+            --success: #00b894;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--dark);
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .home-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .home-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .home-btn i {
+            margin-right: 8px;
+        }
+        
+        h1 {
+            color: var(--primary);
+            margin: 15px 0 5px;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .info-box {
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 15px;
+            padding: 12px;
+            flex: 1;
+            min-width: 120px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-label {
+            font-size: 0.8rem;
+            margin-bottom: 5px;
+            opacity: 0.9;
+        }
+        
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .stars {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+            gap: 5px;
+        }
+        
+        .star {
+            color: #ddd;
+            font-size: 1.8rem;
+            transition: all 0.3s;
+        }
+        
+        .star.filled {
+            color: var(--warning);
+            text-shadow: 0 0 10px rgba(253, 203, 110, 0.5);
+        }
+        
+        .progress-container {
+            width: 100%;
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            height: 15px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+        
+        .multiplication-table {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+        
+        .table-btn {
+            background: linear-gradient(145deg, #74b9ff, #0984e3);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 12px 0;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .table-btn:hover:not(.active) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .table-btn.active {
+            background: linear-gradient(145deg, var(--danger), #ee5a52);
+            transform: scale(1.05);
+        }
+        
+        .table-btn.completed {
+            background: linear-gradient(145deg, var(--success), #00a382);
+        }
+        
+        .question-container {
+            background-color: var(--light);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .question {
+            font-size: 2rem;
+            color: var(--dark);
+            margin: 10px 0;
+            transition: transform 0.3s;
+        }
+        
+        .answer-input {
+            font-size: 1.8rem;
+            width: 90px;
+            text-align: center;
+            border: 3px solid #74b9ff;
+            border-radius: 10px;
+            padding: 8px;
+            margin: 10px 0;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(116, 185, 255, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .control-btn {
+            background: linear-gradient(145deg, var(--success), #00a382);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 10px 20px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .control-btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .control-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        #skip-btn {
+            background: linear-gradient(145deg, var(--warning), #fdc43e);
+            color: var(--dark);
+        }
+        
+        .feedback {
+            font-size: 1.2rem;
+            min-height: 40px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(10px);
+            margin-bottom: 10px;
+        }
+        
+        .feedback.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .correct {
+            color: var(--success);
+            background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid var(--success);
+        }
+        
+        .incorrect {
+            color: var(--danger);
+            background-color: rgba(214, 48, 49, 0.1);
+            border: 1px solid var(--danger);
+        }
+        
+        /* Animation for new question */
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .pop-in {
+            animation: popIn 0.3s ease forwards;
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 2;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .bounce {
+            animation: bounce 0.6s;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .game-info {
+                flex-direction: column;
+            }
+            
+            .info-box {
+                width: 100%;
+            }
+            
+            .multiplication-table {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .question {
+                font-size: 1.8rem;
+            }
+            
+            .answer-input {
+                font-size: 1.5rem;
+                width: 80px;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .control-btn {
+                width: 100%;
+            }
+            
+            .home-btn {
+                position: relative;
+                margin-bottom: 15px;
+                width: auto;
+                display: inline-flex;
+            }
+            
+            .header {
+                text-align: center;
+            }
+        }
+
+        /* High contrast mode for better accessibility */
+        @media (prefers-contrast: high) {
+            .table-btn {
+                border: 2px solid var(--dark);
+            }
+            
+            .answer-input {
+                border-width: 3px;
+            }
+            
+            .info-box {
+                border: 2px solid white;
+            }
+        }
+        
+        /* Reduced motion for accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <button class="home-btn" id="home-btn">
+                <i class="fas fa-home"></i> Trang chủ
+            </button>
+            <h1>🧮 Bảng Cửu Chương 🧮</h1>
+            <p class="subtitle">Học thuộc bảng cửu chương thật dễ dàng!</p>
+        </div>
+        
+        <div class="game-info">
+            <div class="info-box">
+                <div class="info-label">Điểm số</div>
+                <div class="info-value" id="score">0</div>
+            </div>
+            <div class="info-box">
+                <div class="info-label">Câu đúng</div>
+                <div class="info-value" id="correct">0</div>
+            </div>
+            <div class="info-box">
+                <div class="info-label">Bảng đang học</div>
+                <div class="info-value" id="current-table">-</div>
+            </div>
+        </div>
+        
+        <div class="stars">
+            <span class="star">⭐</span>
+            <span class="star">⭐</span>
+            <span class="star">⭐</span>
+            <span class="star">⭐</span>
+            <span class="star">⭐</span>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="multiplication-table">
+            <button class="table-btn" data-table="2">Bảng 2</button>
+            <button class="table-btn" data-table="3">Bảng 3</button>
+            <button class="table-btn" data-table="4">Bảng 4</button>
+            <button class="table-btn" data-table="5">Bảng 5</button>
+            <button class="table-btn" data-table="6">Bảng 6</button>
+            <button class="table-btn" data-table="7">Bảng 7</button>
+            <button class="table-btn" data-table="8">Bảng 8</button>
+            <button class="table-btn" data-table="9">Bảng 9</button>
+            <button class="table-btn" data-table="10">Bảng 10</button>
+            <button class="table-btn" data-table="mixed">Tổng hợp</button>
+        </div>
+        
+        <div class="question-container">
+            <div class="question" id="question">Chọn một bảng cửu chương để bắt đầu!</div>
+            <input type="number" class="answer-input" id="answer-input" placeholder="?" min="0" disabled>
+        </div>
+        
+        <div class="controls">
+            <button class="control-btn" id="check-btn" disabled>
+                <i class="fas fa-check"></i> Kiểm tra
+            </button>
+            <button class="control-btn" id="skip-btn" disabled>
+                <i class="fas fa-forward"></i> Bỏ qua
+            </button>
+        </div>
+        
+        <div class="feedback" id="feedback"></div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            score: 0,
+            correctAnswers: 0,
+            currentTable: null,
+            currentQuestion: {},
+            isWaiting: false,
+            stars: 0,
+            completedTables: {},
+            questionsAnswered: 0,
+            // Lưu trữ các câu hỏi đã hỏi để tránh lặp lại
+            askedQuestions: new Set()
+        };
+
+        // DOM Elements
+        const elements = {
+            score: document.getElementById('score'),
+            correct: document.getElementById('correct'),
+            currentTable: document.getElementById('current-table'),
+            question: document.getElementById('question'),
+            answerInput: document.getElementById('answer-input'),
+            checkBtn: document.getElementById('check-btn'),
+            skipBtn: document.getElementById('skip-btn'),
+            homeBtn: document.getElementById('home-btn'),
+            feedback: document.getElementById('feedback'),
+            progressBar: document.getElementById('progress-bar'),
+            stars: document.querySelectorAll('.star'),
+            tableBtns: document.querySelectorAll('.table-btn')
+        };
+
+        // Initialize game
+        function initGame() {
+            setupEventListeners();
+            updateScoreDisplay();
+            // Focus vào ô input khi trang load
+            setTimeout(() => {
+                if (!gameState.currentTable) {
+                    elements.answerInput.disabled = true;
+                }
+            }, 100);
+        }
+
+        // Start a multiplication table
+        function startTable(table) {
+            gameState.currentTable = table;
+            gameState.questionsAnswered = 0;
+            gameState.askedQuestions.clear();
+            
+            elements.currentTable.textContent = table === 'mixed' ? 'Tổng hợp' : `Bảng ${table}`;
+            
+            // Update active button
+            elements.tableBtns.forEach(btn => {
+                if (btn.dataset.table === table) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+                
+                // Mark completed tables
+                if (gameState.completedTables[btn.dataset.table]) {
+                    btn.classList.add('completed');
+                } else {
+                    btn.classList.remove('completed');
+                }
+            });
+            
+            // Enable input and buttons
+            elements.answerInput.disabled = false;
+            elements.checkBtn.disabled = false;
+            elements.skipBtn.disabled = false;
+            elements.answerInput.focus();
+            
+            generateQuestion();
+        }
+
+        // Generate a new question (tránh lặp lại câu hỏi)
+        function generateQuestion() {
+            if (gameState.isWaiting) return;
+            
+            let num1, num2;
+            let questionKey;
+            let attempts = 0;
+            const maxAttempts = 20; // Giới hạn số lần thử để tránh vòng lặp vô hạn
+            
+            do {
+                if (gameState.currentTable === 'mixed') {
+                    // Random table from 2 to 10
+                    const randomTable = Math.floor(Math.random() * 9) + 2;
+                    num1 = randomTable;
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                } else {
+                    // Specific table
+                    num1 = parseInt(gameState.currentTable);
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                }
+                
+                questionKey = `${num1}x${num2}`;
+                attempts++;
+                
+                // Nếu đã thử quá nhiều, xóa bộ nhớ câu hỏi đã hỏi
+                if (attempts > maxAttempts) {
+                    gameState.askedQuestions.clear();
+                    break;
+                }
+            } while (gameState.askedQuestions.has(questionKey));
+            
+            // Thêm câu hỏi vào danh sách đã hỏi
+            gameState.askedQuestions.add(questionKey);
+            
+            const answer = num1 * num2;
+            
+            gameState.currentQuestion = { num1, num2, answer };
+            elements.question.textContent = `${num1} × ${num2} = ?`;
+            elements.answerInput.value = '';
+            elements.feedback.className = 'feedback';
+            
+            // Add animation
+            elements.question.classList.remove('pop-in');
+            void elements.question.offsetWidth;
+            elements.question.classList.add('pop-in');
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Check the answer
+        function checkAnswer() {
+            if (gameState.isWaiting) return;
+            
+            const userAnswer = parseInt(elements.answerInput.value);
+            
+            if (isNaN(userAnswer)) {
+                showFeedback('Hãy nhập câu trả lời!', false);
+                elements.answerInput.focus();
+                return;
+            }
+            
+            gameState.isWaiting = true;
+            gameState.questionsAnswered++;
+            
+            if (userAnswer === gameState.currentQuestion.answer) {
+                // Correct answer
+                gameState.score += 10;
+                gameState.correctAnswers++;
+                gameState.stars = Math.min(gameState.stars + 1, 5);
+                
+                updateScoreDisplay();
+                showFeedback('Chính xác! 👏', true);
+                playSuccessSound();
+                
+                // Check if table is completed (10 correct answers)
+                if (gameState.questionsAnswered >= 10) {
+                    gameState.completedTables[gameState.currentTable] = true;
+                    setTimeout(() => {
+                        showFeedback(`Chúc mừng! Bạn đã hoàn thành ${gameState.currentTable === 'mixed' ? 'câu hỏi tổng hợp' : 'bảng ' + gameState.currentTable}! 🎉`, true);
+                        createConfetti();
+                    }, 1000);
+                }
+            } else {
+                // Incorrect answer
+                gameState.stars = Math.max(gameState.stars - 1, 0);
+                updateScoreDisplay();
+                showFeedback(`Sai rồi! ${gameState.currentQuestion.num1} × ${gameState.currentQuestion.num2} = ${gameState.currentQuestion.answer}`, false);
+            }
+            
+            // Generate new question after delay
+            setTimeout(() => {
+                gameState.isWaiting = false;
+                generateQuestion();
+                elements.answerInput.focus();
+            }, 2000);
+        }
+
+        // Skip the current question
+        function skipQuestion() {
+            if (gameState.isWaiting) return;
+            
+            showFeedback(`Đáp án: ${gameState.currentQuestion.answer}`, false);
+            gameState.isWaiting = true;
+            
+            // Generate new question after delay
+            setTimeout(() => {
+                gameState.isWaiting = false;
+                generateQuestion();
+                elements.answerInput.focus();
+            }, 1500);
+        }
+
+        // Update score display
+        function updateScoreDisplay() {
+            elements.score.textContent = gameState.score;
+            elements.correct.textContent = gameState.correctAnswers;
+            
+            // Update stars
+            elements.stars.forEach((star, index) => {
+                if (index < gameState.stars) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
+        }
+
+        // Update progress bar
+        function updateProgress() {
+            const progress = (gameState.questionsAnswered / 10) * 100;
+            elements.progressBar.style.width = `${progress}%`;
+        }
+
+        // Show feedback
+        function showFeedback(message, isCorrect) {
+            elements.feedback.textContent = message;
+            elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+            
+            if (isCorrect) {
+                elements.feedback.classList.add('celebrate');
+            }
+        }
+
+        // Play success sound
+        function playSuccessSound() {
+            // Simple success sound using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+                
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime); // Reduced volume
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log("Web Audio API is not supported in this browser");
+            }
+        }
+
+        // Create confetti effect (optimized)
+        function createConfetti() {
+            const confettiCount = 20; // Reduced for performance
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: absolute;
+                    width: 8px;
+                    height: 8px;
+                    background: ${['#ff6b6b', '#74b9ff', '#ffeaa7', '#55efc4', '#a29bfe'][i % 5]};
+                    top: 50%;
+                    left: ${50 + (i % 2 === 0 ? i * 2 : -i * 2)}%;
+                    border-radius: ${i % 2 === 0 ? '50%' : '0'};
+                    z-index: 100;
+                    animation: fadeOut 1s forwards;
+                `;
+                
+                container.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 1000);
+            }
+        }
+
+        // Handle home button click
+        function handleHomeButton() {
+            window.location.href = "index.html";
+        }
+
+        // Handle keyboard input
+        function handleKeyboardInput(event) {
+            if (gameState.isWaiting) return;
+            
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Table buttons
+            elements.tableBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    startTable(btn.dataset.table);
+                });
+            });
+            
+            // Check button
+            elements.checkBtn.addEventListener('click', checkAnswer);
+            
+            // Skip button
+            elements.skipBtn.addEventListener('click', skipQuestion);
+            
+            // Home button
+            elements.homeBtn.addEventListener('click', handleHomeButton);
+            
+            // Keyboard support
+            elements.answerInput.addEventListener('keydown', handleKeyboardInput);
+            
+            // Auto-focus on input when enabled
+            elements.answerInput.addEventListener('focus', () => {
+                if (window.innerWidth > 480) return;
+                setTimeout(() => {
+                    window.scrollTo(0, elements.answerInput.offsetTop - 100);
+                }, 100);
+            });
+        }
+
+        // Initialize the game when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initGame);
+    </script>
+</body>
+</html>
