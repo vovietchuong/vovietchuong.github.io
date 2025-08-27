@@ -79,6 +79,31 @@
             margin-bottom: 5px;
         }
         
+        .mode-selector {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .mode-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background: #e3f2fd;
+            color: #1976d2;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .mode-btn.active {
+            background: linear-gradient(145deg, #74b9ff, #0984e3);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         .score-container {
             background: linear-gradient(145deg, #ffeaa7, #fdcb6e);
             border-radius: 50px;
@@ -88,6 +113,45 @@
             font-size: 1.2rem;
             color: #d63031;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 5px;
+        }
+        
+        .star {
+            color: #ffeaa7;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .star.filled {
+            color: #fdcb6e;
+            text-shadow: 0 0 5px rgba(253, 203, 110, 0.8);
+        }
+        
+        .visual-representation {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            min-height: 80px;
+        }
+        
+        .fruit {
+            font-size: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .operator {
+            font-size: 2rem;
+            margin: 0 5px;
+            color: #74b9ff;
         }
         
         .question-container {
@@ -96,6 +160,7 @@
             padding: 20px;
             margin: 20px 0;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            position: relative;
         }
         
         .question {
@@ -111,6 +176,9 @@
             margin: 15px 0;
             min-height: 60px;
             transition: all 0.3s;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
         }
         
         .answer-buttons {
@@ -174,6 +242,7 @@
             transition: all 0.3s;
             opacity: 0;
             transform: translateY(10px);
+            margin-bottom: 10px;
         }
         
         .feedback.show {
@@ -184,11 +253,13 @@
         .correct {
             color: #00b894;
             background-color: rgba(0, 184, 148, 0.1);
+            border: 1px solid #00b894;
         }
         
         .incorrect {
             color: #d63031;
             background-color: rgba(214, 48, 49, 0.1);
+            border: 1px solid #d63031;
         }
         
         .keyboard-hints {
@@ -207,6 +278,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             color: #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .key-icon {
@@ -228,6 +300,43 @@
         
         .pop-in {
             animation: popIn 0.5s ease forwards;
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 2;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
+        }
+        
+        .bounce {
+            animation: bounce 1s;
+        }
+        
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+        
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+        
+        /* Confetti effect */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            z-index: 100;
         }
         
         /* Responsive design */
@@ -263,21 +372,48 @@
                 flex-direction: column;
                 gap: 8px;
             }
+            
+            .visual-representation {
+                min-height: 60px;
+            }
+            
+            .fruit {
+                font-size: 1.5rem;
+            }
+            
+            .answer-buttons {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>🎮 Game Toán Lớp 1 🎮</h1>
-            <p class="subtitle">Luyện tập cộng trừ thật vui!</p>
+            <h1>🍎 Toán Lớp 1 🍎</h1>
+            <p class="subtitle">Cộng trừ trong phạm vi 10</p>
             <button class="home-btn" id="home-btn">
                 <i class="fas fa-home"></i> Về trang chủ MathHub
             </button>
         </div>
         
+        <div class="mode-selector">
+            <button class="mode-btn active" data-mode="addition">Chỉ cộng</button>
+            <button class="mode-btn" data-mode="subtraction">Chỉ trừ</button>
+            <button class="mode-btn" data-mode="both">Cả hai</button>
+        </div>
+        
         <div class="score-container">
             Điểm: <span id="score">0</span>
+            <div class="stars">
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+                <span class="star">⭐</span>
+            </div>
+        </div>
+        
+        <div class="visual-representation" id="visual-representation">
+            <!-- Visual elements will be added here -->
         </div>
         
         <div class="question-container">
@@ -327,7 +463,9 @@
             currentAnswer: '',
             currentQuestion: {},
             score: 0,
-            isWaiting: false
+            isWaiting: false,
+            correctInRow: 0,
+            gameMode: 'addition' // addition, subtraction, both
         };
 
         // DOM Elements
@@ -339,8 +477,14 @@
             answerButtons: document.getElementById('answer-buttons'),
             clearButton: document.getElementById('clear-btn'),
             submitButton: document.getElementById('submit-btn'),
-            homeButton: document.getElementById('home-btn')
+            homeButton: document.getElementById('home-btn'),
+            visualRepresentation: document.getElementById('visual-representation'),
+            stars: document.querySelectorAll('.star'),
+            modeButtons: document.querySelectorAll('.mode-btn')
         };
+
+        // Fruit emojis for visual representation
+        const fruits = ['🍎', '🍐', '🍊', '🍋', '🍌', '🍉', '🍇', '🍓', '🍒', '🍑'];
 
         // Initialize game
         function initGame() {
@@ -349,9 +493,11 @@
             updateScoreDisplay();
         }
 
-        // Generate a new math question
+        // Generate a new math question based on selected mode
         function generateQuestion() {
-            const isAddition = Math.random() > 0.5;
+            const isAddition = gameState.gameMode === 'addition' || 
+                              (gameState.gameMode === 'both' && Math.random() > 0.5);
+            
             let num1, num2, answer;
 
             if (isAddition) {
@@ -368,13 +514,54 @@
                 elements.question.textContent = `${num1} - ${num2} = ?`;
             }
 
-            gameState.currentQuestion = { num1, num2, answer, operator: isAddition ? '+' : '-' };
+            gameState.currentQuestion = { 
+                num1, 
+                num2, 
+                answer, 
+                operator: isAddition ? '+' : '-' 
+            };
+            
+            // Create visual representation
+            createVisualRepresentation(num1, num2, isAddition);
+            
             resetAnswer();
             
             // Add animation
             elements.question.classList.remove('pop-in');
             void elements.question.offsetWidth; // Trigger reflow
             elements.question.classList.add('pop-in');
+        }
+
+        // Create visual representation of the problem
+        function createVisualRepresentation(num1, num2, isAddition) {
+            elements.visualRepresentation.innerHTML = '';
+            
+            const fruit1 = document.createElement('div');
+            fruit1.className = 'fruit';
+            fruit1.textContent = fruits[num1 - 1].repeat(num1);
+            
+            const operator = document.createElement('div');
+            operator.className = 'operator';
+            operator.textContent = isAddition ? '+' : '-';
+            
+            const fruit2 = document.createElement('div');
+            fruit2.className = 'fruit';
+            fruit2.textContent = fruits[num2 + 2].repeat(num2);
+            
+            if (isAddition) {
+                elements.visualRepresentation.appendChild(fruit1);
+                elements.visualRepresentation.appendChild(operator);
+                elements.visualRepresentation.appendChild(fruit2);
+            } else {
+                elements.visualRepresentation.appendChild(fruit1);
+                elements.visualRepresentation.appendChild(operator);
+                elements.visualRepresentation.appendChild(fruit2);
+            }
+            
+            // Add animation
+            elements.visualRepresentation.classList.remove('pop-in');
+            void elements.visualRepresentation.offsetWidth;
+            elements.visualRepresentation.classList.add('pop-in');
         }
 
         // Reset answer
@@ -393,17 +580,83 @@
         // Update score display
         function updateScoreDisplay() {
             elements.score.textContent = gameState.score;
+            
+            // Update stars based on correct answers in a row
+            elements.stars.forEach((star, index) => {
+                if (index < gameState.correctInRow) {
+                    star.classList.add('filled');
+                } else {
+                    star.classList.remove('filled');
+                }
+            });
         }
 
         // Show feedback
         function showFeedback(message, isCorrect) {
             elements.feedback.textContent = message;
             elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+            
+            if (isCorrect) {
+                elements.feedback.classList.add('celebrate');
+                playSuccessSound();
+                createConfetti();
+            }
+        }
+
+        // Play success sound
+        function playSuccessSound() {
+            // Simple success sound using Web Audio API
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+                
+                const gainNode = audioContext.createGain();
+                gainNode.gain.setValueAtTime(0.5, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch (e) {
+                console.log("Web Audio API is not supported in this browser");
+            }
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            for (let i = 0; i < 20; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.cssText = `
+                    position: absolute;
+                    width: 10px;
+                    height: 10px;
+                    background: ${['#ff6b6b', '#74b9ff', '#ffeaa7', '#55efc4', '#a29bfe'][i % 5]};
+                    top: 50%;
+                    left: ${50 + (i % 2 === 0 ? i * 2 : -i * 2)}%;
+                    border-radius: ${i % 2 === 0 ? '50%' : '0'};
+                    animation: fadeOut 1s forwards;
+                `;
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 1000);
+            }
         }
 
         // Hide feedback
         function hideFeedback() {
             elements.feedback.className = 'feedback';
+            elements.feedback.classList.remove('celebrate');
         }
 
         // Handle number input
@@ -437,10 +690,13 @@
             if (userAnswer === gameState.currentQuestion.answer) {
                 // Correct answer
                 gameState.score += 10;
+                gameState.correctInRow = Math.min(gameState.correctInRow + 1, 3);
                 updateScoreDisplay();
                 showFeedback('Chính xác! 👏', true);
             } else {
                 // Incorrect answer
+                gameState.correctInRow = 0;
+                updateScoreDisplay();
                 showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.answer}`, false);
             }
 
@@ -457,6 +713,25 @@
             if (confirmLeave) {
                 window.location.href = "index.html";
             }
+        }
+
+        // Handle mode change
+        function handleModeChange(mode) {
+            gameState.gameMode = mode;
+            gameState.score = 0;
+            gameState.correctInRow = 0;
+            updateScoreDisplay();
+            
+            // Update active button
+            elements.modeButtons.forEach(btn => {
+                if (btn.dataset.mode === mode) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            generateQuestion();
         }
 
         // Handle keyboard input
@@ -496,6 +771,13 @@
             
             // Home button
             elements.homeButton.addEventListener('click', handleHomeButton);
+            
+            // Mode buttons
+            elements.modeButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    handleModeChange(btn.dataset.mode);
+                });
+            });
             
             // Keyboard support
             document.addEventListener('keydown', handleKeyboardInput);
