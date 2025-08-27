@@ -31,10 +31,11 @@
             width: 100%;
             max-width: 800px;
             overflow: hidden;
+            position: relative;
         }
         
         .game-header {
-            background: #1cc88a;
+            background: linear-gradient(to right, #1cc88a, #0f9d58);
             color: white;
             padding: 20px;
             text-align: center;
@@ -44,6 +45,7 @@
         .game-header h1 {
             font-size: 2rem;
             margin-bottom: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
         }
         
         .game-stats {
@@ -83,6 +85,7 @@
             overflow: hidden;
             margin-bottom: 25px;
             border: 3px solid #e9ecef;
+            background-image: url('data:image/svg+xml;utf8,<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="%23f8f9fc"/><path d="M0,50 L100,50" stroke="%23dee2e6" stroke-width="4" stroke-dasharray="10,10" /></svg>');
         }
         
         .track-lane {
@@ -114,7 +117,7 @@
             width: 50px;
             height: 30px;
             background: #e74a3b;
-            border-radius: 5px;
+            border-radius: 5px 5px 0 0;
             bottom: 40px;
             left: 30px;
             transition: left 0.5s ease-out;
@@ -124,6 +127,7 @@
             color: white;
             font-weight: bold;
             z-index: 10;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
         
         .player-car::after {
@@ -150,7 +154,7 @@
         
         .finish-line {
             position: absolute;
-            width: 10px;
+            width: 15px;
             height: 100%;
             background: repeating-linear-gradient(
                 to bottom,
@@ -162,10 +166,21 @@
             right: 50px;
             top: 0;
             z-index: 5;
+            box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .finish-flag {
+            position: absolute;
+            right: 65px;
+            top: 30px;
+            color: #1cc88a;
+            font-size: 2rem;
+            z-index: 6;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .math-problem {
-            background: #4e73df;
+            background: linear-gradient(to right, #4e73df, #2e59d9);
             color: white;
             padding: 15px;
             border-radius: 10px;
@@ -176,6 +191,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .math-problem::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            transform: rotate(30deg);
         }
         
         .answer-options {
@@ -195,13 +224,16 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         
         .answer-btn:hover:not(:disabled) {
             background: #4e73df;
             color: white;
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
         }
         
         .answer-btn:disabled {
@@ -212,11 +244,13 @@
         .answer-btn.correct {
             background: #1cc88a;
             color: white;
+            box-shadow: 0 0 10px rgba(28, 200, 138, 0.5);
         }
         
         .answer-btn.incorrect {
             background: #e74a3b;
             color: white;
+            box-shadow: 0 0 10px rgba(231, 74, 59, 0.5);
         }
         
         .game-controls {
@@ -235,6 +269,7 @@
             align-items: center;
             gap: 8px;
             transition: all 0.3s;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
         
         .btn-start {
@@ -249,7 +284,14 @@
         
         .control-btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+        
+        .control-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
         
         .game-instructions {
@@ -258,11 +300,15 @@
             padding: 15px;
             border-radius: 10px;
             border-left: 4px solid #4e73df;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
         
         .game-instructions h3 {
             margin-bottom: 10px;
             color: #2e59d9;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         .instructions-list {
@@ -271,6 +317,7 @@
         
         .instructions-list li {
             margin-bottom: 8px;
+            padding-left: 5px;
         }
         
         .home-link {
@@ -283,11 +330,132 @@
             background: rgba(255, 255, 255, 0.2);
             border-radius: 50px;
             transition: all 0.3s;
+            backdrop-filter: blur(5px);
         }
         
         .home-link:hover {
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-3px);
+        }
+        
+        .power-up {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 7;
+            animation: float 3s ease-in-out infinite;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .power-up.extra-life {
+            background: #e74a3b;
+        }
+        
+        .power-up.speed-boost {
+            background: #4e73df;
+        }
+        
+        .power-up.time-bonus {
+            background: #f6c23e;
+            color: #333;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: #1cc88a;
+        }
+        
+        .notification.error {
+            background: #e74a3b;
+        }
+        
+        .notification.info {
+            background: #4e73df;
+        }
+        
+        .level-up-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            color: white;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .level-up-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .level-up-screen h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #f6c23e;
+            text-shadow: 0 0 10px rgba(246, 194, 62, 0.5);
+        }
+        
+        .level-up-screen p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .high-scores {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            backdrop-filter: blur(5px);
+            display: none;
+        }
+        
+        .high-scores h3 {
+            margin-bottom: 10px;
+            color: white;
+            text-align: center;
+        }
+        
+        .high-scores-list {
+            list-style: none;
+            color: white;
+        }
+        
+        .high-scores-list li {
+            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         @media (max-width: 600px) {
@@ -308,6 +476,10 @@
                 flex-direction: column;
                 gap: 10px;
             }
+            
+            .game-controls {
+                flex-direction: column;
+            }
         }
         
         /* Animations */
@@ -321,8 +493,23 @@
             50% { transform: scale(1.1); }
         }
         
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
         .celebrate {
             animation: celebrate 0.5s ease-in-out 2;
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
         
         .progress-bar {
@@ -331,18 +518,44 @@
             border-radius: 5px;
             margin: 10px 0;
             overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
         
         .progress {
             height: 100%;
-            background: #1cc88a;
+            background: linear-gradient(to right, #1cc88a, #0f9d58);
             width: 0%;
             transition: width 0.3s ease;
+            border-radius: 5px;
+        }
+        
+        .timer-container {
+            width: 100%;
+            height: 5px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .timer {
+            height: 100%;
+            background: linear-gradient(to right, #4e73df, #2e59d9);
+            width: 100%;
+            transition: width 1s linear;
         }
     </style>
 </head>
 <body>
     <div class="game-container">
+        <div class="level-up-screen" id="level-up-screen">
+            <h2>Level Up!</h2>
+            <p>Bạn đã đạt cấp độ <span id="new-level">1</span></p>
+            <button class="control-btn btn-start" id="continue-btn">
+                <i class="fas fa-arrow-right"></i> Tiếp tục
+            </button>
+        </div>
+    
         <div class="game-header">
             <h1><i class="fas fa-flag-checkered"></i> Đường đua phép tính</h1>
             <p>Giải đúng để đưa xe về đích!</p>
@@ -365,6 +578,10 @@
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
+            
+            <div class="timer-container">
+                <div class="timer" id="timer"></div>
+            </div>
         </div>
         
         <div class="game-body">
@@ -374,6 +591,10 @@
                     <i class="fas fa-car"></i>
                 </div>
                 <div class="finish-line"></div>
+                <div class="finish-flag">
+                    <i class="fas fa-flag-checkered"></i>
+                </div>
+                <!-- Power-ups will be added dynamically -->
             </div>
             
             <div class="math-problem" id="math-problem">
@@ -394,7 +615,17 @@
                 <button class="control-btn btn-reset" id="reset-btn" disabled>
                     <i class="fas fa-redo"></i> Chơi lại
                 </button>
+                <button class="control-btn btn-reset" id="scores-btn">
+                    <i class="fas fa-trophy"></i> Điểm cao
+                </button>
             </div>
+        </div>
+        
+        <div class="high-scores" id="high-scores">
+            <h3><i class="fas fa-trophy"></i> Bảng điểm cao</h3>
+            <ul class="high-scores-list" id="high-scores-list">
+                <!-- High scores will be populated here -->
+            </ul>
         </div>
     </div>
     
@@ -406,13 +637,15 @@
             <li>Mỗi câu trả lời đúng sẽ đưa xe của bạn tiến gần hơn về đích</li>
             <li>Trả lời sai quá 3 lần sẽ thua cuộc</li>
             <li>Về đích để hoàn thành cấp độ và chuyển sang cấp độ khó hơn</li>
+            <li>Thu thập các vật phẩm trên đường đua để nhận điểm thưởng</li>
         </ul>
     </div>
     
-    <!-- ĐÃ SỬA: Thay đổi href từ "#" thành "index.html" -->
     <a href="index.html" class="home-link">
         <i class="fas fa-arrow-left"></i> Quay về trang chủ MathHub
     </a>
+
+    <div class="notification" id="notification"></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -423,7 +656,10 @@
             let gameActive = false;
             let correctAnswer;
             let progress = 0;
+            let timeLeft = 15;
+            let timerInterval;
             const maxProgress = 700; // Tổng số px cần để về đích
+            let powerUps = [];
             
             // Các phần tử DOM
             const scoreElement = document.getElementById('score');
@@ -433,8 +669,33 @@
             const answerOptionsElement = document.getElementById('answer-options');
             const startButton = document.getElementById('start-btn');
             const resetButton = document.getElementById('reset-btn');
+            const scoresButton = document.getElementById('scores-btn');
             const playerCar = document.getElementById('player-car');
             const progressBar = document.getElementById('progress');
+            const timerElement = document.getElementById('timer');
+            const notificationElement = document.getElementById('notification');
+            const levelUpScreen = document.getElementById('level-up-screen');
+            const newLevelElement = document.getElementById('new-level');
+            const continueButton = document.getElementById('continue-btn');
+            const highScoresElement = document.getElementById('high-scores');
+            const highScoresList = document.getElementById('high-scores-list');
+            
+            // Khởi tạo trò chơi
+            function initGame() {
+                // Tải điểm cao từ localStorage
+                loadHighScores();
+                
+                // Gán sự kiện cho các nút
+                startButton.addEventListener('click', startGame);
+                resetButton.addEventListener('click', resetGame);
+                scoresButton.addEventListener('click', toggleHighScores);
+                continueButton.addEventListener('click', hideLevelUpScreen);
+                
+                // Khởi tạo trạng thái ban đầu
+                mathProblemElement.textContent = "Nhấn Bắt đầu để chơi!";
+                resetButton.disabled = true;
+                timerElement.style.width = '100%';
+            }
             
             // Hàm tạo phép toán ngẫu nhiên
             function generateMathProblem() {
@@ -451,8 +712,8 @@
                     num1 = Math.floor(Math.random() * 12) + 1;
                     num2 = Math.floor(Math.random() * 12) + 1;
                     operator = ['+', '-', '×'][Math.floor(Math.random() * 3)];
-                } else {
-                    // Cấp độ 7+: Phép chia và phức tạp hơn
+                } else if (level <= 9) {
+                    // Cấp độ 7-9: Phép chia và phức tạp hơn
                     operator = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
                     
                     if (operator === '÷') {
@@ -462,6 +723,53 @@
                         num1 = Math.floor(Math.random() * 15) + 5;
                         num2 = Math.floor(Math.random() * 15) + 5;
                     }
+                } else {
+                    // Cấp độ 10+: Phức tạp với nhiều số và phép tính
+                    const numCount = Math.floor(Math.random() * 2) + 3; // 3 hoặc 4 số
+                    let numbers = [];
+                    let operators = [];
+                    let expression = "";
+                    
+                    for (let i = 0; i < numCount; i++) {
+                        numbers.push(Math.floor(Math.random() * 15) + 5);
+                    }
+                    
+                    const availableOperators = ['+', '-', '×'];
+                    for (let i = 0; i < numCount - 1; i++) {
+                        operators.push(availableOperators[Math.floor(Math.random() * availableOperators.length)]);
+                    }
+                    
+                    // Xây dựng biểu thức
+                    for (let i = 0; i < numCount; i++) {
+                        expression += numbers[i];
+                        if (i < numCount - 1) {
+                            expression += " " + operators[i] + " ";
+                        }
+                    }
+                    
+                    // Tính toán kết quả
+                    let result = numbers[0];
+                    for (let i = 0; i < operators.length; i++) {
+                        switch(operators[i]) {
+                            case '+':
+                                result += numbers[i+1];
+                                break;
+                            case '-':
+                                result -= numbers[i+1];
+                                break;
+                            case '×':
+                                result *= numbers[i+1];
+                                break;
+                        }
+                    }
+                    
+                    correctAnswer = result;
+                    problemText = `${expression} = ?`;
+                    mathProblemElement.textContent = problemText;
+                    
+                    // Tạo các lựa chọn câu trả lời
+                    generateAnswerOptions(correctAnswer);
+                    return;
                 }
                 
                 // Tính toán kết quả đúng
@@ -555,11 +863,17 @@
                 const allButtons = document.querySelectorAll('.answer-btn');
                 allButtons.forEach(btn => btn.disabled = true);
                 
+                // Dừng bộ đếm thời gian
+                clearInterval(timerInterval);
+                
                 if (selectedAnswer === correctAnswer) {
                     // Đáp án đúng
                     buttonElement.classList.add('correct');
                     score += 10 * level;
                     scoreElement.textContent = score;
+                    
+                    // Hiệu ứng
+                    mathProblemElement.classList.add('celebrate');
                     
                     // Di chuyển xe
                     progress += 70;
@@ -573,7 +887,10 @@
                     } else {
                         // Tạo bài toán mới sau 1 giây
                         setTimeout(() => {
+                            resetTimer();
                             generateMathProblem();
+                            generatePowerUps();
+                            mathProblemElement.classList.remove('celebrate');
                         }, 1000);
                     }
                 } else {
@@ -590,12 +907,18 @@
                     lives--;
                     livesElement.textContent = lives;
                     
+                    // Hiệu ứng rung
+                    mathProblemElement.classList.add('shake');
+                    
                     if (lives <= 0) {
                         setTimeout(() => endGame(false), 1000);
                     } else {
                         // Tạo bài toán mới sau 1.5 giây
                         setTimeout(() => {
+                            resetTimer();
                             generateMathProblem();
+                            generatePowerUps();
+                            mathProblemElement.classList.remove('shake');
                         }, 1500);
                     }
                 }
@@ -609,30 +932,43 @@
                 playerCar.style.left = '30px';
                 progressBar.style.width = '0%';
                 
-                // Hiệu ứng ăn mừng
-                mathProblemElement.classList.add('celebrate');
-                mathProblemElement.textContent = `Chúc mừng! Bạn đã lên cấp ${level}!`;
-                
-                // Tạm dừng trò chơi trong 2 giây
+                // Hiển thị màn hình level up
+                showLevelUpScreen();
+            }
+            
+            // Hiển thị màn hình level up
+            function showLevelUpScreen() {
+                newLevelElement.textContent = level;
+                levelUpScreen.classList.add('active');
                 gameActive = false;
-                setTimeout(() => {
-                    mathProblemElement.classList.remove('celebrate');
-                    gameActive = true;
-                    generateMathProblem();
-                }, 2000);
+            }
+            
+            // Ẩn màn hình level up
+            function hideLevelUpScreen() {
+                levelUpScreen.classList.remove('active');
+                gameActive = true;
+                resetTimer();
+                generateMathProblem();
+                generatePowerUps();
             }
             
             // Hàm kết thúc trò chơi
             function endGame(isWin) {
                 gameActive = false;
+                clearInterval(timerInterval);
                 startButton.disabled = false;
                 resetButton.disabled = false;
                 
                 if (isWin) {
                     mathProblemElement.textContent = `Chiến thắng! Điểm số: ${score}`;
+                    showNotification(`Chiến thắng! Bạn đạt ${score} điểm!`, 'success');
                 } else {
                     mathProblemElement.textContent = `Game Over! Điểm số: ${score}`;
+                    showNotification(`Game Over! Điểm số: ${score}`, 'error');
                 }
+                
+                // Lưu điểm cao
+                saveHighScore(score);
             }
             
             // Hàm bắt đầu trò chơi
@@ -650,6 +986,7 @@
                 playerCar.style.left = '30px';
                 
                 generateMathProblem();
+                generatePowerUps();
                 
                 gameActive = true;
                 startButton.disabled = true;
@@ -660,6 +997,9 @@
                 buttons.forEach(button => {
                     button.disabled = false;
                 });
+                
+                // Bắt đầu bộ đếm thời gian
+                resetTimer();
             }
             
             // Hàm reset trò chơi
@@ -667,13 +1007,183 @@
                 startGame();
             }
             
-            // Gán sự kiện cho các nút
-            startButton.addEventListener('click', startGame);
-            resetButton.addEventListener('click', resetGame);
+            // Tạo power-up ngẫu nhiên
+            function generatePowerUps() {
+                // Xóa các power-up cũ
+                const existingPowerUps = document.querySelectorAll('.power-up');
+                existingPowerUps.forEach(powerUp => powerUp.remove());
+                powerUps = [];
+                
+                // Tạo power-up mới với xác suất 40%
+                if (Math.random() < 0.4) {
+                    const powerUpTypes = ['extra-life', 'speed-boost', 'time-bonus'];
+                    const randomType = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+                    
+                    const powerUp = document.createElement('div');
+                    powerUp.className = `power-up ${randomType}`;
+                    
+                    // Đặt vị trí ngẫu nhiên trên đường đua
+                    const leftPosition = Math.floor(Math.random() * (maxProgress - 100)) + 100;
+                    const topPosition = Math.floor(Math.random() * 100) + 50;
+                    
+                    powerUp.style.left = `${leftPosition}px`;
+                    powerUp.style.top = `${topPosition}px`;
+                    
+                    // Đặt biểu tượng dựa trên loại power-up
+                    switch(randomType) {
+                        case 'extra-life':
+                            powerUp.innerHTML = '<i class="fas fa-heart"></i>';
+                            break;
+                        case 'speed-boost':
+                            powerUp.innerHTML = '<i class="fas fa-bolt"></i>';
+                            break;
+                        case 'time-bonus':
+                            powerUp.innerHTML = '<i class="fas fa-clock"></i>';
+                            break;
+                    }
+                    
+                    // Thêm sự kiện click
+                    powerUp.addEventListener('click', () => collectPowerUp(powerUp, randomType));
+                    
+                    document.querySelector('.race-track').appendChild(powerUp);
+                    powerUps.push(powerUp);
+                }
+            }
             
-            // Khởi tạo trạng thái ban đầu
-            mathProblemElement.textContent = "Nhấn Bắt đầu để chơi!";
-            resetButton.disabled = true;
+            // Thu thập power-up
+            function collectPowerUp(powerUp, type) {
+                if (!gameActive) return;
+                
+                // Hiệu ứng biến mất
+                powerUp.style.transform = 'scale(0)';
+                powerUp.style.opacity = '0';
+                
+                // Áp dụng hiệu ứng power-up
+                switch(type) {
+                    case 'extra-life':
+                        lives++;
+                        livesElement.textContent = lives;
+                        showNotification('+1 Mạng!', 'success');
+                        break;
+                    case 'speed-boost':
+                        progress += 50;
+                        playerCar.style.left = `${30 + progress}px`;
+                        progressBar.style.width = `${(progress / maxProgress) * 100}%`;
+                        showNotification('Tăng tốc!', 'info');
+                        break;
+                    case 'time-bonus':
+                        timeLeft += 5;
+                        timerElement.style.width = '100%';
+                        showNotification('+5 Giây!', 'info');
+                        break;
+                }
+                
+                // Xóa power-up khỏi DOM
+                setTimeout(() => {
+                    powerUp.remove();
+                }, 300);
+            }
+            
+            // Hiển thị thông báo
+            function showNotification(message, type) {
+                notificationElement.textContent = message;
+                notificationElement.className = `notification ${type}`;
+                notificationElement.classList.add('show');
+                
+                setTimeout(() => {
+                    notificationElement.classList.remove('show');
+                }, 2000);
+            }
+            
+            // Reset bộ đếm thời gian
+            function resetTimer() {
+                clearInterval(timerInterval);
+                timeLeft = 15;
+                timerElement.style.width = '100%';
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timerElement.style.width = `${(timeLeft / 15) * 100}%`;
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        timeUp();
+                    }
+                }, 1000);
+            }
+            
+            // Hết thời gian
+            function timeUp() {
+                if (!gameActive) return;
+                
+                lives--;
+                livesElement.textContent = lives;
+                
+                showNotification('Hết thời gian!', 'error');
+                
+                if (lives <= 0) {
+                    setTimeout(() => endGame(false), 1000);
+                } else {
+                    setTimeout(() => {
+                        resetTimer();
+                        generateMathProblem();
+                        generatePowerUps();
+                    }, 1500);
+                }
+            }
+            
+            // Lưu điểm cao
+            function saveHighScore(score) {
+                let highScores = JSON.parse(localStorage.getItem('mathRaceHighScores')) || [];
+                
+                // Thêm điểm mới
+                highScores.push({
+                    score: score,
+                    date: new Date().toLocaleDateString('vi-VN')
+                });
+                
+                // Sắp xếp điểm cao (giảm dần)
+                highScores.sort((a, b) => b.score - a.score);
+                
+                // Giữ chỉ 5 điểm cao nhất
+                highScores = highScores.slice(0, 5);
+                
+                // Lưu vào localStorage
+                localStorage.setItem('mathRaceHighScores', JSON.stringify(highScores));
+                
+                // Cập nhật hiển thị
+                loadHighScores();
+            }
+            
+            // Tải điểm cao
+            function loadHighScores() {
+                const highScores = JSON.parse(localStorage.getItem('mathRaceHighScores')) || [];
+                highScoresList.innerHTML = '';
+                
+                if (highScores.length === 0) {
+                    highScoresList.innerHTML = '<li>Chưa có điểm cao nào!</li>';
+                    return;
+                }
+                
+                highScores.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span>${index + 1}. ${item.score} điểm</span><span>${item.date}</span>`;
+                    highScoresList.appendChild(li);
+                });
+            }
+            
+            // Hiển thị/ẩn bảng điểm cao
+            function toggleHighScores() {
+                if (highScoresElement.style.display === 'block') {
+                    highScoresElement.style.display = 'none';
+                } else {
+                    highScoresElement.style.display = 'block';
+                    loadHighScores();
+                }
+            }
+            
+            // Khởi tạo trò chơi
+            initGame();
         });
     </script>
 </body>
