@@ -22,13 +22,25 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f44336;
+            opacity: 0;
+            z-index: 100;
         }
         
         .header-container {
             width: 100%;
             max-width: 500px;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
         }
         
@@ -57,6 +69,27 @@
             margin-right: 8px;
         }
         
+        .sound-toggle {
+            background: linear-gradient(145deg, #5e35b1, #3949ab);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.2rem;
+        }
+        
+        .sound-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        
         .container {
             background-color: white;
             border-radius: 20px;
@@ -79,6 +112,10 @@
             margin-bottom: 10px;
             font-size: 2.2rem;
             text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
+            background: linear-gradient(145deg, #5e35b1, #3949ab);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: inline-block;
         }
         
         .subtitle {
@@ -92,6 +129,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
+            flex-wrap: wrap;
         }
         
         .level-btn {
@@ -103,6 +141,8 @@
             cursor: pointer;
             transition: all 0.3s;
             font-weight: bold;
+            position: relative;
+            overflow: hidden;
         }
         
         .level-btn.active {
@@ -111,15 +151,45 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         
-        .score-container {
-            background: linear-gradient(145deg, #ffd54f, #ffb300);
-            border-radius: 50px;
-            padding: 10px 20px;
+        .level-btn .badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #f44336;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .stats-container {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 20px;
-            display: inline-block;
-            font-size: 1.2rem;
+        }
+        
+        .stat-box {
+            background: linear-gradient(145deg, #ffd54f, #ffb300);
+            border-radius: 15px;
+            padding: 10px 15px;
+            font-size: 1rem;
             color: #5d4037;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 0 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-top: 5px;
         }
         
         .question-container {
@@ -129,6 +199,7 @@
             margin: 20px 0;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
             position: relative;
+            border: 2px dashed #64b5f6;
         }
         
         .question {
@@ -145,6 +216,9 @@
             font-size: 1.2rem;
             color: #e53935;
             font-weight: bold;
+            background: #ffebee;
+            padding: 5px 10px;
+            border-radius: 10px;
         }
         
         .answer-display {
@@ -154,6 +228,10 @@
             min-height: 60px;
             transition: all 0.3s;
             font-weight: bold;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #bbdefb;
         }
         
         .answer-buttons {
@@ -173,6 +251,24 @@
             height: 60px;
             transition: all 0.2s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .number-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .number-btn:hover:after {
+            transform: translateY(0);
         }
         
         .number-btn:active {
@@ -199,6 +295,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             flex: 1;
             max-width: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+        }
+        
+        .control-btn:hover:after {
+            transform: translateX(0);
         }
         
         .control-btn:active {
@@ -217,6 +331,7 @@
             transition: all 0.3s;
             opacity: 0;
             transform: translateY(10px);
+            margin-bottom: 10px;
         }
         
         .feedback.show {
@@ -227,21 +342,25 @@
         .correct {
             color: #2e7d32;
             background-color: rgba(46, 125, 50, 0.1);
+            border: 1px solid #a5d6a7;
         }
         
         .incorrect {
             color: #d32f2f;
             background-color: rgba(211, 47, 47, 0.1);
+            border: 1px solid #ef9a9a;
         }
         
         .explanation {
             margin-top: 15px;
-            padding: 10px;
+            padding: 15px;
             background-color: #e8f5e9;
             border-radius: 10px;
             font-size: 1rem;
             color: #388e3c;
             display: none;
+            text-align: left;
+            border-left: 4px solid #66bb6a;
         }
         
         .keyboard-hints {
@@ -260,6 +379,7 @@
             border-radius: 8px;
             font-size: 0.9rem;
             color: #555;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .key-icon {
@@ -271,6 +391,48 @@
             font-weight: bold;
             min-width: 28px;
             text-align: center;
+        }
+        
+        .achievement-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(145deg, #ffd54f, #ffb300);
+            color: #5d4037;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transition: transform 0.5s ease;
+        }
+        
+        .achievement-toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        .achievement-toast i {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(145deg, #66bb6a, #2e7d32);
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 5px;
         }
         
         /* Animation for new question */
@@ -293,14 +455,48 @@
             animation: carryAnimation 0.5s ease forwards;
         }
         
+        /* Confetti animation */
+        @keyframes confettiFall {
+            0% { 
+                transform: translateY(-100px) rotate(0deg); 
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(1000px) rotate(360deg); 
+                opacity: 0;
+            }
+        }
+        
+        /* Celebration animation */
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 3;
+        }
+        
         /* Responsive design */
         @media (max-width: 500px) {
             .container {
                 padding: 20px 15px;
             }
             
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
             .home-btn {
                 padding: 10px 20px;
+                font-size: 1rem;
+                width: 100%;
+            }
+            
+            .sound-toggle {
+                width: 40px;
+                height: 40px;
                 font-size: 1rem;
             }
             
@@ -331,6 +527,15 @@
                 flex-direction: column;
                 gap: 8px;
             }
+            
+            .stats-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .stat-box {
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -338,6 +543,9 @@
     <div class="header-container">
         <button class="home-btn" id="home-btn">
             <i class="fas fa-home"></i> Trang chủ MathHub
+        </button>
+        <button class="sound-toggle" id="sound-toggle">
+            <i class="fas fa-volume-up"></i>
         </button>
     </div>
     
@@ -347,14 +555,38 @@
             <p class="subtitle">Cộng trừ có nhớ - Thử thách toán học!</p>
             
             <div class="level-selector">
-                <button class="level-btn active" data-level="easy">Dễ</button>
-                <button class="level-btn" data-level="medium">Trung bình</button>
-                <button class="level-btn" data-level="hard">Khó</button>
+                <button class="level-btn active" data-level="easy">
+                    Dễ
+                    <span class="badge" id="easy-badge">0</span>
+                </button>
+                <button class="level-btn" data-level="medium">
+                    Trung bình
+                    <span class="badge" id="medium-badge">0</span>
+                </button>
+                <button class="level-btn" data-level="hard">
+                    Khó
+                    <span class="badge" id="hard-badge">0</span>
+                </button>
             </div>
         </div>
         
-        <div class="score-container">
-            Điểm: <span id="score">0</span>
+        <div class="stats-container">
+            <div class="stat-box">
+                <span>Điểm</span>
+                <span class="stat-value" id="score">0</span>
+            </div>
+            <div class="stat-box">
+                <span>Câu đúng</span>
+                <span class="stat-value" id="correct-count">0</span>
+            </div>
+            <div class="stat-box">
+                <span>Hoàn thành</span>
+                <span class="stat-value" id="progress">0%</span>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="progress-bar"></div>
         </div>
         
         <div class="question-container">
@@ -364,15 +596,15 @@
         </div>
         
         <div class="answer-buttons" id="answer-buttons">
-            <button class="number-btn" data-number="1">1</button>
-            <button class="number-btn" data-number="2">2</button>
-            <button class="number-btn" data-number="3">3</button>
-            <button class="number-btn" data-number="4">4</button>
-            <button class="number-btn" data-number="5">5</button>
-            <button class="number-btn" data-number="6">6</button>
             <button class="number-btn" data-number="7">7</button>
             <button class="number-btn" data-number="8">8</button>
             <button class="number-btn" data-number="9">9</button>
+            <button class="number-btn" data-number="4">4</button>
+            <button class="number-btn" data-number="5">5</button>
+            <button class="number-btn" data-number="6">6</button>
+            <button class="number-btn" data-number="1">1</button>
+            <button class="number-btn" data-number="2">2</button>
+            <button class="number-btn" data-number="3">3</button>
             <button class="number-btn" data-number="0">0</button>
         </div>
         
@@ -400,14 +632,27 @@
         </div>
     </div>
 
+    <div class="achievement-toast" id="achievement-toast">
+        <i class="fas fa-trophy"></i>
+        <span id="achievement-text"></span>
+    </div>
+
     <script>
         // Game state
         const gameState = {
             currentAnswer: '',
             currentQuestion: {},
             score: 0,
+            correctCount: 0,
+            totalQuestions: 0,
             isWaiting: false,
-            level: 'easy'
+            level: 'easy',
+            soundEnabled: true,
+            achievements: {
+                easy: 0,
+                medium: 0,
+                hard: 0
+            }
         };
 
         // DOM Elements
@@ -415,6 +660,9 @@
             question: document.getElementById('question'),
             answerDisplay: document.getElementById('answer-display'),
             score: document.getElementById('score'),
+            correctCount: document.getElementById('correct-count'),
+            progress: document.getElementById('progress'),
+            progressBar: document.getElementById('progress-bar'),
             feedback: document.getElementById('feedback'),
             explanation: document.getElementById('explanation'),
             carryOver: document.getElementById('carry-over'),
@@ -422,14 +670,77 @@
             clearButton: document.getElementById('clear-btn'),
             submitButton: document.getElementById('submit-btn'),
             homeButton: document.getElementById('home-btn'),
-            levelButtons: document.querySelectorAll('.level-btn')
+            soundToggle: document.getElementById('sound-toggle'),
+            levelButtons: document.querySelectorAll('.level-btn'),
+            achievementToast: document.getElementById('achievement-toast'),
+            achievementText: document.getElementById('achievement-text'),
+            easyBadge: document.getElementById('easy-badge'),
+            mediumBadge: document.getElementById('medium-badge'),
+            hardBadge: document.getElementById('hard-badge')
+        };
+
+        // Sound effects
+        const sounds = {
+            correct: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间'),
+            incorrect: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间'),
+            levelup: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间')
         };
 
         // Initialize game
         function initGame() {
+            // Load saved data
+            loadGameData();
+            
             generateQuestion();
             setupEventListeners();
             updateScoreDisplay();
+            updateAchievementBadges();
+        }
+
+        // Load game data from localStorage
+        function loadGameData() {
+            const savedData = localStorage.getItem('mathGameData');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                gameState.score = data.score || 0;
+                gameState.correctCount = data.correctCount || 0;
+                gameState.totalQuestions = data.totalQuestions || 0;
+                gameState.achievements = data.achievements || { easy: 0, medium: 0, hard: 0 };
+                gameState.soundEnabled = data.soundEnabled !== undefined ? data.soundEnabled : true;
+                
+                // Update sound icon
+                updateSoundIcon();
+            }
+        }
+
+        // Save game data to localStorage
+        function saveGameData() {
+            const data = {
+                score: gameState.score,
+                correctCount: gameState.correctCount,
+                totalQuestions: gameState.totalQuestions,
+                achievements: gameState.achievements,
+                soundEnabled: gameState.soundEnabled
+            };
+            localStorage.setItem('mathGameData', JSON.stringify(data));
+        }
+
+        // Update sound icon based on current state
+        function updateSoundIcon() {
+            const icon = elements.soundToggle.querySelector('i');
+            if (gameState.soundEnabled) {
+                icon.className = 'fas fa-volume-up';
+            } else {
+                icon.className = 'fas fa-volume-mute';
+            }
+        }
+
+        // Play sound effect
+        function playSound(soundName) {
+            if (gameState.soundEnabled && sounds[soundName]) {
+                sounds[soundName].currentTime = 0;
+                sounds[soundName].play().catch(e => console.log("Audio play failed:", e));
+            }
         }
 
         // Generate a new math question based on level
@@ -539,6 +850,9 @@
                 explanation: explanationText
             };
             
+            gameState.totalQuestions++;
+            updateProgressBar();
+            
             // Hiển thị gợi ý nhớ nếu cần
             showCarryOverHint(isAddition, num1, num2);
             
@@ -548,6 +862,69 @@
             elements.question.classList.remove('pop-in');
             void elements.question.offsetWidth; // Trigger reflow
             elements.question.classList.add('pop-in');
+        }
+
+        // Update progress bar
+        function updateProgressBar() {
+            const progressPercent = Math.min(100, (gameState.correctCount / 10) * 100);
+            elements.progressBar.style.width = `${progressPercent}%`;
+            elements.progress.textContent = `${Math.round(progressPercent)}%`;
+            
+            // Check for level up
+            if (gameState.correctCount > 0 && gameState.correctCount % 10 === 0) {
+                levelUp();
+            }
+        }
+
+        // Level up achievement
+        function levelUp() {
+            gameState.achievements[gameState.level]++;
+            updateAchievementBadges();
+            saveGameData();
+            
+            // Show achievement toast
+            elements.achievementText.textContent = `Chúc mừng! Bạn đã đạt cấp độ ${gameState.achievements[gameState.level]} ở mức ${gameState.level === 'easy' ? 'Dễ' : gameState.level === 'medium' ? 'Trung bình' : 'Khó'}!`;
+            elements.achievementToast.classList.add('show');
+            
+            // Play level up sound
+            playSound('levelup');
+            
+            // Create confetti effect
+            createConfetti();
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                elements.achievementToast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+                confetti.style.width = `${Math.random() * 10 + 5}px`;
+                confetti.style.height = `${Math.random() * 10 + 5}px`;
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Update achievement badges
+        function updateAchievementBadges() {
+            elements.easyBadge.textContent = gameState.achievements.easy;
+            elements.mediumBadge.textContent = gameState.achievements.medium;
+            elements.hardBadge.textContent = gameState.achievements.hard;
         }
 
         // Hiển thị gợi ý về phép nhớ
@@ -587,12 +964,21 @@
         // Update score display
         function updateScoreDisplay() {
             elements.score.textContent = gameState.score;
+            elements.correctCount.textContent = gameState.correctCount;
         }
 
         // Show feedback
         function showFeedback(message, isCorrect) {
             elements.feedback.textContent = message;
             elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+            
+            // Play sound
+            if (isCorrect) {
+                playSound('correct');
+                elements.feedback.classList.add('celebrate');
+            } else {
+                playSound('incorrect');
+            }
             
             // Hiển thị giải thích nếu sai
             if (!isCorrect && gameState.currentQuestion.explanation) {
@@ -604,6 +990,7 @@
         // Hide feedback
         function hideFeedback() {
             elements.feedback.className = 'feedback';
+            elements.feedback.classList.remove('celebrate');
         }
 
         // Handle number input
@@ -637,12 +1024,16 @@
             if (userAnswer === gameState.currentQuestion.answer) {
                 // Correct answer
                 gameState.score += 10;
+                gameState.correctCount++;
                 updateScoreDisplay();
                 showFeedback('Chính xác! 👏', true);
             } else {
                 // Incorrect answer
                 showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.answer}`, false);
             }
+
+            // Save game data
+            saveGameData();
 
             // Generate new question after delay
             setTimeout(() => {
@@ -659,11 +1050,16 @@
             }
         }
 
+        // Handle sound toggle
+        function handleSoundToggle() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            updateSoundIcon();
+            saveGameData();
+        }
+
         // Handle level change
         function handleLevelChange(level) {
             gameState.level = level;
-            gameState.score = 0;
-            updateScoreDisplay();
             
             // Update active button
             elements.levelButtons.forEach(btn => {
@@ -714,6 +1110,9 @@
             
             // Home button
             elements.homeButton.addEventListener('click', handleHomeButton);
+            
+            // Sound toggle button
+            elements.soundToggle.addEventListener('click', handleSoundToggle);
             
             // Level buttons
             elements.levelButtons.forEach(btn => {
