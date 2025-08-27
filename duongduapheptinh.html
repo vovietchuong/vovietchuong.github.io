@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đường đua phép tính - MathHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+        }
+        
+        .game-header {
+            background: #1cc88a;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .game-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .game-body {
+            padding: 25px;
+        }
+        
+        .race-track {
+            height: 200px;
+            background: #f8f9fc;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+            border: 3px solid #e9ecef;
+        }
+        
+        .track-lane {
+            position: absolute;
+            height: 4px;
+            width: 100%;
+            background: #dee2e6;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        .track-lane::before {
+            content: '';
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            background: repeating-linear-gradient(
+                90deg,
+                #dee2e6 0px,
+                #dee2e6 10px,
+                transparent 10px,
+                transparent 20px
+            );
+            animation: laneMove 1s linear infinite;
+        }
+        
+        .player-car {
+            position: absolute;
+            width: 50px;
+            height: 30px;
+            background: #e74a3b;
+            border-radius: 5px;
+            bottom: 40px;
+            left: 30px;
+            transition: left 0.5s ease-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            z-index: 10;
+        }
+        
+        .player-car::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #333;
+            border-radius: 50%;
+            bottom: -5px;
+            left: 10px;
+        }
+        
+        .player-car::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #333;
+            border-radius: 50%;
+            bottom: -5px;
+            right: 10px;
+        }
+        
+        .finish-line {
+            position: absolute;
+            width: 10px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                #000 0px,
+                #000 10px,
+                #fff 10px,
+                #fff 20px
+            );
+            right: 50px;
+            top: 0;
+            z-index: 5;
+        }
+        
+        .math-problem {
+            background: #4e73df;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .answer-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .answer-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: #f8f9fc;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .answer-btn:hover:not(:disabled) {
+            background: #4e73df;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .answer-btn.correct {
+            background: #1cc88a;
+            color: white;
+        }
+        
+        .answer-btn.incorrect {
+            background: #e74a3b;
+            color: white;
+        }
+        
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .control-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-start {
+            background: #1cc88a;
+            color: white;
+        }
+        
+        .btn-reset {
+            background: #f6c23e;
+            color: #333;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .game-instructions {
+            background: #f8f9fc;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #4e73df;
+        }
+        
+        .game-instructions h3 {
+            margin-bottom: 10px;
+            color: #2e59d9;
+        }
+        
+        .instructions-list {
+            list-style-position: inside;
+        }
+        
+        .instructions-list li {
+            margin-bottom: 8px;
+        }
+        
+        .home-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        
+        .home-link:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 600px) {
+            .game-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .math-problem {
+                font-size: 1.2rem;
+                min-height: 70px;
+            }
+            
+            .answer-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        /* Animations */
+        @keyframes laneMove {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-20px); }
+        }
+        
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 2;
+        }
+        
+        .progress-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: #1cc88a;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1><i class="fas fa-flag-checkered"></i> Đường đua phép tính</h1>
+            <p>Giải đúng để đưa xe về đích!</p>
+            
+            <div class="game-stats">
+                <div class="stat">
+                    <span class="stat-value" id="score">0</span>
+                    <span class="stat-label">Điểm số</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="level">1</span>
+                    <span class="stat-label">Cấp độ</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value" id="lives">3</span>
+                    <span class="stat-label">Mạng</span>
+                </div>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+        </div>
+        
+        <div class="game-body">
+            <div class="race-track">
+                <div class="track-lane"></div>
+                <div class="player-car" id="player-car">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="finish-line"></div>
+            </div>
+            
+            <div class="math-problem" id="math-problem">
+                Nhấn Bắt đầu để chơi!
+            </div>
+            
+            <div class="answer-options" id="answer-options">
+                <button class="answer-btn" disabled>?</button>
+                <button class="answer-btn" disabled>?</button>
+                <button class="answer-btn" disabled>?</button>
+                <button class="answer-btn" disabled>?</button>
+            </div>
+            
+            <div class="game-controls">
+                <button class="control-btn btn-start" id="start-btn">
+                    <i class="fas fa-play"></i> Bắt đầu
+                </button>
+                <button class="control-btn btn-reset" id="reset-btn" disabled>
+                    <i class="fas fa-redo"></i> Chơi lại
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="game-instructions">
+        <h3><i class="fas fa-info-circle"></i> Hướng dẫn chơi</h3>
+        <ul class="instructions-list">
+            <li>Nhấn nút "Bắt đầu" để bắt đầu trò chơi</li>
+            <li>Giải các phép tính toán học bằng cách chọn đáp án đúng</li>
+            <li>Mỗi câu trả lời đúng sẽ đưa xe của bạn tiến gần hơn về đích</li>
+            <li>Trả lời sai quá 3 lần sẽ thua cuộc</li>
+            <li>Về đích để hoàn thành cấp độ và chuyển sang cấp độ khó hơn</li>
+        </ul>
+    </div>
+    
+    <a href="#" class="home-link">
+        <i class="fas fa-arrow-left"></i> Quay về trang chủ MathHub
+    </a>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Các biến trò chơi
+            let score = 0;
+            let level = 1;
+            let lives = 3;
+            let gameActive = false;
+            let correctAnswer;
+            let progress = 0;
+            const maxProgress = 700; // Tổng số px cần để về đích
+            
+            // Các phần tử DOM
+            const scoreElement = document.getElementById('score');
+            const levelElement = document.getElementById('level');
+            const livesElement = document.getElementById('lives');
+            const mathProblemElement = document.getElementById('math-problem');
+            const answerOptionsElement = document.getElementById('answer-options');
+            const startButton = document.getElementById('start-btn');
+            const resetButton = document.getElementById('reset-btn');
+            const playerCar = document.getElementById('player-car');
+            const progressBar = document.getElementById('progress');
+            
+            // Hàm tạo phép toán ngẫu nhiên
+            function generateMathProblem() {
+                let num1, num2, operator, problemText;
+                
+                // Tăng độ khó theo cấp độ
+                if (level <= 3) {
+                    // Cấp độ 1-3: Phép cộng và trừ đơn giản
+                    num1 = Math.floor(Math.random() * 10) + 1;
+                    num2 = Math.floor(Math.random() * 10) + 1;
+                    operator = Math.random() > 0.5 ? '+' : '-';
+                } else if (level <= 6) {
+                    // Cấp độ 4-6: Phép nhân và số lớn hơn
+                    num1 = Math.floor(Math.random() * 12) + 1;
+                    num2 = Math.floor(Math.random() * 12) + 1;
+                    operator = ['+', '-', '×'][Math.floor(Math.random() * 3)];
+                } else {
+                    // Cấp độ 7+: Phép chia và phức tạp hơn
+                    operator = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
+                    
+                    if (operator === '÷') {
+                        num2 = Math.floor(Math.random() * 6) + 1;
+                        num1 = num2 * (Math.floor(Math.random() * 10) + 2);
+                    } else {
+                        num1 = Math.floor(Math.random() * 15) + 5;
+                        num2 = Math.floor(Math.random() * 15) + 5;
+                    }
+                }
+                
+                // Tính toán kết quả đúng
+                switch(operator) {
+                    case '+':
+                        correctAnswer = num1 + num2;
+                        break;
+                    case '-':
+                        // Đảm bảo kết quả không âm
+                        if (num1 < num2) [num1, num2] = [num2, num1];
+                        correctAnswer = num1 - num2;
+                        break;
+                    case '×':
+                        correctAnswer = num1 * num2;
+                        break;
+                    case '÷':
+                        correctAnswer = num1 / num2;
+                        break;
+                }
+                
+                // Làm tròn kết quả nếu là số thập phân
+                if (!Number.isInteger(correctAnswer)) {
+                    correctAnswer = Math.round(correctAnswer * 100) / 100;
+                }
+                
+                // Tạo văn bản bài toán
+                problemText = `${num1} ${operator} ${num2} = ?`;
+                mathProblemElement.textContent = problemText;
+                
+                // Tạo các lựa chọn câu trả lời
+                generateAnswerOptions(correctAnswer);
+            }
+            
+            // Hàm tạo các lựa chọn câu trả lời
+            function generateAnswerOptions(correctAnswer) {
+                // Xóa các nút cũ
+                answerOptionsElement.innerHTML = '';
+                
+                // Tạo mảng các câu trả lời (bao gồm đáp án đúng)
+                let answers = [correctAnswer];
+                
+                // Thêm các đáp án sai
+                while(answers.length < 4) {
+                    // Tạo đáp án sai ngẫu nhiên
+                    let randomAnswer;
+                    let variation;
+                    
+                    if (level <= 3) {
+                        variation = Math.floor(Math.random() * 5) + 1;
+                    } else if (level <= 6) {
+                        variation = Math.floor(Math.random() * 8) + 1;
+                    } else {
+                        variation = Math.floor(Math.random() * 10) + 1;
+                    }
+                    
+                    // Quyết định cộng hoặc trừ để tạo đáp án sai
+                    randomAnswer = Math.random() > 0.5 
+                        ? correctAnswer + variation 
+                        : correctAnswer - variation;
+                    
+                    // Đảm bảo đáp án sai không trùng với đáp án đúng, không âm và không trùng với đáp án sai khác
+                    if (randomAnswer !== correctAnswer && 
+                        !answers.includes(randomAnswer) && 
+                        randomAnswer > 0 &&
+                        (Number.isInteger(randomAnswer) || level > 5)) {
+                        answers.push(randomAnswer);
+                    }
+                }
+                
+                // Trộn ngẫu nhiên các đáp án
+                answers.sort(() => Math.random() - 0.5);
+                
+                // Tạo nút cho mỗi đáp án
+                answers.forEach(answer => {
+                    const button = document.createElement('button');
+                    button.className = 'answer-btn';
+                    button.textContent = answer;
+                    
+                    button.addEventListener('click', function() {
+                        if (!gameActive) return;
+                        checkAnswer(answer, button);
+                    });
+                    
+                    answerOptionsElement.appendChild(button);
+                });
+            }
+            
+            // Hàm kiểm tra câu trả lời
+            function checkAnswer(selectedAnswer, buttonElement) {
+                // Vô hiệu hóa tất cả các nút để tránh nhiều lần nhấn
+                const allButtons = document.querySelectorAll('.answer-btn');
+                allButtons.forEach(btn => btn.disabled = true);
+                
+                if (selectedAnswer === correctAnswer) {
+                    // Đáp án đúng
+                    buttonElement.classList.add('correct');
+                    score += 10 * level;
+                    scoreElement.textContent = score;
+                    
+                    // Di chuyển xe
+                    progress += 70;
+                    if (progress > maxProgress) progress = maxProgress;
+                    playerCar.style.left = `${30 + progress}px`;
+                    progressBar.style.width = `${(progress / maxProgress) * 100}%`;
+                    
+                    // Kiểm tra nếu về đích
+                    if (progress >= maxProgress) {
+                        setTimeout(() => levelUp(), 800);
+                    } else {
+                        // Tạo bài toán mới sau 1 giây
+                        setTimeout(() => {
+                            generateMathProblem();
+                        }, 1000);
+                    }
+                } else {
+                    // Đáp án sai
+                    buttonElement.classList.add('incorrect');
+                    
+                    // Đánh dấu đáp án đúng
+                    allButtons.forEach(btn => {
+                        if (parseFloat(btn.textContent) === correctAnswer) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                    
+                    lives--;
+                    livesElement.textContent = lives;
+                    
+                    if (lives <= 0) {
+                        setTimeout(() => endGame(false), 1000);
+                    } else {
+                        // Tạo bài toán mới sau 1.5 giây
+                        setTimeout(() => {
+                            generateMathProblem();
+                        }, 1500);
+                    }
+                }
+            }
+            
+            // Hàm tăng cấp độ
+            function levelUp() {
+                level++;
+                levelElement.textContent = level;
+                progress = 0;
+                playerCar.style.left = '30px';
+                progressBar.style.width = '0%';
+                
+                // Hiệu ứng ăn mừng
+                mathProblemElement.classList.add('celebrate');
+                mathProblemElement.textContent = `Chúc mừng! Bạn đã lên cấp ${level}!`;
+                
+                // Tạm dừng trò chơi trong 2 giây
+                gameActive = false;
+                setTimeout(() => {
+                    mathProblemElement.classList.remove('celebrate');
+                    gameActive = true;
+                    generateMathProblem();
+                }, 2000);
+            }
+            
+            // Hàm kết thúc trò chơi
+            function endGame(isWin) {
+                gameActive = false;
+                startButton.disabled = false;
+                resetButton.disabled = false;
+                
+                if (isWin) {
+                    mathProblemElement.textContent = `Chiến thắng! Điểm số: ${score}`;
+                } else {
+                    mathProblemElement.textContent = `Game Over! Điểm số: ${score}`;
+                }
+            }
+            
+            // Hàm bắt đầu trò chơi
+            function startGame() {
+                score = 0;
+                level = 1;
+                lives = 3;
+                progress = 0;
+                
+                scoreElement.textContent = score;
+                levelElement.textContent = level;
+                livesElement.textContent = lives;
+                progressBar.style.width = '0%';
+                
+                playerCar.style.left = '30px';
+                
+                generateMathProblem();
+                
+                gameActive = true;
+                startButton.disabled = true;
+                resetButton.disabled = false;
+                
+                // Kích hoạt các nút trả lời
+                const buttons = document.querySelectorAll('.answer-btn');
+                buttons.forEach(button => {
+                    button.disabled = false;
+                });
+            }
+            
+            // Hàm reset trò chơi
+            function resetGame() {
+                startGame();
+            }
+            
+            // Gán sự kiện cho các nút
+            startButton.addEventListener('click', startGame);
+            resetButton.addEventListener('click', resetGame);
+            
+            // Khởi tạo trạng thái ban đầu
+            mathProblemElement.textContent = "Nhấn Bắt đầu để chơi!";
+            resetButton.disabled = true;
+        });
+    </script>
+</body>
+</html>
