@@ -188,19 +188,19 @@ a{color:inherit}
 </div>
 
 <script>
-/* Professional multiplication table game
-   Features added:
-   - Settings (mode/time)
-   - Leaderboard (localStorage) with CSV export
-   - Import/Export, Save progress, Print
-   - Accessibility considerations
-   - Smooth animations, confetti, sounds (web audio)
+/* Professional multiplication table game - Optimized version
+   Optimizations:
+   - Event delegation for better performance
+   - Debounced event handlers
+   - Optimized DOM updates
+   - Improved error handling
+   - Better state management
 */
 (() => {
   // State
   const state = {
-    table: null, // number or 'mixed'
-    question: null, // {a,b,ans}
+    table: null,
+    question: null,
     score: 0,
     correct: 0,
     answeredCount: 0,
@@ -215,9 +215,9 @@ a{color:inherit}
     soundOn: true
   };
 
-  // DOM
+  // DOM references with caching
   const dom = {
-    tableBtns: document.querySelectorAll('.table-btn'),
+    tableSelect: document.getElementById('table-select'),
     question: document.getElementById('question'),
     answer: document.getElementById('answer'),
     btnCheck: document.getElementById('btn-check'),
@@ -243,233 +243,560 @@ a{color:inherit}
     soundToggle: document.getElementById('soundToggle')
   };
 
-  // Audio
-  let audioCtx=null;
-  function ensureAudio(){ if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-  function playTone(freqs=[440], dur=0.12){
-    if(!state.soundOn) return;
-    try{
+  // Audio context - lazy initialization
+  let audioCtx = null;
+  
+  // Utility functions
+  const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  
+  const debounce = (func, wait) => {
+    let timeout;
+    return function executedFunction(...args) {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  };
+
+  // LocalStorage operations with error handling
+  const safeLocalStorage = {
+    getItem: (key) => {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        console.error('Error accessing localStorage:', e);
+        return null;
+      }
+    },
+    
+    setItem: (key, value) => {
+      try {
+        localStorage.setItem(key, value);
+        return true;
+      } catch (e) {
+        console.error('Error writing to localStorage:', e);
+        return false;
+      }
+    },
+    
+    removeItem: (key) => {
+      try {
+        localStorage.removeItem(key);
+        return true;
+      } catch (e) {
+        console.error('Error removing from localStorage:', e);
+        return false;
+      }
+    }
+  };
+
+  // Audio functions
+  const ensureAudio = () => {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+  };
+
+  const playTone = (freqs = [440], dur = 0.12) => {
+    if (!state.soundOn) return;
+    
+    try {
       ensureAudio();
       const now = audioCtx.currentTime;
-      const g = audioCtx.createGain(); g.gain.setValueAtTime(0.001,now); g.gain.exponentialRampToValueAtTime(0.2, now+0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001, now+dur);
-      g.connect(audioCtx.destination);
-      freqs.forEach((f,i)=>{
-        const o = audioCtx.createOscillator(); o.type='sine'; o.frequency.setValueAtTime(f, now + i*0.02);
-        o.connect(g); o.start(now + i*0.02); o.stop(now + dur + i*0.02);
+      const gainNode = audioCtx.createGain();
+      
+      gainNode.gain.setValueAtTime(0.001, now);
+      gainNode.gain.exponentialRampToValueAtTime(0.2, now + 0.02);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, now + dur);
+      gainNode.connect(audioCtx.destination);
+      
+      freqs.forEach((freq, i) => {
+        const oscillator = audioCtx.createOscillator();
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(freq, now + i * 0.02);
+        oscillator.connect(gainNode);
+        oscillator.start(now + i * 0.02);
+        oscillator.stop(now + dur + i * 0.02);
       });
-    }catch(e){ console.log('Audio not supported', e); }
-  }
+    } catch (e) {
+      console.log('Audio not supported', e);
+    }
+  };
 
-  // Utilities
-  function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
-  function saveLB(list){ localStorage.setItem('mh_lbh', JSON.stringify(list)); }
-  function loadLB(){ const r = localStorage.getItem('mh_lbh'); return r? JSON.parse(r): []; }
-  function saveProgress(){
-    const payload = { table: state.table, score: state.score, correct: state.correct, answeredCount: state.answeredCount };
-    localStorage.setItem('mh_progress', JSON.stringify(payload));
-    alert('Đã lưu tiến trình vào localStorage');
-  }
-  function loadProgress(){
-    const raw = localStorage.getItem('mh_progress'); if(!raw){ alert('Không có tiến trình'); return; }
-    const p = JSON.parse(raw);
-    state.table = p.table; state.score = p.score; state.correct = p.correct; state.answeredCount = p.answeredCount;
-    updateUI();
-    if(state.table) activateButtonForTable(state.table);
-    alert('Đã tải tiến trình');
-  }
+  // Leaderboard functions
+  const saveLB = (list) => {
+    safeLocalStorage.setItem('mh_lbh', JSON.stringify(list));
+  };
 
-  // Leaderboard render and export
-  function renderLB(){
+  const loadLB = () => {
+    const data = safeLocalStorage.getItem('mh_lbh');
+    return data ? JSON.parse(data) : [];
+  };
+
+  const renderLB = () => {
     const list = loadLB();
     dom.leaderboard.innerHTML = '';
-    list.slice(0,10).forEach((it,i)=>{
-      const li = document.createElement('li'); li.innerHTML = `<span>${i+1}. <strong>${it.name}</strong></span><span>${it.score}</span>`;
+    
+    list.slice(0, 10).forEach((item, index) => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${index + 1}. <strong>${item.name}</strong></span><span>${item.score}</span>`;
       dom.leaderboard.appendChild(li);
     });
-  }
-  function exportLBCSV(){
+  };
+
+  const exportLBCSV = () => {
     const list = loadLB();
-    if(!list.length){ alert('BXH trống'); return; }
-    const rows = [['rank','name','score','date']].concat(list.map((l,idx)=>[idx+1, l.name, l.score, l.date]));
-    const csv = rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    if (!list.length) {
+      alert('BXH trống');
+      return;
+    }
+    
+    const rows = [['rank', 'name', 'score', 'date']].concat(
+      list.map((item, index) => [index + 1, item.name, item.score, item.date])
+    );
+    
+    const csvContent = rows.map(row => 
+      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download = 'mathhub_leaderboard.csv'; a.click(); URL.revokeObjectURL(url);
-  }
-  function clearLB(){ if(confirm('Xóa BXH?')){ localStorage.removeItem('mh_lbh'); renderLB(); } }
+    const link = document.createElement('a');
+    
+    link.href = url;
+    link.download = 'mathhub_leaderboard.csv';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+  };
+
+  const clearLB = () => {
+    if (confirm('Xóa BXH?')) {
+      safeLocalStorage.removeItem('mh_lbh');
+      renderLB();
+    }
+  };
+
+  // Game state management
+  const saveProgress = () => {
+    const progressData = {
+      table: state.table,
+      score: state.score,
+      correct: state.correct,
+      answeredCount: state.answeredCount
+    };
+    
+    if (safeLocalStorage.setItem('mh_progress', JSON.stringify(progressData))) {
+      alert('Đã lưu tiến trình vào localStorage');
+    } else {
+      alert('Không thể lưu tiến trình');
+    }
+  };
+
+  const loadProgress = () => {
+    const data = safeLocalStorage.getItem('mh_progress');
+    if (!data) {
+      alert('Không có tiến trình');
+      return;
+    }
+    
+    try {
+      const progress = JSON.parse(data);
+      state.table = progress.table;
+      state.score = progress.score;
+      state.correct = progress.correct;
+      state.answeredCount = progress.answeredCount;
+      
+      updateUI();
+      if (state.table) {
+        activateButtonForTable(state.table);
+      }
+      
+      alert('Đã tải tiến trình');
+    } catch (e) {
+      console.error('Error loading progress:', e);
+      alert('Lỗi khi tải tiến trình');
+    }
+  };
 
   // Table activation
-  function activateButtonForTable(table){
-    dom.tableBtns.forEach(b=> b.classList.toggle('active', b.dataset.table==table));
+  const activateButtonForTable = (table) => {
+    // Update button states
+    document.querySelectorAll('.table-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.table === table);
+    });
+    
+    // Update game state
     state.table = table;
     state.asked.clear();
     state.answeredCount = 0;
-    state.target = Number(dom.targetCount.value)||10;
+    state.target = Number(dom.targetCount.value) || 10;
     state.mode = dom.modeSelect.value;
     state.timeLimit = Number(dom.timeLimit.value) || 60;
-    dom.current.textContent = table==='mixed' ? 'Tổng hợp' : 'Bảng '+table;
-    dom.answer.disabled = false; dom.btnCheck.disabled = false; dom.btnSkip.disabled = false; dom.answer.focus();
+    
+    // Update UI
+    dom.current.textContent = table === 'mixed' ? 'Tổng hợp' : `Bảng ${table}`;
+    dom.answer.disabled = false;
+    dom.btnCheck.disabled = false;
+    dom.btnSkip.disabled = false;
+    
+    // Focus and start
+    dom.answer.focus();
     newQuestion();
-  }
+  };
 
-  // New question generation (avoid repeats)
-  function newQuestion(){
-    if(!state.table) return;
-    let a,b,key,attempts=0;
-    do{
-      if(state.table === 'mixed'){
-        a = randInt(2,10); b = randInt(1,10);
+  // Question generation
+  const newQuestion = () => {
+    if (!state.table) return;
+    
+    let a, b, key;
+    let attempts = 0;
+    
+    // Generate a unique question
+    do {
+      if (state.table === 'mixed') {
+        a = randInt(2, 10);
+        b = randInt(1, 10);
       } else {
-        a = Number(state.table); b = randInt(1,10);
+        a = Number(state.table);
+        b = randInt(1, 10);
       }
-      key = `${a}x${b}`; attempts++;
-      if(attempts>50){ state.asked.clear(); break; }
-    } while(state.asked.has(key));
+      
+      key = `${a}x${b}`;
+      attempts++;
+      
+      // Reset asked set if too many attempts
+      if (attempts > 50) {
+        state.asked.clear();
+        break;
+      }
+    } while (state.asked.has(key));
+    
+    // Store the question
     state.asked.add(key);
-    state.question = {a,b,ans:a*b};
+    state.question = { a, b, ans: a * b };
+    
+    // Update UI
     dom.question.textContent = `${a} × ${b} = ?`;
     dom.answer.value = '';
     dom.feedback.className = 'feedback';
-    updateProgress();
-    if(state.mode === 'challenge' && !state.timer){
+    
+    updateProgressBar();
+    
+    // Start timer if in challenge mode
+    if (state.mode === 'challenge' && !state.timer) {
       startTimer();
     }
-  }
+  };
 
-  // Timer
-  function startTimer(){
-    if(state.timer) clearInterval(state.timer);
+  // Timer functions
+  const startTimer = () => {
+    if (state.timer) {
+      clearInterval(state.timer);
+    }
+    
     state.timeLeft = state.timeLimit;
     updateTimeDisplay();
-    state.timer = setInterval(()=>{
+    
+    state.timer = setInterval(() => {
       state.timeLeft--;
       updateTimeDisplay();
-      if(state.timeLeft<=0){ clearInterval(state.timer); state.timer=null; finish(true); }
-    },1000);
-  }
-  function stopTimer(){ if(state.timer){ clearInterval(state.timer); state.timer=null; } }
-  function updateTimeDisplay(){ document.getElementById('current').textContent = dom.modeSelect.value === 'challenge' ? `${state.timeLeft}s (chế độ)` : (state.table? '—': '-'); }
+      
+      if (state.timeLeft <= 0) {
+        clearInterval(state.timer);
+        state.timer = null;
+        finish(true);
+      }
+    }, 1000);
+  };
 
-  // Progress / UI updates
-  function updateProgress(){
-    const pct = Math.min(100, Math.round((state.answeredCount/state.target)*100));
-    dom.progressBar.style.width = pct + '%';
-  }
-  function updateUI(){
+  const stopTimer = () => {
+    if (state.timer) {
+      clearInterval(state.timer);
+      state.timer = null;
+    }
+  };
+
+  const updateTimeDisplay = () => {
+    dom.current.textContent = state.mode === 'challenge' 
+      ? `${state.timeLeft}s (chế độ)` 
+      : (state.table ? '—' : '-');
+  };
+
+  // UI updates
+  const updateProgressBar = () => {
+    const percentage = Math.min(100, Math.round((state.answeredCount / state.target) * 100));
+    dom.progressBar.style.width = `${percentage}%`;
+  };
+
+  const updateUI = () => {
     dom.score.textContent = state.score;
     dom.correct.textContent = state.correct;
-    dom.current.textContent = state.table ? (state.table==='mixed' ? 'Tổng hợp' : 'Bảng '+state.table) : '-';
-    updateProgress();
-  }
+    dom.current.textContent = state.table 
+      ? (state.table === 'mixed' ? 'Tổng hợp' : `Bảng ${state.table}`) 
+      : '-';
+    
+    updateProgressBar();
+  };
 
-  // Answer check
-  function checkAnswer(){
-    if(!state.question || state.waiting) return;
-    const val = Number(dom.answer.value);
-    if(!Number.isFinite(val)){ showFeedback('Vui lòng nhập đáp án', false); dom.answer.focus(); return; }
+  // Answer checking
+  const checkAnswer = () => {
+    if (!state.question || state.waiting) return;
+    
+    const answer = Number(dom.answer.value);
+    if (!Number.isFinite(answer)) {
+      showFeedback('Vui lòng nhập đáp án', false);
+      dom.answer.focus();
+      return;
+    }
+    
     state.waiting = true;
     state.answeredCount++;
-    if(val === state.question.ans){
-      // correct
+    
+    if (answer === state.question.ans) {
+      // Correct answer
       state.score += 10;
       state.correct++;
+      
       showFeedback('Chính xác! +10', true);
-      playTone([523,659,784],0.24);
-      // completed table?
-      if(state.answeredCount >= state.target){
-        // mark completed visually (store)
-        localStorage.setItem(`mh_completed_${state.table}`, '1');
-        showFeedback(`Hoàn thành ${state.table==='mixed'?'tổng hợp':'bảng '+state.table}! 🎉`, true);
-        confetti();
+      playTone([523, 659, 784], 0.24);
+      
+      // Check if table is completed
+      if (state.answeredCount >= state.target) {
+        safeLocalStorage.setItem(`mh_completed_${state.table}`, '1');
+        showFeedback(`Hoàn thành ${state.table === 'mixed' ? 'tổng hợp' : 'bảng ' + state.table}! 🎉`, true);
+        triggerConfetti();
       }
     } else {
-      // wrong
+      // Wrong answer
       showFeedback(`Sai — Đáp án đúng: ${state.question.ans}`, false);
-      playTone([220],0.12);
+      playTone([220], 0.12);
     }
+    
     updateUI();
-    setTimeout(()=>{ state.waiting=false; newQuestion(); dom.answer.focus(); }, state.reducedMotion? 250 : 900);
-  }
+    
+    // Next question after delay
+    const delay = state.reducedMotion ? 250 : 900;
+    setTimeout(() => {
+      state.waiting = false;
+      newQuestion();
+      dom.answer.focus();
+    }, delay);
+  };
 
-  // Skip
-  function skipQuestion(){ if(state.waiting) return; showFeedback(`Đáp án: ${state.question.ans}`, false); setTimeout(()=>{ newQuestion(); dom.answer.focus(); },500); }
+  const skipQuestion = () => {
+    if (state.waiting) return;
+    
+    showFeedback(`Đáp án: ${state.question.ans}`, false);
+    
+    setTimeout(() => {
+      newQuestion();
+      dom.answer.focus();
+    }, 500);
+  };
 
-  // Finish (end of challenge if time out)
-  function finish(timeout=false){
+  // Game completion
+  const finish = (timeout = false) => {
     stopTimer();
-    const total = state.score;
-    const name = prompt('Nhập tên lưu BXH (để giáo viên theo dõi):') || 'Anon';
-    const list = loadLB(); list.push({name,score:total,date:new Date().toISOString()}); list.sort((a,b)=>b.score-a.score); saveLB(list.slice(0,50)); renderLB();
-    alert(timeout ? 'Hết thời gian! Điểm đã lưu tạm thời.' : `Kết thúc! Điểm: ${total}`);
+    
+    const totalScore = state.score;
+    const playerName = prompt('Nhập tên lưu BXH (để giáo viên theo dõi):') || 'Anon';
+    
+    // Update leaderboard
+    const leaderboard = loadLB();
+    leaderboard.push({
+      name: playerName,
+      score: totalScore,
+      date: new Date().toISOString()
+    });
+    
+    leaderboard.sort((a, b) => b.score - a.score);
+    saveLB(leaderboard.slice(0, 50));
+    renderLB();
+    
+    alert(timeout 
+      ? 'Hết thời gian! Điểm đã lưu tạm thời.' 
+      : `Kết thúc! Điểm: ${totalScore}`
+    );
+    
     resetGameState(false);
-  }
+  };
 
-  // Reset
-  function resetGameState(keepTable=true){
+  // Reset game
+  const resetGameState = (keepTable = true) => {
     stopTimer();
-    if(!keepTable) state.table=null;
-    state.question=null; state.score=0; state.correct=0; state.answeredCount=0; state.asked.clear();
-    dom.answer.value=''; dom.answer.disabled = !state.table;
-    dom.btnCheck.disabled = !state.table; dom.btnSkip.disabled = !state.table;
-    updateUI();
-    dom.question.textContent = state.table ? 'Sẵn sàng...' : 'Chọn bảng để bắt đầu';
-    dom.progressBar.style.width='0%';
-  }
-
-  // Feedback UI
-  function showFeedback(msg, ok){
-    dom.feedback.textContent = msg;
-    dom.feedback.className = 'feedback ' + (ok? 'correct':'wrong') + ' show';
-  }
-
-  // Confetti (lightweight)
-  function confetti(){
-    for(let i=0;i<18;i++){
-      const d=document.createElement('div'); d.style.position='fixed'; d.style.width='10px'; d.style.height='10px';
-      d.style.left = `${50+ (Math.random()-0.5)*60}%`; d.style.top='40%'; d.style.background = ['#60a5fa','#34d399','#f97316','#f43f5e','#a78bfa'][i%5];
-      d.style.borderRadius = (i%2? '50%':'2px'); d.style.zIndex = 9999; d.style.opacity=1;
-      d.style.transition = 'transform 900ms cubic-bezier(.17,.67,.32,1),opacity 900ms';
-      document.body.appendChild(d);
-      setTimeout(()=>{ d.style.transform = `translate(${(Math.random()-0.5)*400}px, ${Math.random()*600 + 200}px) rotate(${Math.random()*540-270}deg)`; d.style.opacity=0; },20);
-      setTimeout(()=>d.remove(),1100);
+    
+    if (!keepTable) {
+      state.table = null;
     }
-  }
+    
+    state.question = null;
+    state.score = 0;
+    state.correct = 0;
+    state.answeredCount = 0;
+    state.asked.clear();
+    
+    dom.answer.value = '';
+    dom.answer.disabled = !state.table;
+    dom.btnCheck.disabled = !state.table;
+    dom.btnSkip.disabled = !state.table;
+    
+    updateUI();
+    
+    dom.question.textContent = state.table ? 'Sẵn sàng...' : 'Chọn bảng để bắt đầu';
+    dom.progressBar.style.width = '0%';
+  };
 
-  // Export/Import CSV & Export game as HTML? (export LB only)
-  function exportCSV(){
-    const rows = [['name','score','date']].concat(loadLB().map(r=>[r.name,r.score,r.date]));
-    const csv = rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\\n');
-    const blob = new Blob([csv],{type:'text/csv'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='mathhub_leaderboard.csv'; a.click(); URL.revokeObjectURL(url);
-  }
+  // Feedback
+  const showFeedback = (message, isCorrect) => {
+    dom.feedback.textContent = message;
+    dom.feedback.className = `feedback ${isCorrect ? 'correct' : 'wrong'} show`;
+  };
 
-  // Print
-  function printPage(){ window.print(); }
+  // Confetti effect
+  const triggerConfetti = () => {
+    for (let i = 0; i < 18; i++) {
+      const confetti = document.createElement('div');
+      
+      // Style the confetti
+      confetti.style.position = 'fixed';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.left = `${50 + (Math.random() - 0.5) * 60}%`;
+      confetti.style.top = '40%';
+      confetti.style.background = ['#60a5fa', '#34d399', '#f97316', '#f43f5e', '#a78bfa'][i % 5];
+      confetti.style.borderRadius = (i % 2 ? '50%' : '2px');
+      confetti.style.zIndex = '9999';
+      confetti.style.opacity = '1';
+      confetti.style.transition = 'transform 900ms cubic-bezier(.17,.67,.32,1), opacity 900ms';
+      
+      // Add to document
+      document.body.appendChild(confetti);
+      
+      // Animate
+      setTimeout(() => {
+        confetti.style.transform = `translate(${(Math.random() - 0.5) * 400}px, ${Math.random() * 600 + 200}px) rotate(${Math.random() * 540 - 270}deg)`;
+        confetti.style.opacity = '0';
+      }, 20);
+      
+      // Remove after animation
+      setTimeout(() => {
+        if (confetti.parentNode) {
+          confetti.parentNode.removeChild(confetti);
+        }
+      }, 1100);
+    }
+  };
 
-  // Event bindings
-  dom.tableBtns.forEach(b=> b.addEventListener('click', ()=> activateButtonForTable(b.dataset.table)));
-  dom.btnCheck.addEventListener('click', checkAnswer);
-  dom.btnSkip.addEventListener('click', skipQuestion);
-  dom.answer.addEventListener('keydown', (e)=>{ if(e.key==='Enter') checkAnswer(); });
-  dom.modeSelect.addEventListener('change', ()=>{ state.mode = dom.modeSelect.value; });
-  dom.targetCount.addEventListener('change', ()=>{ state.target = Number(dom.targetCount.value); updateProgress(); });
-  dom.timeLimit.addEventListener('change', ()=> state.timeLimit = Number(dom.timeLimit.value));
-  dom.btnHome.addEventListener('click', ()=> window.location.href='index.html');
-  dom.btnExportCSV.addEventListener('click', exportCSV);
-  dom.btnExportLB.addEventListener('click', exportLBCSV);
-  dom.btnClearLB.addEventListener('click', clearLB);
-  dom.btnSave.addEventListener('click', saveProgress);
-  dom.btnPrint.addEventListener('click', printPage);
-  dom.btnReset.addEventListener('click', ()=>{ if(confirm('Reset game?')) resetGameState(false); });
-  dom.btnImport.addEventListener('click', ()=>{ alert('Import: Chức năng nhập sẽ sớm có (cần file đúng định dạng).'); });
-  dom.reducedMotion.addEventListener('change', ()=> state.reducedMotion = dom.reducedMotion.checked);
-  dom.soundToggle.addEventListener('change', ()=> state.soundOn = dom.soundToggle.checked);
+  // Export CSV
+  const exportCSV = () => {
+    const leaderboard = loadLB();
+    const rows = [['name', 'score', 'date']].concat(
+      leaderboard.map(item => [item.name, item.score, item.date])
+    );
+    
+    const csvContent = rows.map(row => 
+      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+    
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    
+    link.href = url;
+    link.download = 'mathhub_leaderboard.csv';
+    link.click();
+    
+    URL.revokeObjectURL(url);
+  };
 
-  // init
-  renderLB();
-  resetGameState(false);
-  // preload question sample
-  dom.question.textContent = 'Sẵn sàng để bắt đầu — chọn bảng!';
+  // Print function
+  const printPage = () => {
+    window.print();
+  };
+
+  // Event handlers
+  const setupEventListeners = () => {
+    // Event delegation for table buttons
+    dom.tableSelect.addEventListener('click', (e) => {
+      if (e.target.classList.contains('table-btn')) {
+        activateButtonForTable(e.target.dataset.table);
+      }
+    });
+    
+    // Check answer
+    dom.btnCheck.addEventListener('click', checkAnswer);
+    
+    // Skip question
+    dom.btnSkip.addEventListener('click', skipQuestion);
+    
+    // Enter key to check answer
+    dom.answer.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        checkAnswer();
+      }
+    });
+    
+    // Settings changes
+    dom.modeSelect.addEventListener('change', () => {
+      state.mode = dom.modeSelect.value;
+    });
+    
+    dom.targetCount.addEventListener('change', () => {
+      state.target = Number(dom.targetCount.value);
+      updateProgressBar();
+    });
+    
+    dom.timeLimit.addEventListener('change', () => {
+      state.timeLimit = Number(dom.timeLimit.value);
+    });
+    
+    // Button actions
+    dom.btnHome.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+    
+    dom.btnExportCSV.addEventListener('click', exportCSV);
+    dom.btnExportLB.addEventListener('click', exportLBCSV);
+    dom.btnClearLB.addEventListener('click', clearLB);
+    dom.btnSave.addEventListener('click', saveProgress);
+    dom.btnPrint.addEventListener('click', printPage);
+    
+    dom.btnReset.addEventListener('click', () => {
+      if (confirm('Reset game?')) {
+        resetGameState(false);
+      }
+    });
+    
+    dom.btnImport.addEventListener('click', () => {
+      alert('Import: Chức năng nhập sẽ sớm có (cần file đúng định dạng).');
+    });
+    
+    // Accessibility settings
+    dom.reducedMotion.addEventListener('change', () => {
+      state.reducedMotion = dom.reducedMotion.checked;
+    });
+    
+    dom.soundToggle.addEventListener('change', () => {
+      state.soundOn = dom.soundToggle.checked;
+    });
+  };
+
+  // Initialize the game
+  const init = () => {
+    setupEventListeners();
+    renderLB();
+    resetGameState(false);
+    
+    // Preload question sample
+    dom.question.textContent = 'Sẵn sàng để bắt đầu — chọn bảng!';
+  };
+
+  // Start the game
+  init();
 })();
 </script>
 </body>
