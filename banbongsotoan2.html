@@ -48,9 +48,11 @@
     .btn-danger{background:linear-gradient(180deg,#ef4444,#dc2626); color:#fff}
 
     /* PANEL SETTINGS */
-    .dock{position:absolute; right:10px; top:10px; display:flex; gap:8px}
-    .chip{padding:8px 12px; border-radius:999px; background:#fff; font-weight:800; cursor:pointer; box-shadow: var(--shadow)}
+    .dock{position:absolute; right:10px; top:10px; display:flex; gap:8px; flex-direction:column; z-index:5}
+    .chip{padding:8px 12px; border-radius:999px; background:#fff; font-weight:800; cursor:pointer; box-shadow: var(--shadow); display:flex; align-items:center; gap:6px; transition:all 0.2s}
+    .chip:hover{transform:translateY(-2px); box-shadow:0 12px 20px rgba(2,6,23,0.2)}
     .chip.active{background:#3730a3; color:#fff}
+    .chip-icon{font-size:16px}
 
     .modal{position:fixed; inset:0; background:rgba(2,6,23,.4); display:none; align-items:center; justify-content:center; z-index:10}
     .modal.show{display:flex}
@@ -65,8 +67,19 @@
     .toast.ok{color:var(--ok); text-shadow:0 2px 0 #fff}
     .toast.bad{color:var(--bad); text-shadow:0 2px 0 #fff}
 
+    /* HOME BUTTON */
+    .home-btn{position:absolute; left:10px; top:10px; z-index:5; padding:8px 12px; border-radius:999px; background:#fff; font-weight:800; cursor:pointer; box-shadow: var(--shadow); display:flex; align-items:center; gap:6px; transition:all 0.2s}
+    .home-btn:hover{transform:translateY(-2px); box-shadow:0 12px 20px rgba(2,6,23,0.2)}
+
     /* RESPONSIVE */
-    @media (max-width:480px){ .balloon{width:76px; height:96px} .balloon .txt{font-size:16px} }
+    @media (max-width:480px){ 
+      .balloon{width:76px; height:96px} 
+      .balloon .txt{font-size:16px} 
+      .stats{gap:6px}
+      .stat{min-width:70px; font-size:14px; padding:4px 8px}
+      .dock{flex-direction:row; bottom:10px; top:auto; right:50%; transform:translateX(50%)}
+      .home-btn{top:auto; bottom:10px; left:50%; transform:translateX(-50%)}
+    }
   </style>
 </head>
 <body>
@@ -87,10 +100,14 @@
 
   <div id="gameArea"></div>
 
+  <!-- Home Button -->
+  <button id="btnHome" class="home-btn">🏠 Trang chủ</button>
+
+  <!-- Control Dock -->
   <div class="dock">
-    <button id="btnPause" class="chip">⏸ Tạm dừng</button>
-    <button id="btnSettings" class="chip">⚙️ Cài đặt</button>
-    <button id="btnMute" class="chip">🔊 Âm</button>
+    <button id="btnPause" class="chip"><span class="chip-icon">⏸</span><span class="chip-text">Tạm dừng</span></button>
+    <button id="btnSettings" class="chip"><span class="chip-icon">⚙️</span><span class="chip-text">Cài đặt</span></button>
+    <button id="btnMute" class="chip"><span class="chip-icon">🔊</span><span class="chip-text">Âm thanh</span></button>
   </div>
 
   <section class="controls">
@@ -159,7 +176,7 @@
       area: $('#gameArea'), score: $('#score'), correct: $('#correct'), wrong: $('#wrong'), lives: $('#lives'),
       best: $('#best'), time: $('#time'), timebar: $('#timebar'), ans: $('#answer'), toast: $('#toast'),
       btnShoot: $('#btnShoot'), btnStart: $('#btnStart'), btnReset: $('#btnReset'), btnPause: $('#btnPause'), btnSettings: $('#btnSettings'), btnMute: $('#btnMute'),
-      modal: $('#settingsModal'),
+      btnHome: $('#btnHome'), modal: $('#settingsModal'),
       maxN: $('#maxN'), maxNLabel: $('#maxNLabel'), speed: $('#speed'), speedLabel: $('#speedLabel'),
       duration: $('#duration'), durationLabel: $('#durationLabel'), bonus: $('#bonus'), bonusLabel: $('#bonusLabel'),
     };
@@ -246,7 +263,7 @@
       if(state.score>state.best){ state.best=state.score; localStorage.setItem('bb_best', state.best); ui.best.textContent = state.best; }
     }
 
-    function pauseToggle(){ if(!state.running) return; state.paused = !state.paused; ui.btnPause.textContent = state.paused ? '▶️ Tiếp tục' : '⏸ Tạm dừng'; if(!state.paused) { state.lastFrame = performance.now(); loop(state.lastFrame);} }
+    function pauseToggle(){ if(!state.running) return; state.paused = !state.paused; ui.btnPause.textContent = state.paused ? '▶️ Tiếp tục' : '⏸ Tạm dừng'; ui.btnPause.querySelector('.chip-icon').textContent = state.paused ? '▶️' : '⏸'; if(!state.paused) { state.lastFrame = performance.now(); loop(state.lastFrame);} }
 
     function shoot(val){ if(!state.running || state.paused) return; if(Number.isNaN(+val)) return;
       // tìm bóng có đáp án đúng gần đáy nhất
@@ -276,7 +293,20 @@
     ui.btnShoot.addEventListener('click', ()=> shoot(+ui.ans.value));
     ui.ans.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); shoot(+ui.ans.value); }});
     ui.btnPause.addEventListener('click', pauseToggle);
-    ui.btnMute.addEventListener('click', ()=>{ state.muted = !state.muted; ui.btnMute.textContent = state.muted? '🔇 Tắt âm' : '🔊 Âm';});
+    ui.btnMute.addEventListener('click', ()=>{ 
+      state.muted = !state.muted; 
+      ui.btnMute.querySelector('.chip-icon').textContent = state.muted ? '🔇' : '🔊';
+      ui.btnMute.querySelector('.chip-text').textContent = state.muted ? 'Tắt âm' : 'Âm thanh';
+      beep(state.muted ? 440 : 660, 0.1);
+    });
+    
+    // Home button functionality
+    ui.btnHome.addEventListener('click', () => {
+      if(confirm('Bạn có muốn trở về trang chủ không? Tiến trình hiện tại sẽ bị mất.')) {
+        // Thực tế có thể chuyển hướng đến trang chủ, ở đây tôi chỉ reset game
+        window.location.href = '/'; // Thay đổi URL này theo trang chủ thực tế
+      }
+    });
 
     // click vào bóng để autofill đáp án
     $('#gameArea').addEventListener('click', (ev)=>{
@@ -302,7 +332,19 @@
     $$('.op').forEach(cb=> cb.addEventListener('change', ()=>{ const sel = $$('.op').filter(x=>x.checked).map(x=>x.value); state.ops = sel.length? sel : ['+']; }));
 
     // init defaults
-    (function init(){ ui.ans.setAttribute('inputmode','numeric'); ui.ans.setAttribute('pattern','[0-9]*'); ui.duration.value=60; ui.durationLabel.textContent='60s'; ui.maxN.value=20; ui.maxNLabel.textContent='20'; ui.speed.value=1.2; ui.speedLabel.textContent='1.2x'; ui.bonus.value=1; ui.bonusLabel.textContent='+1s'; $$('.diff')[0].classList.add('active'); })();
+    (function init(){ 
+      ui.ans.setAttribute('inputmode','numeric'); 
+      ui.ans.setAttribute('pattern','[0-9]*'); 
+      ui.duration.value=60; ui.durationLabel.textContent='60s'; 
+      ui.maxN.value=20; ui.maxNLabel.textContent='20'; 
+      ui.speed.value=1.2; ui.speedLabel.textContent='1.2x'; 
+      ui.bonus.value=1; ui.bonusLabel.textContent='+1s'; 
+      $$('.diff')[0].classList.add('active'); 
+      
+      // Cập nhật icon cho nút tạm dừng
+      ui.btnPause.querySelector('.chip-icon').textContent = '⏸';
+      ui.btnPause.querySelector('.chip-text').textContent = 'Tạm dừng';
+    })();
 
     // Prevent wheel from changing number on scroll while focused
     ui.ans.addEventListener('wheel', e=> e.target === document.activeElement && e.preventDefault(), {passive:false});
