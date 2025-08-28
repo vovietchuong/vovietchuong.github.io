@@ -18,47 +18,17 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, rgba(78, 115, 223, 0.95) 0%, rgba(46, 89, 217, 0.95) 100%), 
-                        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);
             color: #333;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
-        
-        /* Thêm các yếu tố toán học nổi */
-        .math-elements {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-        
-        .math-symbol {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.1);
-            font-size: 2rem;
-            animation: float 15s infinite linear;
-        }
-        
-        @keyframes float {
-            0% {
-                transform: translateY(0) rotate(0deg);
-            }
-            100% {
-                transform: translateY(-100vh) rotate(360deg);
-            }
         }
         
         .header {
@@ -67,32 +37,22 @@
             color: white;
             width: 100%;
             position: relative;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.18);
         }
         
         .header h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            font-weight: 800;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
         
         .header p {
             font-size: 1.2rem;
             opacity: 0.9;
-            max-width: 800px;
-            margin: 0 auto;
         }
         
         .user-controls {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 0;
+            right: 0;
             display: flex;
             align-items: center;
             gap: 15px;
@@ -106,265 +66,201 @@
         }
         
         .user-avatar {
-            width: 45px;
-            height: 45px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .user-avatar:hover {
-            transform: scale(1.1);
-            background: rgba(255, 255, 255, 0.3);
+            font-size: 18px;
         }
         
         .auth-btn {
-            padding: 10px 20px;
+            padding: 8px 16px;
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s;
-            font-weight: 600;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: background 0.3s;
+            font-weight: 500;
         }
         
         .auth-btn:hover {
             background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
         
         .section-title {
             color: white;
-            margin: 40px 0 20px;
+            margin: 30px 0 15px;
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 1.8rem;
             width: 100%;
-            max-width: 1200px;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            position: relative;
-            display: inline-block;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 4px;
-            background: linear-gradient(90deg, #ff6b6b, #4e73df);
-            border-radius: 2px;
+            max-width: 1000px;
         }
         
         .section-divider {
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-            margin: 20px 0 40px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 10px 0 30px;
         }
         
         .container {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
         }
         
         .game-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            background: white;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
             position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         
         .game-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         .game-card.featured {
-            border: 2px solid #ff6b6b;
-            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.3);
+            border: 3px solid #ff6b6b;
         }
         
         .featured-badge {
             position: absolute;
             top: -10px;
             right: -10px;
-            background: linear-gradient(135deg, #ff6b6b, #e55656);
+            background: #ff6b6b;
             color: white;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 0.8rem;
             z-index: 10;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
         .new-badge {
             position: absolute;
             top: -10px;
             left: -10px;
-            background: linear-gradient(135deg, #36b9cc, #2a9eb0);
+            background: #36b9cc;
             color: white;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 0.8rem;
             z-index: 10;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
         .popular-badge {
             position: absolute;
             top: -10px;
             right: -10px;
-            background: linear-gradient(135deg, #f6c23e, #e6b02a);
+            background: #f6c23e;
             color: white;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 0.8rem;
             z-index: 10;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
         .game-card-img {
-            height: 200px;
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 3.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .game-card-img::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2), transparent);
+            font-size: 3rem;
         }
         
         .game-card-content {
-            padding: 25px;
+            padding: 20px;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
         
         .game-card h3 {
-            margin-bottom: 15px;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2e59d9;
         }
         
         .game-card p {
-            margin-bottom: 25px;
-            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+            color: #666;
             flex-grow: 1;
-            line-height: 1.6;
         }
         
         .game-card-btn {
             display: block;
             text-align: center;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.2);
+            padding: 12px;
+            background: #4e73df;
             color: white;
             text-decoration: none;
-            border-radius: 10px;
+            border-radius: 5px;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: background 0.3s;
             cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
         }
         
         .game-card-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: #2e59d9;
         }
         
         .game-card-btn.featured {
-            background: linear-gradient(135deg, #ff6b6b, #e55656);
+            background: #ff6b6b;
         }
         
         .game-card-btn.featured:hover {
-            background: linear-gradient(135deg, #e55656, #cc4b4b);
-            transform: translateY(-3px);
+            background: #e55656;
         }
         
         .game-card-btn.new {
-            background: linear-gradient(135deg, #36b9cc, #2a9eb0);
+            background: #36b9cc;
         }
         
         .game-card-btn.new:hover {
-            background: linear-gradient(135deg, #2a9eb0, #248a9a);
-            transform: translateY(-3px);
+            background: #2a9eb0;
         }
         
         .game-card-btn.popular {
-            background: linear-gradient(135deg, #f6c23e, #e6b02a);
+            background: #f6c23e;
             color: #333;
         }
         
         .game-card-btn.popular:hover {
-            background: linear-gradient(135deg, #e6b02a, #d6a326);
-            transform: translateY(-3px);
+            background: #e6b02a;
         }
         
         .game-card-btn.coming-soon {
-            background: rgba(133, 135, 150, 0.5);
+            background: #858796;
             cursor: not-allowed;
         }
         
         .game-card-btn.coming-soon:hover {
-            background: rgba(133, 135, 150, 0.5);
-            transform: none;
+            background: #858796;
         }
         
         .footer {
-            margin-top: 60px;
+            margin-top: 40px;
             color: white;
             text-align: center;
-            padding: 30px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
-        
-        .footer p {
-            margin: 10px 0;
-            opacity: 0.9;
+            padding: 20px;
         }
         
         /* Toast notification */
@@ -372,31 +268,27 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: rgba(51, 51, 51, 0.9);
+            background-color: #333;
             color: white;
-            padding: 16px 24px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s, transform 0.3s;
+            transition: opacity 0.3s;
             max-width: 300px;
-            transform: translateY(20px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .toast.show {
             opacity: 1;
-            transform: translateY(0);
         }
         
         .toast.success {
-            background-color: rgba(28, 200, 138, 0.9);
+            background-color: #1cc88a;
         }
         
         .toast.error {
-            background-color: rgba(231, 74, 59, 0.9);
+            background-color: #e74a3b;
         }
         
         /* Login modal */
@@ -411,65 +303,45 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(5px);
         }
         
         .modal-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 247, 252, 0.95));
-            border-radius: 20px;
+            background: white;
+            border-radius: 15px;
             width: 90%;
-            max-width: 450px;
-            padding: 35px;
+            max-width: 400px;
+            padding: 30px;
             position: relative;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(20px);
         }
         
         .close-modal {
             position: absolute;
             top: 15px;
             right: 15px;
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             cursor: pointer;
             color: #777;
-            transition: color 0.3s;
-        }
-        
-        .close-modal:hover {
-            color: #333;
         }
         
         .auth-tabs {
             display: flex;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-bottom: 2px solid #f0f0f0;
         }
         
         .auth-tab {
             flex: 1;
             text-align: center;
-            padding: 12px;
+            padding: 10px;
             cursor: pointer;
             font-weight: 600;
             color: #777;
             transition: all 0.3s;
-            position: relative;
         }
         
         .auth-tab.active {
             color: #4e73df;
-        }
-        
-        .auth-tab.active::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, #4e73df, #2e59d9);
-            border-radius: 3px;
+            border-bottom: 3px solid #4e73df;
         }
         
         .auth-form {
@@ -486,46 +358,40 @@
         
         .form-group label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             font-weight: 500;
             color: #555;
         }
         
         .form-input {
             width: 100%;
-            padding: 14px 18px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            border-radius: 10px;
+            border-radius: 5px;
             font-size: 16px;
-            transition: all 0.3s;
-            background: rgba(255, 255, 255, 0.8);
+            transition: border 0.3s;
         }
         
         .form-input:focus {
             border-color: #4e73df;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.2);
-            background: white;
         }
         
         .modal-btn {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #4e73df, #2e59d9);
+            padding: 12px;
+            background: #4e73df;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 5px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 5px 15px rgba(46, 89, 217, 0.3);
+            transition: background 0.3s;
         }
         
         .modal-btn:hover {
-            background: linear-gradient(135deg, #2e59d9, #1a46c4);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(46, 89, 217, 0.4);
+            background: #2e59d9;
         }
         
         .auth-footer {
@@ -538,13 +404,6 @@
             color: #4e73df;
             text-decoration: none;
             cursor: pointer;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        
-        .auth-footer a:hover {
-            color: #2e59d9;
-            text-decoration: underline;
         }
         
         @media (max-width: 768px) {
@@ -555,32 +414,16 @@
             .user-controls {
                 position: static;
                 justify-content: center;
-                margin-top: 20px;
+                margin-top: 15px;
             }
             
             .header {
-                margin-bottom: 20px;
-                padding: 15px;
-            }
-            
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            
-            .section-title {
-                font-size: 1.8rem;
-            }
-            
-            .game-card-img {
-                height: 180px;
+                margin-bottom: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Math elements in background -->
-    <div class="math-elements" id="math-elements"></div>
-
     <!-- Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
@@ -658,7 +501,7 @@
         <!-- Game Toán lớp 1 - Nổi bật -->
         <div class="game-card featured">
             <div class="featured-badge">Nổi bật</div>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b, #e55656);">
+            <div class="game-card-img" style="background-color: #ff6b6b;">
                 <i class="fas fa-child"></i>
             </div>
             <div class="game-card-content">
@@ -671,7 +514,7 @@
         <!-- Game Bắn Bóng Số - Mới -->
         <div class="game-card">
             <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b, #e55656);">
+            <div class="game-card-img" style="background: linear-gradient(145deg, #ff6b6b, #e55656);">
                 <i class="fas fa-bullseye"></i>
             </div>
             <div class="game-card-content">
@@ -683,7 +526,7 @@
         
         <!-- Game Bảng cửu chương -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #8e2de2, #4a00e0);">
+            <div class="game-card-img" style="background: linear-gradient(145deg, #8e2de2, #4a00e0);">
                 <i class="fas fa-times-circle"></i>
             </div>
             <div class="game-card-content">
@@ -696,7 +539,7 @@
         <!-- Game Toán lớp 2 - Phổ biến -->
         <div class="game-card">
             <div class="popular-badge">Phổ biến</div>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #4e73df, #2e59d9);">
+            <div class="game-card-img" style="background-color: #4e73df;">
                 <i class="fas fa-plus-circle"></i>
             </div>
             <div class="game-card-content">
@@ -709,7 +552,7 @@
         <!-- Cộng trừ số nguyên lớp 6 -->
         <div class="game-card">
             <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a, #0f9d58);">
+            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
                 <i class="fas fa-infinity"></i>
             </div>
             <div class="game-card-content">
@@ -722,7 +565,7 @@
         <!-- Nhân chia nâng cao lớp 3-4 -->
         <div class="game-card">
             <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #6f42c1, #4e2a8e);">
+            <div class="game-card-img" style="background: linear-gradient(145deg, #6f42c1, #4e2a8e);">
                 <i class="fas fa-divide"></i>
             </div>
             <div class="game-card-content">
@@ -734,7 +577,7 @@
         
         <!-- Đường đua phép tính -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a, #0f9d58);">
+            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
                 <i class="fas fa-flag-checkered"></i>
             </div>
             <div class="game-card-content">
@@ -751,7 +594,7 @@
     <div class="container">
         <!-- Toán đố vui -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e, #e6b02a);">
+            <div class="game-card-img" style="background-color: #f6c23e;">
                 <i class="fas fa-puzzle-piece"></i>
             </div>
             <div class="game-card-content">
@@ -763,7 +606,7 @@
         
         <!-- Cờ toán học -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b, #d52c1e);">
+            <div class="game-card-img" style="background-color: #e74a3b;">
                 <i class="fas fa-chess-board"></i>
             </div>
             <div class="game-card-content">
@@ -775,7 +618,7 @@
         
         <!-- Đấu trường toán học -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc, #2a9eb0);">
+            <div class="game-card-img" style="background-color: #36b9cc;">
                 <i class="fas fa-trophy"></i>
             </div>
             <div class="game-card-content">
@@ -787,185 +630,29 @@
 
         <!-- Hình học vui nhộn -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #8e2de2, #6a1fc0);">
+            <div class="game-card-img" style="background-color: #8e2de2;">
                 <i class="fas fa-shapes"></i>
             </div>
             <div class="game-card-content">
                 <h3>Hình học vui nhộn</h3>
-                <p>Khám phá thế giới hình học qua các trò chơi tương tác thú vị và sáng tạo.</p>
+                <p>Khám phá thế giới hình học qua các trò chơi thú vị. Nhận diện hình khối và tính chu vi, diện tích.</p>
                 <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
     </div>
     
     <div class="footer">
-        <p>MathHub - Trang web giáo dục toán học vui nhộn</p>
-        <p>Email: contact@mathhub.edu.vn | Điện thoại: 0123.456.789</p>
-        <p>&copy; 2023 MathHub. Tất cả các quyền được bảo lưu.</p>
+        <p>© 2023 MathHub - Website của thầy Võ Viết Chương - THPT Lê Quảng Chí</p>
+        <p>Liên hệ: gnouhcteiv@gmail.com</p>
     </div>
-    
+
     <!-- Toast notification -->
     <div class="toast" id="toast"></div>
+
+    <!-- Font Awesome for icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     
-    <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDummyAPIKeyForDemoPurposesOnly",
-            authDomain: "mathhub-demo.firebaseapp.com",
-            projectId: "mathhub-demo",
-            storageBucket: "mathhub-demo.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:dummyappidfordemopurposes",
-            measurementId: "G-DUMMYID"
-        };
-        
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-        
-        // DOM Elements
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userInfo = document.getElementById('user-info');
-        const userName = document.getElementById('user-name');
-        const loginModal = document.getElementById('login-modal');
-        const closeModal = document.getElementById('close-modal');
-        const loginTab = document.getElementById('login-tab');
-        const registerTab = document.getElementById('register-tab');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const toast = document.getElementById('toast');
-        const mathElements = document.getElementById('math-elements');
-        
-        // Add math symbols to background
-        const symbols = ['+', '-', '×', '÷', '=', 'π', '∞', '√', '∫', '∑', 'α', 'β', 'θ', '°', '%', '≠', '≈', '±', '≤', '≥', '‰', '∂', '∆', '∏', '∩', '∪'];
-        for (let i = 0; i < 50; i++) {
-            const symbol = document.createElement('div');
-            symbol.className = 'math-symbol';
-            symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-            symbol.style.left = `${Math.random() * 100}%`;
-            symbol.style.animationDuration = `${15 + Math.random() * 20}s`;
-            symbol.style.animationDelay = `${Math.random() * 5}s`;
-            symbol.style.fontSize = `${1 + Math.random() * 2}rem`;
-            mathElements.appendChild(symbol);
-        }
-        
-        // Check if user is logged in
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in
-                loginBtn.style.display = 'none';
-                userInfo.style.display = 'flex';
-                userName.textContent = user.displayName || user.email;
-                showToast('Đăng nhập thành công!', 'success');
-            } else {
-                // User is signed out
-                loginBtn.style.display = 'block';
-                userInfo.style.display = 'none';
-            }
-        });
-        
-        // Event Listeners
-        loginBtn.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-        });
-        
-        closeModal.addEventListener('click', () => {
-            loginModal.style.display = 'none';
-        });
-        
-        window.addEventListener('click', (e) => {
-            if (e.target === loginModal) {
-                loginModal.style.display = 'none';
-            }
-        });
-        
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active');
-            registerTab.classList.remove('active');
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
-        });
-        
-        registerTab.addEventListener('click', () => {
-            registerTab.classList.add('active');
-            loginTab.classList.remove('active');
-            registerForm.classList.add('active');
-            loginForm.classList.remove('active');
-        });
-        
-        logoutBtn.addEventListener('click', () => {
-            firebase.auth().signOut().then(() => {
-                showToast('Đã đăng xuất!', 'success');
-            }).catch((error) => {
-                showToast('Có lỗi xảy ra!', 'error');
-            });
-        });
-        
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    loginModal.style.display = 'none';
-                    loginForm.reset();
-                })
-                .catch((error) => {
-                    showToast('Email hoặc mật khẩu không đúng!', 'error');
-                });
-        });
-        
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirm = document.getElementById('register-confirm').value;
-            
-            if (password !== confirm) {
-                showToast('Mật khẩu xác nhận không khớp!', 'error');
-                return;
-            }
-            
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Update user profile
-                    return userCredential.user.updateProfile({
-                        displayName: name
-                    });
-                })
-                .then(() => {
-                    loginModal.style.display = 'none';
-                    registerForm.reset();
-                    showToast('Đăng ký thành công!', 'success');
-                })
-                .catch((error) => {
-                    showToast('Có lỗi xảy ra khi đăng ký!', 'error');
-                });
-        });
-        
-        // Function to show toast notifications
-        function showToast(message, type = '') {
-            toast.textContent = message;
-            toast.className = 'toast';
-            if (type) {
-                toast.classList.add(type);
-            }
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        // Demo login for presentation purposes
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(() => {
-                showToast('Chào mừng bạn đến với MathHub!', 'success');
-            }, 1000);
-        });
-    </script>
+    <!-- Auth System JavaScript -->
+    <script src="auth-system.js"></script>
 </body>
 </html>
