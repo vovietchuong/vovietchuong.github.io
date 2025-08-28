@@ -1,591 +1,311 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bắn Bóng Số - Toán Lớp 2</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🎈 Bắn Bóng Số – Bản Nâng Cấp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Comic Sans MS', cursive, sans-serif;
+    :root{
+      --bg-1:#0ea5e9; --bg-2:#7dd3fc; --panel:#ffffffee; --ink:#0f172a;
+      --brand:#f97316; --ok:#10b981; --bad:#ef4444; --muted:#475569;
+      --shadow:0 10px 25px rgba(2, 6, 23, .15);
     }
-    
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(to bottom, #1e90ff, #87ceeb);
-      overflow: hidden;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      color: #333;
-    }
-    
-    .header {
-      text-align: center;
-      padding: 10px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      z-index: 10;
-    }
-    
-    h1 {
-      color: #ff6b6b;
-      margin-bottom: 5px;
-      font-size: 2rem;
-      text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
-    }
-    
-    .game-info {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 10px;
-      flex-wrap: wrap;
-    }
-    
-    .info-box {
-      background: linear-gradient(145deg, #4e73df, #2e59d9);
-      color: white;
-      padding: 8px 15px;
-      border-radius: 20px;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    }
-    
-    #gameArea {
-      position: relative;
-      width: 100%;
-      flex-grow: 1;
-      overflow: hidden;
-      background: rgba(255, 255, 255, 0.2);
-    }
-    
-    .balloon {
-      position: absolute;
-      bottom: -100px;
-      width: 80px;  /* Tăng kích thước bóng */
-      height: 100px; /* Tăng kích thước bóng */
-      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><path fill="%23ff6b6b" d="M50 10 C70 10 85 30 85 60 C85 90 70 110 50 110 C30 110 15 90 15 60 C15 30 30 10 50 10 Z"/><path fill="%23ffffff" d="M40 40 C45 35 55 35 60 40 C55 45 45 45 40 40 Z"/></svg>');
-      background-size: contain;
-      background-repeat: no-repeat;
-      text-align: center;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 18px; /* Giảm kích thước font */
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 1px 1px 2px #000;
-      transition: transform 0.2s;
-      cursor: pointer;
-      padding: 5px;
-      box-sizing: border-box;
-    }
-    
-    .expression {
-      max-width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.2;
-      padding: 0 5px;
-    }
-    
-    .balloon:hover {
-      transform: scale(1.1);
-    }
-    
-    .balloon.hit {
-      animation: pop 0.5s forwards;
-    }
-    
-    @keyframes pop {
-      0% { transform: scale(1); opacity: 1; }
-      50% { transform: scale(1.5); opacity: 0.7; }
-      100% { transform: scale(0); opacity: 0; }
-    }
-    
-    #controls {
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.9);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      flex-wrap: wrap;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    #answerInput {
-      font-size: 20px;
-      padding: 10px 15px;
-      width: 120px;
-      border: 2px solid #4e73df;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    
-    #shootBtn {
-      background: linear-gradient(145deg, #ff6b6b, #e55656);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    }
-    
-    #shootBtn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    #shootBtn:active {
-      transform: translateY(0);
-    }
-    
-    #startBtn {
-      background: linear-gradient(145deg, #1cc88a, #0f9d58);
-      color: white;
-      border: none;
-      border-radius: 10px;
-      padding: 10px 20px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.3s;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-    }
-    
-    #startBtn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
-    
-    .home-btn {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background: linear-gradient(145deg, #4e73df, #2e59d9);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      z-index: 100;
-    }
-    
-    .home-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    }
-    
-    .home-btn i {
-      margin-right: 8px;
-    }
-    
-    .feedback {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 3rem;
-      font-weight: bold;
-      color: #ff6b6b;
-      opacity: 0;
-      pointer-events: none;
-      z-index: 1000;
-      text-shadow: 2px 2px 0 #fff, -2px -2px 0 #fff, 2px -2px 0 #fff, -2px 2px 0 #fff;
-      transition: opacity 0.3s;
-    }
-    
-    .level-select {
-      display: flex;
-      gap: 10px;
-      margin: 10px 0;
-    }
-    
-    .level-btn {
-      padding: 8px 15px;
-      border: none;
-      border-radius: 20px;
-      background: #e3f2fd;
-      color: #1976d2;
-      cursor: pointer;
-      transition: all 0.3s;
-      font-weight: bold;
-    }
-    
-    .level-btn.active {
-      background: linear-gradient(145deg, #3949ab, #1a237e);
-      color: white;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 1.5rem;
-      }
-      
-      .info-box {
-        font-size: 0.9rem;
-        padding: 6px 12px;
-      }
-      
-      #answerInput {
-        font-size: 18px;
-        padding: 8px 12px;
-        width: 100px;
-      }
-      
-      #shootBtn, #startBtn {
-        font-size: 16px;
-        padding: 8px 16px;
-      }
-      
-      .balloon {
-        width: 70px;
-        height: 90px;
-        font-size: 16px;
-      }
-    }
-    
-    @media (max-width: 480px) {
-      .game-info {
-        gap: 10px;
-      }
-      
-      .info-box {
-        font-size: 0.8rem;
-        padding: 5px 10px;
-      }
-      
-      #controls {
-        flex-direction: column;
-        gap: 15px;
-      }
-      
-      .home-btn {
-        top: 10px;
-        left: 10px;
-        padding: 8px 15px;
-        font-size: 0.9rem;
-      }
-      
-      .balloon {
-        width: 65px;
-        height: 85px;
-        font-size: 14px;
-      }
-    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family: 'Nunito', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color:var(--ink);
+      background: linear-gradient(180deg, var(--bg-1), var(--bg-2)); display:flex; flex-direction:column; overflow:hidden}
+    /* HEADER */
+    .topbar{position:relative; z-index:3; display:flex; gap:12px; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--panel); box-shadow: var(--shadow)}
+    .brand{display:flex; align-items:center; gap:10px}
+    .brand h1{font-size:clamp(18px, 4vw, 26px); margin:0; color:var(--brand)}
+    .pill{background:#eef2ff; color:#3730a3; font-weight:800; padding:6px 10px; border-radius:999px;}
+
+    .stats{display:flex; gap:10px; flex-wrap:wrap}
+    .stat{background:#ecfeff; border:2px solid #67e8f9; padding:6px 10px; border-radius:14px; font-weight:800; min-width:90px; text-align:center}
+    .heart{color:#ef4444}
+    .timer{position:relative}
+    .timer-bar{position:absolute; left:0; bottom:-3px; height:3px; background:#0ea5e9; width:100%; border-radius:3px}
+
+    /* AREA */
+    #gameArea{position:relative; flex:1; overflow:hidden; background:linear-gradient(180deg, #ffffff33, #ffffff14)}
+
+    /* BALLOON */
+    .balloon{position:absolute; bottom:-120px; width:90px; height:110px; display:flex; align-items:center; justify-content:center; padding:8px; cursor:pointer; filter:drop-shadow(0 6px 12px rgba(0,0,0,.15)); user-select:none}
+    .balloon .txt{font-size:18px; font-weight:900; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.5)}
+    .pop{animation:pop .45s both}
+    @keyframes pop{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.8}100%{transform:scale(0);opacity:0}}
+
+    /* CONTROLS */
+    .controls{z-index:2; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center; padding:10px; background:var(--panel); box-shadow: var(--shadow)}
+    input[type=number]{font-size:18px; padding:10px 14px; width:140px; border-radius:12px; border:2px solid #38bdf8; text-align:center}
+    button{border:0; padding:10px 16px; border-radius:12px; font-weight:900; cursor:pointer; box-shadow: var(--shadow)}
+    .btn-primary{background:linear-gradient(180deg, #fb923c, #f97316); color:#fff}
+    .btn-green{background:linear-gradient(180deg, #22c55e, #16a34a); color:#fff}
+    .btn-muted{background:#e2e8f0}
+    .btn-danger{background:linear-gradient(180deg,#ef4444,#dc2626); color:#fff}
+
+    /* PANEL SETTINGS */
+    .dock{position:absolute; right:10px; top:10px; display:flex; gap:8px}
+    .chip{padding:8px 12px; border-radius:999px; background:#fff; font-weight:800; cursor:pointer; box-shadow: var(--shadow)}
+    .chip.active{background:#3730a3; color:#fff}
+
+    .modal{position:fixed; inset:0; background:rgba(2,6,23,.4); display:none; align-items:center; justify-content:center; z-index:10}
+    .modal.show{display:flex}
+    .card{width:min(720px, 92vw); background:#fff; border-radius:20px; padding:16px; box-shadow: var(--shadow)}
+    .grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .range{width:100%}
+    .kbd{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; background:#0f172a; color:#fff; padding:2px 6px; border-radius:6px}
+
+    /* FEEDBACK */
+    .toast{position:fixed; left:50%; top:18%; transform:translate(-50%,-50%); font-weight:900; font-size:32px; pointer-events:none; opacity:0; transition:opacity .2s; z-index:5}
+    .toast.ok{color:var(--ok); text-shadow:0 2px 0 #fff}
+    .toast.bad{color:var(--bad); text-shadow:0 2px 0 #fff}
+
+    /* RESPONSIVE */
+    @media (max-width:480px){ .balloon{width:76px; height:96px} .balloon .txt{font-size:16px} }
   </style>
 </head>
 <body>
-  <button class="home-btn" onclick="goHome()">
-    <i class="fas fa-home"></i> Trang chủ
-  </button>
-
-  <div class="header">
-    <h1>🎈 Bắn Bóng Số - Toán Lớp 2 🎈</h1>
-    <div class="level-select">
-      <button class="level-btn active" data-level="easy">Dễ</button>
-      <button class="level-btn" data-level="medium">Trung bình</button>
-      <button class="level-btn" data-level="hard">Khó</button>
+  <header class="topbar">
+    <div class="brand">
+      <span class="pill">Lớp 2</span>
+      <h1>🎯 Bắn Bóng Số – Bản Nâng Cấp</h1>
     </div>
-    <div class="game-info">
-      <div class="info-box">Điểm: <span id="score">0</span></div>
-      <div class="info-box">Bóng đã bắn: <span id="balloonsShot">0</span></div>
-      <div class="info-box">Bóng đúng: <span id="correctShots">0</span></div>
-      <div class="info-box">Mạng: <span id="lives">3</span> ❤️</div>
+    <div class="stats">
+      <div class="stat">Điểm: <span id="score">0</span></div>
+      <div class="stat">Đúng: <span id="correct">0</span></div>
+      <div class="stat">Sai: <span id="wrong">0</span></div>
+      <div class="stat timer">Thời gian: <span id="time">60</span>s<div class="timer-bar" id="timebar"></div></div>
+      <div class="stat">Mạng: <span id="lives">3</span> <span class="heart">❤</span></div>
+      <div class="stat">Kỷ lục: <span id="best">0</span></div>
     </div>
-  </div>
+  </header>
 
   <div id="gameArea"></div>
 
-  <div id="controls">
-    <input type="number" id="answerInput" placeholder="Nhập số">
-    <button id="shootBtn" onclick="checkAnswer()">Bắn!</button>
-    <button id="startBtn" onclick="startGame()">Bắt đầu</button>
+  <div class="dock">
+    <button id="btnPause" class="chip">⏸ Tạm dừng</button>
+    <button id="btnSettings" class="chip">⚙️ Cài đặt</button>
+    <button id="btnMute" class="chip">🔊 Âm</button>
   </div>
 
-  <div class="feedback" id="feedback"></div>
+  <section class="controls">
+    <input type="number" id="answer" placeholder="Nhập đáp án" />
+    <button class="btn-primary" id="btnShoot">Bắn!</button>
+    <button class="btn-green" id="btnStart">Bắt đầu</button>
+    <button class="btn-danger" id="btnReset">Chơi lại</button>
+  </section>
+
+  <!-- MODAL SETTINGS -->
+  <div class="modal" id="settingsModal">
+    <div class="card">
+      <h2 style="margin:4px 0 12px">⚙️ Cài đặt luyện tập</h2>
+      <div class="grid">
+        <div class="row"><label>Độ khó</label>
+          <div>
+            <button class="chip diff" data-diff="easy">Dễ</button>
+            <button class="chip diff" data-diff="medium">TB</button>
+            <button class="chip diff" data-diff="hard">Khó</button>
+          </div>
+        </div>
+        <div class="row">
+          <label>Phép toán</label>
+          <div>
+            <label><input type="checkbox" class="op" value="+" checked /> Cộng</label>
+            <label><input type="checkbox" class="op" value="-" checked /> Trừ</label>
+            <label><input type="checkbox" class="op" value="×" /> Nhân (≤5)</label>
+            <label><input type="checkbox" class="op" value="÷" /> Chia (tròn)</label>
+          </div>
+        </div>
+        <div class="row">
+          <label>Giới hạn số tối đa</label>
+          <input class="range" id="maxN" type="range" min="10" max="100" step="10" value="20" />
+          <span id="maxNLabel" class="kbd">20</span>
+        </div>
+        <div class="row">
+          <label>Tốc độ bóng</label>
+          <input class="range" id="speed" type="range" min="1" max="3" step="0.5" value="1.2" />
+          <span id="speedLabel" class="kbd">1.2x</span>
+        </div>
+        <div class="row">
+          <label>Thời gian mỗi ván</label>
+          <input class="range" id="duration" type="range" min="30" max="180" step="10" value="60" />
+          <span id="durationLabel" class="kbd">60s</span>
+        </div>
+        <div class="row">
+          <label>Thêm thời gian khi đúng</label>
+          <input class="range" id="bonus" type="range" min="0" max="5" step="1" value="1" />
+          <span id="bonusLabel" class="kbd">+1s</span>
+        </div>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px">
+        <button class="btn-muted" id="btnCloseSettings">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 
   <script>
-    const gameArea = document.getElementById("gameArea");
-    const answerInput = document.getElementById("answerInput");
-    const scoreBox = document.getElementById("score");
-    const balloonsShotBox = document.getElementById("balloonsShot");
-    const correctShotsBox = document.getElementById("correctShots");
-    const livesBox = document.getElementById("lives");
-    const feedback = document.getElementById("feedback");
-    const levelButtons = document.querySelectorAll('.level-btn');
-    
-    let balloons = [];
-    let score = 0;
-    let balloonsShot = 0;
-    let correctShots = 0;
-    let lives = 3;
-    let gameActive = false;
-    let gameSpeed = 1;
-    let difficulty = "easy";
-    let balloonInterval;
-    let moveInterval;
+    // ======= STATE =======
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
-    // Hàm điều hướng về trang chủ
-    function goHome() {
-      window.location.href = "index.html";
-    }
-
-    // Hàm chọn độ khó
-    levelButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        levelButtons.forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        difficulty = btn.dataset.level;
-        
-        // Cập nhật tốc độ game theo độ khó
-        switch(difficulty) {
-          case "easy":
-            gameSpeed = 1;
-            break;
-          case "medium":
-            gameSpeed = 1.5;
-            break;
-          case "hard":
-            gameSpeed = 2;
-            break;
-        }
-      });
-    });
-
-    // Hàm bắt đầu game
-    function startGame() {
-      if (gameActive) return;
-      
-      // Reset game state
-      gameActive = true;
-      score = 0;
-      balloonsShot = 0;
-      correctShots = 0;
-      lives = 3;
-      balloons = [];
-      
-      // Xóa tất cả bóng hiện có
-      gameArea.innerHTML = '';
-      
-      // Cập nhật giao diện
-      scoreBox.textContent = score;
-      balloonsShotBox.textContent = balloonsShot;
-      correctShotsBox.textContent = correctShots;
-      livesBox.textContent = lives;
-      
-      // Bắt đầu tạo bóng
-      clearInterval(balloonInterval);
-      balloonInterval = setInterval(createBalloon, 2000);
-      
-      // Bắt đầu di chuyển bóng
-      clearInterval(moveInterval);
-      moveInterval = setInterval(moveBalloons, 50);
-      
-      // Focus vào ô nhập
-      answerInput.focus();
-    }
-
-    // Hàm tạo bóng
-    function createBalloon() {
-      if (!gameActive) return;
-      
-      let a, b, op, expression, result;
-      
-      // Tạo phép tính theo độ khó
-      switch(difficulty) {
-        case "easy":
-          a = Math.floor(Math.random() * 10) + 1;
-          b = Math.floor(Math.random() * 10) + 1;
-          op = Math.random() > 0.5 ? "+" : "-";
-          break;
-        case "medium":
-          a = Math.floor(Math.random() * 20) + 1;
-          b = Math.floor(Math.random() * 20) + 1;
-          op = Math.random() > 0.7 ? "+" : "-";
-          break;
-        case "hard":
-          a = Math.floor(Math.random() * 50) + 1;
-          b = Math.floor(Math.random() * 50) + 1;
-          op = Math.random() > 0.5 ? "+" : "-";
-          break;
-      }
-      
-      expression = `${a} ${op} ${b}`;
-      result = eval(expression);
-      
-      // Đảm bảo kết quả không âm và là số nguyên
-      if (result < 0 || !Number.isInteger(result)) {
-        createBalloon(); // Thử lại
-        return;
-      }
-      
-      // Tạo phần tử bóng
-      let balloon = document.createElement("div");
-      balloon.classList.add("balloon");
-      balloon.style.left = Math.random() * (window.innerWidth - 100) + "px";
-      
-      // Thêm biểu thức toán học vào bóng
-      let expressionDiv = document.createElement("div");
-      expressionDiv.classList.add("expression");
-      expressionDiv.textContent = expression;
-      balloon.appendChild(expressionDiv);
-      
-      balloon.dataset.answer = result;
-      
-      // Màu sắc ngẫu nhiên cho bóng
-      const colors = ["#ff6b6b", "#74b9ff", "#ffeaa7", "#55efc4", "#a29bfe", "#fdcb6e"];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      balloon.style.background = `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120"><path fill="${encodeURIComponent(color)}" d="M50 10 C70 10 85 30 85 60 C85 90 70 110 50 110 C30 110 15 90 15 60 C15 30 30 10 50 10 Z"/><path fill="%23ffffff" d="M40 40 C45 35 55 35 60 40 C55 45 45 45 40 40 Z"/></svg>')`;
-      balloon.style.backgroundSize = "contain";
-      balloon.style.backgroundRepeat = "no-repeat";
-      
-      gameArea.appendChild(balloon);
-      
-      balloons.push({ 
-        element: balloon, 
-        answer: result, 
-        y: 0,
-        speed: Math.random() * 1 + gameSpeed // Tốc độ bay ngẫu nhiên
-      });
-    }
-
-    // Hàm di chuyển bóng
-    function moveBalloons() {
-      if (!gameActive) return;
-      
-      balloons.forEach((balloon, index) => {
-        balloon.y += balloon.speed;
-        balloon.element.style.bottom = balloon.y + "px";
-        
-        // Kiểm tra nếu bóng bay quá cao
-        if (balloon.y > window.innerHeight) {
-          balloon.element.remove();
-          balloons.splice(index, 1);
-          loseLife();
-        }
-      });
-    }
-
-    // Hàm mất mạng
-    function loseLife() {
-      lives--;
-      livesBox.textContent = lives;
-      
-      // Hiệu ứng rung màn hình
-      document.body.style.animation = "shake 0.5s";
-      setTimeout(() => {
-        document.body.style.animation = "";
-      }, 500);
-      
-      // Kiểm tra thua
-      if (lives <= 0) {
-        endGame();
-        showFeedback("Game Over! 💀", false);
-      }
-    }
-
-    // Hàm kiểm tra đáp án
-    function checkAnswer() {
-      if (!gameActive) return;
-      
-      let value = parseInt(answerInput.value);
-      if (isNaN(value)) return;
-      
-      balloonsShot++;
-      balloonsShotBox.textContent = balloonsShot;
-      
-      let hitIndex = balloons.findIndex(b => b.answer === value);
-      
-      if (hitIndex !== -1) {
-        // Bắn trúng
-        balloons[hitIndex].element.classList.add("hit");
-        showFeedback("+10 điểm! 🎯", true);
-        
-        setTimeout(() => {
-          balloons[hitIndex].element.remove();
-          balloons.splice(hitIndex, 1);
-        }, 500);
-        
-        score += 10;
-        correctShots++;
-      } else {
-        // Bắn trượt
-        showFeedback("Trượt rồi! 😅", false);
-        score = Math.max(0, score - 2); // Trừ điểm nhưng không âm
-      }
-      
-      // Cập nhật điểm
-      scoreBox.textContent = score;
-      correctShotsBox.textContent = correctShots;
-      answerInput.value = "";
-      answerInput.focus();
-    }
-
-    // Hàm hiển thị phản hồi
-    function showFeedback(message, isSuccess) {
-      feedback.textContent = message;
-      feedback.style.color = isSuccess ? "#00b894" : "#ff6b6b";
-      feedback.style.opacity = "1";
-      
-      setTimeout(() => {
-        feedback.style.opacity = "0";
-      }, 1000);
-    }
-
-    // Hàm kết thúc game
-    function endGame() {
-      gameActive = false;
-      clearInterval(balloonInterval);
-      clearInterval(moveInterval);
-      
-      // Hiển thị kết quả
-      setTimeout(() => {
-        alert(`Game Over!\nĐiểm số: ${score}\nBóng đã bắn: ${balloonsShot}\nBóng trúng: ${correctShots}`);
-      }, 500);
-    }
-
-    // Cho phép bấm Enter để bắn
-    answerInput.addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        checkAnswer();
-      }
-    });
-
-    // Cho phép click trực tiếp vào bóng để bắn
-    gameArea.addEventListener("click", function(event) {
-      if (!gameActive) return;
-      
-      const balloon = event.target.closest(".balloon");
-      if (balloon) {
-        answerInput.value = balloon.dataset.answer;
-        checkAnswer();
-      }
-    });
-
-    // Khởi tạo game
-    window.onload = function() {
-      answerInput.focus();
+    const ui = {
+      area: $('#gameArea'), score: $('#score'), correct: $('#correct'), wrong: $('#wrong'), lives: $('#lives'),
+      best: $('#best'), time: $('#time'), timebar: $('#timebar'), ans: $('#answer'), toast: $('#toast'),
+      btnShoot: $('#btnShoot'), btnStart: $('#btnStart'), btnReset: $('#btnReset'), btnPause: $('#btnPause'), btnSettings: $('#btnSettings'), btnMute: $('#btnMute'),
+      modal: $('#settingsModal'),
+      maxN: $('#maxN'), maxNLabel: $('#maxNLabel'), speed: $('#speed'), speedLabel: $('#speedLabel'),
+      duration: $('#duration'), durationLabel: $('#durationLabel'), bonus: $('#bonus'), bonusLabel: $('#bonusLabel'),
     };
+
+    const state = {
+      running: false, paused: false, timeLeft: 60, lives: 3,
+      score: 0, correct: 0, wrong: 0, combo: 0, best: +localStorage.getItem('bb_best')||0,
+      diff: 'easy', ops: ['+','-'], maxN: 20, speed: 1.2, spawnEvery: 1400, bonus: 1, muted: false,
+      balloons: [],
+      lastSpawn: 0, lastFrame: 0,
+    };
+    ui.best.textContent = state.best;
+
+    // ======= SOUND (beeps) =======
+    let AC; const beep = (freq=880, dur=0.12, type='sine', vol=0.08) => {
+      if(state.muted) return; AC ||= new (window.AudioContext||window.webkitAudioContext)();
+      const o = AC.createOscillator(); const g = AC.createGain();
+      o.type=type; o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(AC.destination);
+      o.start(); o.stop(AC.currentTime+dur);
+    };
+
+    // ======= HELPERS =======
+    const rand = (a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+    const svgBalloon = (hex) => `url('data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 120\"><defs><radialGradient id=\"g\" cx=\"35%\" cy=\"35%\" r=\"65%\"><stop offset=\"0\" stop-color=\"#fff8\"/><stop offset=\"1\" stop-color=\"${hex}\"/></radialGradient></defs><path fill=\"url(#g)\" d=\"M50 8c22 0 38 20 38 50s-16 50-38 50S12 88 12 58 28 8 50 8z\"/><path fill=\"#0002\" d=\"M45 103c3 4 7 4 10 0\"/></svg>`)}')`;
+
+    const COLORS = ['#f43f5e','#fb923c','#f59e0b','#10b981','#22d3ee','#60a5fa','#a78bfa'];
+
+    function genOp(){
+      const op = state.ops[rand(0, state.ops.length-1)];
+      let a=0,b=0,res=0,disp='';
+      const M = state.maxN;
+      if(op === '+'){ a=rand(0,M); b=rand(0,M-a); res=a+b; }
+      else if(op === '-') { a=rand(0,M); b=rand(0,a); res=a-b; }
+      else if(op === '×') { a=rand(0,5); b=rand(0,5); res=a*b; }
+      else if(op === '÷') { b=rand(1,5); res=rand(0,5); a=b*res; }
+      disp = `${a} ${op} ${b}`; return {disp, res};
+    }
+
+    function spawnBalloon(){
+      const {disp, res} = genOp();
+      const el = document.createElement('div'); el.className='balloon';
+      const color = COLORS[rand(0, COLORS.length-1)];
+      el.style.left = Math.min(Math.max(10, rand(0, ui.area.clientWidth-100)), ui.area.clientWidth-100)+ 'px';
+      el.style.backgroundImage = svgBalloon(color);
+      el.innerHTML = `<div class="txt">${disp}</div>`;
+      ui.area.appendChild(el);
+      state.balloons.push({el, y:-110, v: (Math.random()*0.6 + state.speed), ans: res});
+    }
+
+    function removeBalloon(i, pop=true){
+      const b = state.balloons[i]; if(!b) return;
+      if(pop){ b.el.classList.add('pop'); setTimeout(()=>b.el.remove(), 350);} else { b.el.remove(); }
+      state.balloons.splice(i,1);
+    }
+
+    function loseLife(){
+      state.lives--; ui.lives.textContent = state.lives; flash('−1 mạng', 'bad'); beep(220, .15, 'sawtooth', .06);
+      if(state.lives<=0) endGame();
+    }
+
+    function flash(msg, type='ok'){
+      ui.toast.textContent = msg; ui.toast.className = `toast ${type}`; ui.toast.style.opacity = 1;
+      setTimeout(()=> ui.toast.style.opacity = 0, 700);
+    }
+
+    function updateHUD(){
+      ui.score.textContent = state.score;
+      ui.correct.textContent = state.correct;
+      ui.wrong.textContent = state.wrong;
+      ui.time.textContent = Math.max(0, Math.ceil(state.timeLeft));
+      ui.timebar.style.width = (state.timeLeft / (+ui.duration.value || state.duration) * 100) + '%';
+    }
+
+    function startGame(){
+      state.running = true; state.paused=false;
+      state.timeLeft = +ui.duration.value || 60; state.lives=3; state.score=0; state.correct=0; state.wrong=0; state.combo=0;
+      ui.ans.value=''; ui.ans.focus();
+      ui.area.innerHTML=''; state.balloons.length=0; state.lastSpawn=0; state.lastFrame=performance.now();
+      loop(performance.now());
+    }
+
+    function endGame(){
+      state.running=false; flash(`Hết giờ! Điểm: ${state.score}`, 'bad');
+      if(state.score>state.best){ state.best=state.score; localStorage.setItem('bb_best', state.best); ui.best.textContent = state.best; }
+    }
+
+    function pauseToggle(){ if(!state.running) return; state.paused = !state.paused; ui.btnPause.textContent = state.paused ? '▶️ Tiếp tục' : '⏸ Tạm dừng'; if(!state.paused) { state.lastFrame = performance.now(); loop(state.lastFrame);} }
+
+    function shoot(val){ if(!state.running || state.paused) return; if(Number.isNaN(+val)) return;
+      // tìm bóng có đáp án đúng gần đáy nhất
+      let idx=-1, maxY=-1; for(let i=0;i<state.balloons.length;i++){ const b=state.balloons[i]; if(b.ans===+val && b.y>maxY){ idx=i; maxY=b.y; }}
+      if(idx>-1){
+        removeBalloon(idx, true); state.correct++; state.combo++; const bonus = 10 + Math.min(20, state.combo*2);
+        state.score += bonus; state.timeLeft += (+ui.bonus.value||0); flash(`+${bonus} điểm`, 'ok'); beep(880, .08, 'triangle');
+      } else { state.wrong++; state.combo=0; state.score = Math.max(0, state.score-2); flash('Trượt!', 'bad'); beep(320, .09, 'square'); }
+      ui.ans.value=''; ui.ans.focus(); updateHUD();
+    }
+
+    function loop(ts){
+      if(!state.running) return; const dt = (ts - state.lastFrame); state.lastFrame = ts; if(state.paused) return;
+      // time
+      state.timeLeft -= dt/1000; if(state.timeLeft<=0){ endGame(); updateHUD(); return; }
+      // spawn rate adapts by difficulty + performance
+      state.lastSpawn += dt; const target = Math.max(600, state.spawnEvery - state.correct*6);
+      if(state.lastSpawn >= target){ spawnBalloon(); state.lastSpawn = 0; }
+      // move balloons
+      for(let i=state.balloons.length-1;i>=0;i--){ const b = state.balloons[i]; b.y += b.v * (dt/16); b.el.style.bottom = b.y + 'px'; if(b.y > ui.area.clientHeight){ removeBalloon(i,false); loseLife(); }}
+      updateHUD(); requestAnimationFrame(loop);
+    }
+
+    // ======= EVENTS =======
+    ui.btnStart.addEventListener('click', startGame);
+    ui.btnReset.addEventListener('click', startGame);
+    ui.btnShoot.addEventListener('click', ()=> shoot(+ui.ans.value));
+    ui.ans.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); shoot(+ui.ans.value); }});
+    ui.btnPause.addEventListener('click', pauseToggle);
+    ui.btnMute.addEventListener('click', ()=>{ state.muted = !state.muted; ui.btnMute.textContent = state.muted? '🔇 Tắt âm' : '🔊 Âm';});
+
+    // click vào bóng để autofill đáp án
+    $('#gameArea').addEventListener('click', (ev)=>{
+      const b = ev.target.closest('.balloon'); if(!b || !state.running || state.paused) return;
+      // tìm bản ghi
+      const i = state.balloons.findIndex(x=>x.el===b); if(i>-1){ ui.ans.value = state.balloons[i].ans; shoot(state.balloons[i].ans); }
+    });
+
+    // ======= SETTINGS MODAL =======
+    const openSettings = ()=> ui.modal.classList.add('show');
+    const closeSettings = ()=> ui.modal.classList.remove('show');
+    ui.btnSettings.addEventListener('click', openSettings);
+    $('#btnCloseSettings').addEventListener('click', closeSettings);
+
+    // controls in modal
+    $$('.diff').forEach(btn=> btn.addEventListener('click', ()=>{ $$('.diff').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); state.diff = btn.dataset.diff; const d = {easy:{speed:1, maxN:20}, medium:{speed:1.4, maxN:40}, hard:{speed:1.8, maxN:80}}[state.diff]; ui.speed.value = d.speed; ui.speedLabel.textContent=d.speed+'x'; ui.maxN.value=d.maxN; ui.maxNLabel.textContent=d.maxN; state.speed=+ui.speed.value; state.maxN=+ui.maxN.value; }));
+
+    ui.maxN.addEventListener('input', ()=>{ ui.maxNLabel.textContent = ui.maxN.value; state.maxN = +ui.maxN.value;});
+    ui.speed.addEventListener('input', ()=>{ ui.speedLabel.textContent = ui.speed.value+'x'; state.speed = +ui.speed.value;});
+    ui.duration.addEventListener('input', ()=>{ ui.durationLabel.textContent = ui.duration.value+'s';});
+    ui.bonus.addEventListener('input', ()=>{ ui.bonusLabel.textContent = `+${ui.bonus.value}s`; state.bonus = +ui.bonus.value;});
+
+    $$('.op').forEach(cb=> cb.addEventListener('change', ()=>{ const sel = $$('.op').filter(x=>x.checked).map(x=>x.value); state.ops = sel.length? sel : ['+']; }));
+
+    // init defaults
+    (function init(){ ui.ans.setAttribute('inputmode','numeric'); ui.ans.setAttribute('pattern','[0-9]*'); ui.duration.value=60; ui.durationLabel.textContent='60s'; ui.maxN.value=20; ui.maxNLabel.textContent='20'; ui.speed.value=1.2; ui.speedLabel.textContent='1.2x'; ui.bonus.value=1; ui.bonusLabel.textContent='+1s'; $$('.diff')[0].classList.add('active'); })();
+
+    // Prevent wheel from changing number on scroll while focused
+    ui.ans.addEventListener('wheel', e=> e.target === document.activeElement && e.preventDefault(), {passive:false});
   </script>
 </body>
 </html>
