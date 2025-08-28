@@ -18,10 +18,13 @@ class AuthSystem {
             measurementId: "G-2YNQZ48JVK"
         };
 
-        // Initialize Firebase
+        // Initialize Firebase với nhiều services
         firebase.initializeApp(firebaseConfig);
         this.analytics = firebase.analytics();
         this.auth = firebase.auth();
+        // Khởi tạo Firestore và Storage
+        this.firestore = firebase.firestore();
+        this.storage = firebase.storage();
     }
 
     setupEventListeners() {
@@ -37,24 +40,38 @@ class AuthSystem {
         this.loginForm = document.getElementById('login-form');
         this.registerForm = document.getElementById('register-form');
         this.toast = document.getElementById('toast');
+        this.profileBtn = document.getElementById('profile-btn');
 
         // Event listeners
-        this.loginBtn.addEventListener('click', () => this.openLoginModal());
-        this.closeModal.addEventListener('click', () => this.closeLoginModal());
-        this.loginTab.addEventListener('click', () => this.switchToLogin());
-        this.registerTab.addEventListener('click', () => this.switchToRegister());
-        this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-        this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
-        this.logoutBtn.addEventListener('click', () => this.handleLogout());
-        document.getElementById('forgot-password').addEventListener('click', (e) => this.handleForgotPassword(e));
+        if (this.loginBtn) this.loginBtn.addEventListener('click', () => this.openLoginModal());
+        if (this.closeModal) this.closeModal.addEventListener('click', () => this.closeLoginModal());
+        if (this.loginTab) this.loginTab.addEventListener('click', () => this.switchToLogin());
+        if (this.registerTab) this.registerTab.addEventListener('click', () => this.switchToRegister());
+        if (this.loginForm) this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+        if (this.registerForm) this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
+        if (this.logoutBtn) this.logoutBtn.addEventListener('click', () => this.handleLogout());
+        if (this.profileBtn) this.profileBtn.addEventListener('click', () => this.openProfileModal());
+        
+        const forgotPassword = document.getElementById('forgot-password');
+        if (forgotPassword) forgotPassword.addEventListener('click', (e) => this.handleForgotPassword(e));
     }
 
     openLoginModal() {
-        this.loginModal.style.display = 'flex';
+        if (this.loginModal) this.loginModal.style.display = 'flex';
     }
 
     closeLoginModal() {
-        this.loginModal.style.display = 'none';
+        if (this.loginModal) this.loginModal.style.display = 'none';
+    }
+
+    openProfileModal() {
+        const profileModal = document.getElementById('profile-modal');
+        if (profileModal) profileModal.style.display = 'flex';
+        
+        // Tải dữ liệu hồ sơ nếu hệ thống người dùng đã khởi tạo
+        if (window.userSystem) {
+            window.userSystem.loadProfileData();
+        }
     }
 
     switchToLogin() {
@@ -154,6 +171,11 @@ class AuthSystem {
                 this.userName.textContent = user.displayName || user.email;
                 this.userInfo.style.display = 'flex';
                 this.loginBtn.style.display = 'none';
+                
+                // Khởi tạo hệ thống người dùng khi đã đăng nhập
+                if (!window.userSystem && typeof UserSystem !== 'undefined') {
+                    window.userSystem = new UserSystem(this);
+                }
             } else {
                 this.userInfo.style.display = 'none';
                 this.loginBtn.style.display = 'block';
@@ -180,5 +202,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Track page view
     if (window.authSystem.analytics) {
         window.authSystem.analytics.logEvent('home_page_view');
+    }
+    
+    // Đóng modal khi click bên ngoài
+    const modals = document.querySelectorAll('.modal');
+    modals.forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    });
+    
+    // Đóng modal profile
+    const closeProfileModal = document.getElementById('close-profile-modal');
+    if (closeProfileModal) {
+        closeProfileModal.addEventListener('click', () => {
+            document.getElementById('profile-modal').style.display = 'none';
+        });
     }
 });
