@@ -388,34 +388,6 @@
                 max-width: 200px;
             }
         }
-        
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            :root {
-                --light-bg: #2d3748;
-                --dark-text: #e2e8f0;
-            }
-            
-            .stat-item, .question-container, .progress-container, .instructions {
-                background: #4a5568;
-                color: var(--light-text);
-            }
-            
-            .input-container input {
-                background: #2d3748;
-                color: var(--light-text);
-                border-color: var(--primary);
-            }
-        }
-        
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -510,28 +482,8 @@
                 }
             });
             
-            // Tối ưu: Tạo câu hỏi đầu tiên nhưng chưa bắt đầu game
+            // Tạo câu hỏi đầu tiên
             generateQuestion();
-            
-            // Tối ưu: Preload các biểu tượng
-            preloadIcons();
-        }
-        
-        // Preload icons để cải thiện hiệu suất
-        function preloadIcons() {
-            const icons = [
-                'fa-check-circle',
-                'fa-times-circle',
-                'fa-trophy',
-                'fa-clock'
-            ];
-            
-            icons.forEach(icon => {
-                const i = document.createElement('i');
-                i.className = `fas ${icon}`;
-                i.style.display = 'none';
-                document.body.appendChild(i);
-            });
         }
         
         // Tạo câu hỏi mới
@@ -572,15 +524,8 @@
                 operator = '÷';
             }
             
-            // Hiển thị câu hỏi với hiệu ứng mượt mà
-            const questionElement = document.getElementById('question');
-            questionElement.style.opacity = 0;
-            
-            setTimeout(() => {
-                questionElement.textContent = `${num1} ${operator} ${num2} = ?`;
-                questionElement.style.opacity = 1;
-            }, 200);
-            
+            // Hiển thị câu hỏi
+            document.getElementById('question').textContent = `${num1} ${operator} ${num2} = ?`;
             document.getElementById('answer').value = '';
             document.getElementById('answer').focus();
             
@@ -594,7 +539,10 @@
         
         // Kiểm tra câu trả lời
         function checkAnswer() {
-            if (!gameActive) return;
+            if (!gameActive && timeLeft > 0) {
+                alert('Vui lòng nhấn "Bắt đầu" để chơi!');
+                return;
+            }
             
             const userAnswer = parseInt(document.getElementById('answer').value);
             const feedbackElement = document.getElementById('feedback');
@@ -726,7 +674,7 @@
             document.getElementById('time').textContent = timeLeft;
             
             if (timeLeft <= 10) {
-                document.getElementById('time').parentElement.style.color = var(--danger);
+                document.querySelector('.timer').style.color = '#e74a3b';
             }
             
             if (timeLeft <= 0) {
@@ -746,7 +694,10 @@
         
         // Làm mới câu hỏi
         function newQuestion() {
-            if (!gameActive) return;
+            if (!gameActive) {
+                alert('Vui lòng nhấn "Bắt đầu" để chơi!');
+                return;
+            }
             generateQuestion();
         }
         
@@ -769,6 +720,9 @@
             const startBtn = document.querySelector('.btn-success');
             startBtn.innerHTML = '<i class="fas fa-play"></i> Bắt đầu';
             startBtn.onclick = startGame;
+            
+            // Reset màu timer
+            document.querySelector('.timer').style.color = '';
             
             generateQuestion();
             
