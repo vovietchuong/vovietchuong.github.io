@@ -16,14 +16,14 @@
             --light: #f8f9fc;
             --dark: #5a5c69;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
             color: #333;
@@ -33,7 +33,7 @@
             align-items: center;
             padding: 20px;
         }
-        
+
         .container {
             background: white;
             border-radius: 20px;
@@ -45,12 +45,12 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .header {
             margin-bottom: 20px;
             position: relative;
         }
-        
+
         .home-btn {
             position: absolute;
             top: 0;
@@ -69,29 +69,29 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             z-index: 10;
         }
-        
+
         .home-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
-        
+
         .home-btn i {
             margin-right: 8px;
         }
-        
+
         h1 {
             color: var(--primary);
             margin: 10px 0 5px;
             font-size: 2rem;
             text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.1);
         }
-        
+
         .subtitle {
             color: var(--secondary);
             font-size: 1rem;
             margin-bottom: 5px;
         }
-        
+
         .game-info {
             display: flex;
             justify-content: space-between;
@@ -99,7 +99,7 @@
             flex-wrap: wrap;
             gap: 10px;
         }
-        
+
         .info-box {
             background: linear-gradient(145deg, var(--accent), #2e59d9);
             color: white;
@@ -109,24 +109,24 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             flex: 1;
         }
-        
+
         .info-label {
             font-size: 0.8rem;
             margin-bottom: 3px;
             opacity: 0.9;
         }
-        
+
         .info-value {
             font-size: 1.5rem;
             font-weight: bold;
         }
-        
+
         .number-line-container {
             position: relative;
             margin: 20px 0;
             padding: 10px 0;
         }
-        
+
         .number-line {
             height: 50px;
             background: var(--light);
@@ -135,7 +135,7 @@
             overflow: hidden;
             border: 2px solid #e3e6f0;
         }
-        
+
         .number-line-inner {
             position: relative;
             width: 90%;
@@ -160,7 +160,7 @@
             font-weight: bold;
             font-size: 0.8rem;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: left 0.3s ease;
+            transition: left 0.5s ease-out;
             z-index: 5;
         }
         
@@ -172,7 +172,7 @@
             font-size: 0.8rem;
             color: var(--accent);
         }
-        
+
         .question-container {
             background: linear-gradient(145deg, var(--accent), #2e59d9);
             color: white;
@@ -181,7 +181,7 @@
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
         }
-        
+
         .question {
             font-size: 2rem;
             margin: 10px 0;
@@ -191,14 +191,14 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .answer-options {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin: 20px 0;
         }
-        
+
         .answer-btn {
             background: var(--light);
             border: 2px solid #e3e6f0;
@@ -214,43 +214,43 @@
             align-items: center;
             justify-content: center;
         }
-        
+
         .answer-btn:hover:not(:disabled) {
             background: var(--accent);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
-        
+
         .answer-btn:active:not(:disabled) {
             transform: translateY(0);
         }
-        
+
         .answer-btn:disabled {
             cursor: not-allowed;
         }
-        
+
         .answer-btn.correct {
             background: var(--success);
             color: white;
             border-color: var(--success);
             box-shadow: 0 0 10px rgba(28, 200, 138, 0.5);
         }
-        
+
         .answer-btn.incorrect {
             background: var(--danger);
             color: white;
             border-color: var(--danger);
             box-shadow: 0 0 10px rgba(231, 74, 59, 0.5);
         }
-        
+
         .controls {
             display: flex;
             justify-content: center;
             gap: 12px;
             margin: 20px 0;
         }
-        
+
         .control-btn {
             background: linear-gradient(145deg, var(--success), #0f9d58);
             color: white;
@@ -266,28 +266,28 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .control-btn:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
         }
-        
+
         .control-btn:active:not(:disabled) {
             transform: translateY(0);
         }
-        
+
         .control-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
-        
+
         #hint-btn {
             background: linear-gradient(145deg, var(--warning), #fdc43e);
             color: #333;
         }
-        
+
         .explanation {
             background: var(--light);
             border-radius: 10px;
@@ -297,7 +297,7 @@
             border-left: 4px solid var(--accent);
             display: none;
         }
-        
+
         .explanation h3 {
             color: var(--accent);
             margin-bottom: 8px;
@@ -306,12 +306,12 @@
             gap: 8px;
             font-size: 1rem;
         }
-        
+
         .explanation p {
             font-size: 0.9rem;
             line-height: 1.5;
         }
-        
+
         .feedback {
             font-size: 1.2rem;
             min-height: 40px;
@@ -322,24 +322,24 @@
             transform: translateY(10px);
             margin-bottom: 10px;
         }
-        
+
         .feedback.show {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .correct {
             color: var(--success);
             background-color: rgba(28, 200, 138, 0.1);
             border: 1px solid var(--success);
         }
-        
+
         .incorrect {
             color: var(--danger);
             background-color: rgba(231, 74, 59, 0.1);
             border: 1px solid var(--danger);
         }
-        
+
         .progress-container {
             width: 100%;
             background: #e3e6f0;
@@ -348,7 +348,7 @@
             overflow: hidden;
             height: 12px;
         }
-        
+
         .progress-bar {
             height: 100%;
             background: linear-gradient(to right, var(--success), #0f9d58);
@@ -356,112 +356,131 @@
             transition: width 0.5s ease;
             border-radius: 10px;
         }
-        
+
         /* Animation for number line */
         @keyframes movePoint {
             0% { transform: translateX(var(--start-pos)) translateY(0); }
             50% { transform: translateX(var(--mid-pos)) translateY(-8px); }
             100% { transform: translateX(var(--end-pos)) translateY(0); }
         }
-        
+
         .moving {
             animation: movePoint 1.2s ease-in-out;
         }
+
+        @keyframes movePointPart1 {
+            from { left: var(--start-pos); transform: translateX(-50%); }
+            to { left: var(--mid-pos); transform: translateX(-50%); }
+        }
+
+        @keyframes movePointPart2 {
+            from { left: var(--mid-pos); transform: translateX(-50%); }
+            to { left: var(--end-pos); transform: translateX(-50%); }
+        }
         
+        .move-part-1 {
+            animation: movePointPart1 0.8s ease-in-out forwards;
+        }
+
+        .move-part-2 {
+            animation: movePointPart2 0.8s ease-in-out forwards;
+        }
+
+
         /* Animation for new question */
         @keyframes popIn {
             0% { transform: scale(0.9); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
-        
+
         .pop-in {
             animation: popIn 0.4s ease forwards;
         }
-        
+
         @keyframes celebrate {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
-        
+
         .celebrate {
             animation: celebrate 0.4s ease-in-out 2;
         }
-        
+
         /* Responsive design */
         @media (max-width: 768px) {
             .container {
                 padding: 20px 15px;
             }
-            
+
             h1 {
                 font-size: 1.7rem;
             }
-            
+
             .question {
                 font-size: 1.7rem;
                 min-height: 50px;
             }
-            
+
             .answer-options {
                 grid-template-columns: 1fr;
                 gap: 10px;
             }
-            
+
             .answer-btn {
                 padding: 10px;
                 font-size: 1.2rem;
                 min-height: 50px;
             }
-            
+
             .game-info {
                 flex-direction: column;
                 gap: 8px;
             }
-            
+
             .info-box {
                 width: 100%;
             }
-            
+
             .number-line {
                 height: 45px;
             }
-            
+
             .number-point {
                 width: 20px;
                 height: 20px;
                 font-size: 0.7rem;
             }
-            
+
             .controls {
                 flex-direction: column;
             }
         }
-        
+
         @media (max-width: 480px) {
             .control-btn {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .home-btn {
                 position: relative;
                 margin-bottom: 10px;
                 width: auto;
                 display: inline-flex;
             }
-            
+
             .header {
                 text-align: center;
             }
-            
+
             .question {
                 font-size: 1.5rem;
             }
-            
+
             .number-line-inner {
                 width: 85%;
             }
-            
+
             .number-mark {
                 font-size: 0.7rem;
                 bottom: -22px;
@@ -472,7 +491,7 @@
         .will-change {
             will-change: transform, opacity;
         }
-        
+
         /* Reduced motion for accessibility */
         @media (prefers-reduced-motion: reduce) {
             * {
@@ -480,7 +499,7 @@
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
             }
-            
+
             .will-change {
                 will-change: auto;
             }
@@ -496,7 +515,7 @@
             <h1>🧮 Cộng Trừ Số Nguyên 🧮</h1>
             <p class="subtitle">Toán Lớp 6 - Luyện tập cộng trừ số nguyên âm và dương</p>
         </div>
-        
+
         <div class="game-info">
             <div class="info-box">
                 <div class="info-label">Điểm số</div>
@@ -511,38 +530,37 @@
                 <div class="info-value" id="level">1</div>
             </div>
         </div>
-        
+
         <div class="progress-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        
+
         <div class="number-line-container">
             <div class="number-line">
                 <div class="number-line-inner">
                     <div class="number-point" id="number-point">0</div>
-                    <!-- Number marks will be added dynamically -->
-                </div>
+                    </div>
             </div>
         </div>
-        
+
         <div class="question-container">
             <div class="question" id="question">(-5) + 3 = ?</div>
         </div>
-        
+
         <div class="answer-options" id="answer-options">
             <button class="answer-btn">-8</button>
             <button class="answer-btn">-2</button>
             <button class="answer-btn">2</button>
             <button class="answer-btn">8</button>
         </div>
-        
+
         <div class="feedback" id="feedback"></div>
-        
+
         <div class="explanation" id="explanation">
             <h3><i class="fas fa-lightbulb"></i> Giải thích</h3>
             <p id="explanation-text"></p>
         </div>
-        
+
         <div class="controls">
             <button class="control-btn" id="next-btn" disabled>
                 <i class="fas fa-forward"></i> Câu tiếp theo
@@ -579,6 +597,10 @@
             explanationText: document.getElementById('explanation-text'),
             numberPoint: document.getElementById('number-point')
         };
+        
+        // Sound effects
+        const soundCorrect = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+        const soundIncorrect = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3');
 
         // Initialize game
         function initGame() {
@@ -591,77 +613,73 @@
         // Set up number line with marks
         function setupNumberLine() {
             const numberLine = document.querySelector('.number-line-inner');
-            // Clear existing marks
             const existingMarks = document.querySelectorAll('.number-mark');
             existingMarks.forEach(mark => mark.remove());
-            
-            // Add number marks from -10 to 10
+
             for (let i = -10; i <= 10; i += 2) {
                 const mark = document.createElement('div');
                 mark.className = 'number-mark';
                 mark.textContent = i;
-                // Position the mark (assuming number line is 90% width)
                 mark.style.left = `${((i + 10) / 20) * 90}%`;
                 numberLine.appendChild(mark);
             }
             
-            // Center the point at 0
             elements.numberPoint.style.left = '50%';
             elements.numberPoint.textContent = '0';
         }
 
-        // Animate number line
+        // Animate number line in two parts
         function animateNumberLine(start, change) {
-            const numberLine = document.querySelector('.number-line-inner');
             const point = elements.numberPoint;
             
-            // Calculate positions
             const startPos = ((start + 10) / 20) * 90;
+            const midPos = ((start + 10) / 20) * 90;
             const endPos = ((start + change + 10) / 20) * 90;
             
-            // Set initial position
-            point.style.left = `${startPos}%`;
+            point.style.left = `${midPos}%`;
             point.textContent = start;
             
-            // Animate the movement
+            // Step 1: Animate to the starting number
+            point.style.setProperty('--start-pos', `${midPos}%`);
+            point.style.setProperty('--mid-pos', `${midPos}%`);
+            point.classList.add('move-part-1');
+            
             setTimeout(() => {
-                point.textContent = start + change;
-                point.style.setProperty('--start-pos', `${startPos}%`);
-                point.style.setProperty('--end-pos', `${endPos}%`);
-                point.style.setProperty('--mid-pos', `${(startPos + endPos) / 2}%`);
-                point.classList.add('moving');
+                point.classList.remove('move-part-1');
+                point.textContent = start;
                 
-                // Remove animation class after animation completes
+                // Step 2: Animate the change
+                point.style.setProperty('--mid-pos', `${midPos}%`);
+                point.style.setProperty('--end-pos', `${endPos}%`);
+                point.classList.add('move-part-2');
+                
                 setTimeout(() => {
-                    point.classList.remove('moving');
+                    point.classList.remove('move-part-2');
+                    point.textContent = start + change;
                     point.style.left = `${endPos}%`;
-                }, 1200);
-            }, 400);
+                }, 800);
+            }, 800);
         }
 
         // Generate a new math question
         function generateQuestion() {
             let a, b, op, expression, result;
             let explanation = "";
-            
-            // Increase difficulty with level
+
             const maxValue = gameState.level * 10;
-            
-            // Randomly choose between addition and subtraction
+
             if (Math.random() > 0.5) {
-                // Addition
                 op = "+";
                 a = Math.floor(Math.random() * (maxValue * 2 + 1)) - maxValue;
                 b = Math.floor(Math.random() * (maxValue * 2 + 1)) - maxValue;
                 result = a + b;
-                
-                // Format expression with parentheses for negative numbers
+
                 const aStr = a < 0 ? `(${a})` : a;
                 const bStr = b < 0 ? `(${b})` : b;
                 expression = `${aStr} ${op} ${bStr}`;
-                
+
                 explanation = `Khi cộng hai số nguyên: ${a} + ${b}.<br>`;
-                
+
                 if (a >= 0 && b >= 0) {
                     explanation += `Cộng hai số dương: ${a} + ${b} = ${result}.`;
                 } else if (a < 0 && b < 0) {
@@ -675,20 +693,18 @@
                     explanation += `và giữ dấu của số có giá trị tuyệt đối lớn hơn.`;
                 }
             } else {
-                // Subtraction
                 op = "-";
                 a = Math.floor(Math.random() * (maxValue * 2 + 1)) - maxValue;
                 b = Math.floor(Math.random() * (maxValue * 2 + 1)) - maxValue;
                 result = a - b;
-                
-                // Format expression with parentheses for negative numbers
+
                 const aStr = a < 0 ? `(${a})` : a;
                 const bStr = b < 0 ? `(${b})` : b;
                 expression = `${aStr} ${op} ${bStr}`;
-                
+
                 explanation = `Khi trừ hai số nguyên: ${a} - ${b}.<br>`;
                 explanation += `Ta có thể chuyển phép trừ thành phép cộng: ${a} + (${-b}).<br>`;
-                
+
                 if (a >= 0 && -b >= 0) {
                     explanation += `Cộng hai số dương: ${a} + ${-b} = ${result}.`;
                 } else if (a < 0 && -b < 0) {
@@ -702,146 +718,115 @@
                     explanation += `và giữ dấu của số có giá trị tuyệt đối lớn hơn.`;
                 }
             }
-            
-            gameState.currentQuestion = { 
+
+            gameState.currentQuestion = {
                 a, b, op, expression, result, explanation
             };
-            
+
             elements.question.textContent = expression + " = ?";
-            
-            // Generate answer options with common mistakes
+
             generateAnswerOptionsWithCommonMistakes(result, a, b, op);
-            
-            // Reset UI
+
             elements.feedback.className = 'feedback';
             elements.explanation.style.display = 'none';
             elements.nextBtn.disabled = true;
-            
-            // Add animation
+
             elements.question.classList.remove('pop-in');
             void elements.question.offsetWidth;
             elements.question.classList.add('pop-in');
-            
-            // Update progress
+
             updateProgress();
         }
 
-        // Generate answer options with common mistakes
         function generateAnswerOptionsWithCommonMistakes(correctAnswer, a, b, operation) {
-            // Clear existing options
             elements.answerOptions.innerHTML = '';
-            
-            // Create array of possible answers starting with correct answer
             let answers = [correctAnswer];
-            
-            // Generate common mistakes based on operation and numbers
             let commonMistakes = generateCommonMistakes(a, b, operation);
-            
-            // Add common mistakes to answers
+
             for (let mistake of commonMistakes) {
                 if (!answers.includes(mistake) && answers.length < 4) {
                     answers.push(mistake);
                 }
             }
-            
-            // Fill remaining slots with random answers if needed
+
             while (answers.length < 4) {
                 let variation = Math.floor(Math.random() * 5) + 1;
-                let wrongAnswer = Math.random() > 0.5 
-                    ? correctAnswer + variation 
+                let wrongAnswer = Math.random() > 0.5
+                    ? correctAnswer + variation
                     : correctAnswer - variation;
-                
+
                 if (!answers.includes(wrongAnswer)) {
                     answers.push(wrongAnswer);
                 }
             }
-            
-            // Shuffle answers
+
             answers.sort(() => Math.random() - 0.5);
-            
-            // Create buttons for each answer
+
             answers.forEach(answer => {
                 const button = document.createElement('button');
                 button.className = 'answer-btn will-change';
                 button.textContent = answer;
-                
+
                 button.addEventListener('click', function() {
                     if (gameState.isWaiting) return;
                     checkAnswer(answer, button);
                 });
-                
+
                 elements.answerOptions.appendChild(button);
             });
         }
 
-        // Generate common mistakes based on operation and numbers
         function generateCommonMistakes(a, b, operation) {
             let mistakes = [];
-            
+
             if (operation === '+') {
-                // Common mistakes for addition:
-                
-                // 1. Adding absolute values without considering signs
                 mistakes.push(Math.abs(a) + Math.abs(b));
-                
-                // 2. Subtracting instead of adding when signs are different
+
                 if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
                     mistakes.push(Math.abs(a) - Math.abs(b));
                     mistakes.push(Math.abs(b) - Math.abs(a));
                 }
-                
-                // 3. Wrong sign for result
+
                 mistakes.push(-(a + b));
-                
-                // 4. Forgetting to change sign when adding negatives
+
                 if (a < 0 && b < 0) {
                     mistakes.push(Math.abs(a) + Math.abs(b));
                 }
             } else {
-                // Common mistakes for subtraction:
-                
-                // 1. Subtracting absolute values without considering signs
                 mistakes.push(Math.abs(a) - Math.abs(b));
                 mistakes.push(Math.abs(b) - Math.abs(a));
-                
-                // 2. Adding instead of subtracting
                 mistakes.push(a + b);
-                
-                // 3. Wrong sign for result
                 mistakes.push(-(a - b));
-                
-                // 4. Forgetting to change signs when subtracting negatives
+
                 if (b < 0) {
                     mistakes.push(a + Math.abs(b));
                 } else {
                     mistakes.push(a - Math.abs(b));
                 }
             }
-            
-            // Filter out duplicates, NaN, and correct answers
+
             return [...new Set(mistakes)]
                 .filter(value => !isNaN(value) && value !== (operation === '+' ? a + b : a - b))
-                .slice(0, 3); // Return up to 3 common mistakes
+                .slice(0, 3);
         }
 
         // Check the answer
         function checkAnswer(selectedAnswer, buttonElement) {
             gameState.isWaiting = true;
             gameState.questionsAnswered++;
-            
-            // Disable all buttons
+
             const allButtons = document.querySelectorAll('.answer-btn');
             allButtons.forEach(btn => {
                 btn.disabled = true;
                 btn.classList.remove('will-change');
             });
-            
+
             if (selectedAnswer === gameState.currentQuestion.result) {
                 // Correct answer
                 buttonElement.classList.add('correct');
                 gameState.score += 10 * gameState.level;
                 gameState.correctAnswers++;
-                
+                soundCorrect.play();
                 updateScoreDisplay();
                 showFeedback('Chính xác! 👏', true);
                 
@@ -849,8 +834,7 @@
                 animateNumberLine(gameState.currentQuestion.a, 
                                  gameState.currentQuestion.op === '+' ? 
                                  gameState.currentQuestion.b : -gameState.currentQuestion.b);
-                
-                // Check for level up
+
                 if (gameState.correctAnswers > 0 && gameState.correctAnswers % 5 === 0) {
                     gameState.level++;
                     elements.level.textContent = gameState.level;
@@ -859,22 +843,20 @@
             } else {
                 // Incorrect answer
                 buttonElement.classList.add('incorrect');
-                
-                // Highlight correct answer
+                soundIncorrect.play();
+
                 allButtons.forEach(btn => {
                     if (parseInt(btn.textContent) === gameState.currentQuestion.result) {
                         btn.classList.add('correct');
                     }
                 });
-                
+
                 showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.result}`, false);
-                
-                // Show explanation
+
                 elements.explanationText.innerHTML = gameState.currentQuestion.explanation;
                 elements.explanation.style.display = 'block';
             }
-            
-            // Enable next button
+
             elements.nextBtn.disabled = false;
         }
 
@@ -882,7 +864,7 @@
         function showFeedback(message, isCorrect) {
             elements.feedback.textContent = message;
             elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
-            
+
             if (isCorrect) {
                 elements.feedback.classList.add('celebrate');
             }
@@ -909,7 +891,7 @@
         // Show hint
         function showHint() {
             if (gameState.isWaiting) return;
-            
+
             elements.explanationText.innerHTML = gameState.currentQuestion.explanation;
             elements.explanation.style.display = 'block';
         }
@@ -923,7 +905,7 @@
         function setupEventListeners() {
             elements.nextBtn.addEventListener('click', nextQuestion);
             elements.hintBtn.addEventListener('click', showHint);
-            
+
             // Keyboard support
             document.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter' && !elements.nextBtn.disabled) {
