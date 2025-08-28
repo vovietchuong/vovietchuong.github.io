@@ -95,7 +95,7 @@ const ui={q:document.getElementById('question'),illus:document.getElementById('i
 
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')||'[]');
 
-function init(){genButtons(); bindMode(); newGame(); renderLeaderboard(); document.getElementById('home').onclick=()=>{alert('Quay về trang chủ!');}; document.addEventListener('keydown',handleKey); ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};}
+function init(){genButtons(); bindMode(); newGame(); renderLeaderboard(); document.getElementById('home').onclick=()=>{window.location.href='index.html';}; document.addEventListener('keydown',handleKey); ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};}
 function genButtons(){const box=document.getElementById('answer-buttons'); for(let i=0;i<=9;i++){const b=document.createElement('button'); b.textContent=i; b.className='number-btn'; b.onclick=()=>{if(state.ans.length<2){state.ans+=i; renderAns();}}; box.appendChild(b);}}
 function bindMode(){document.querySelectorAll('.mode-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); state.mode=btn.dataset.mode; reset();});}
 function reset(){state.score=0; state.streak=0; state.ans=''; state.time= state.infinite?Infinity:60; update(); newQ(); if(!state.infinite) startTimer(); else state.running=true;}
