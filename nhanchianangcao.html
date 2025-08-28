@@ -537,7 +537,7 @@ function loadProgress(){
 /* ---------- Navigation ---------- */
 function openMenu(){ showScreen('screen-menu'); }
 document.getElementById('btn-back-menu').addEventListener('click', openMenu);
-function goHome(){ window.location.href='index.php'; }
+function goHome(){ window.location.href='index.html'; }
 
 /* ---------- Keyboard ---------- */
 document.addEventListener('keydown', (e)=>{ if(e.key==='Enter' && document.getElementById('screen-game').classList.contains('active')) submitAnswer(); });
