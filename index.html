@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathHub - Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="users.js"></script>
+    
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <!-- Firebase Analytics -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+    
     <style>
         * {
             margin: 0;
@@ -24,20 +29,11 @@
             padding: 20px;
         }
         
-        /* Header và Navigation */
         .header {
             text-align: center;
             margin-bottom: 30px;
             color: white;
             width: 100%;
-            position: relative;
-        }
-        
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
         }
         
         .header h1 {
@@ -48,230 +44,6 @@
         .header p {
             font-size: 1.2rem;
             opacity: 0.9;
-        }
-        
-        /* User Controls */
-        .user-controls {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-        
-        .user-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-weight: bold;
-        }
-        
-        .user-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-        }
-        
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: white;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 15px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .user-profile:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-        
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f6c23e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-        
-        /* Auth Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-        }
-        
-        .close-modal:hover {
-            color: #333;
-        }
-        
-        .auth-form h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #4e73df;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            text-align: left;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border 0.3s;
-        }
-        
-        .form-group input:focus {
-            border-color: #4e73df;
-            outline: none;
-        }
-        
-        .auth-submit {
-            width: 100%;
-            padding: 12px;
-            background: #4e73df;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .auth-submit:hover {
-            background: #2e59d9;
-        }
-        
-        .auth-switch {
-            text-align: center;
-            margin-top: 20px;
-        }
-        
-        .auth-switch a {
-            color: #4e73df;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        
-        .auth-switch a:hover {
-            text-decoration: underline;
-        }
-        
-        /* Profile Dropdown */
-        .profile-dropdown {
-            display: none;
-            position: absolute;
-            top: 70px;
-            right: 20px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            z-index: 100;
-            overflow: hidden;
-        }
-        
-        .profile-dropdown.show {
-            display: block;
-        }
-        
-        .dropdown-header {
-            padding: 20px;
-            background: #4e73df;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .dropdown-header .avatar {
-            background: #f6c23e;
-        }
-        
-        .dropdown-item {
-            padding: 15px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.3s;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .dropdown-item:last-child {
-            border-bottom: none;
-        }
-        
-        .dropdown-item:hover {
-            background: #f8f9fc;
-        }
-        
-        .dropdown-item i {
-            color: #4e73df;
-            width: 20px;
-        }
-        
-        /* Main Content */
-        .section-title {
-            color: white;
-            margin: 30px 0 15px;
-            text-align: center;
-            font-size: 1.8rem;
-            width: 100%;
-            max-width: 1000px;
-        }
-        
-        .section-divider {
-            width: 100%;
-            max-width: 1000px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 10px 0 30px;
         }
         
         .container {
@@ -290,7 +62,6 @@
             transition: transform 0.3s, box-shadow 0.3s;
             display: flex;
             flex-direction: column;
-            position: relative;
         }
         
         .game-card:hover {
@@ -300,6 +71,7 @@
         
         .game-card.featured {
             border: 3px solid #ff6b6b;
+            position: relative;
         }
         
         .featured-badge {
@@ -316,36 +88,9 @@
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
-        .new-badge {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            background: #36b9cc;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        }
-        
-        .popular-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #f6c23e;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        }
-        
         .game-card-img {
             height: 180px;
+            background-color: #1cc88a;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -381,6 +126,7 @@
             border-radius: 5px;
             font-weight: bold;
             transition: background 0.3s;
+            cursor: pointer;
         }
         
         .game-card-btn:hover {
@@ -395,172 +141,57 @@
             background: #e55656;
         }
         
-        .game-card-btn.new {
+        .new-badge {
+            position: absolute;
+            top: -10px;
+            left: -10px;
             background: #36b9cc;
-        }
-        
-        .game-card-btn.new:hover {
-            background: #2a9eb0;
-        }
-        
-        .game-card-btn.popular {
-            background: #f6c23e;
-            color: #333;
-        }
-        
-        .game-card-btn.popular:hover {
-            background: #e6b02a;
-        }
-        
-        .game-card-btn.coming-soon {
-            background: #858796;
-            cursor: not-allowed;
-        }
-        
-        .game-card-btn.coming-soon:hover {
-            background: #858796;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            z-index: 10;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
         }
         
         .footer {
             margin-top: 40px;
             color: white;
             text-align: center;
-            padding: 20px;
+        }
+        
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 16px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .toast.show {
+            opacity: 1;
         }
         
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
             }
-            
-            .header-content {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .user-controls {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .profile-dropdown {
-                right: 50%;
-                transform: translateX(50%);
-                width: 90%;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Header với user controls -->
     <div class="header">
-        <div class="header-content">
-            <div>
-                <h1><i class="fas fa-calculator"></i> MathHub</h1>
-                <p>Trang web giáo dục toán học - vừa CHƠI vừa HỌC - HỌC qua TRÒ CHƠI</p>
-            </div>
-            
-            <div class="user-controls" id="userControls">
-                <!-- Hiển thị khi chưa đăng nhập -->
-                <div id="guestView">
-                    <button class="user-btn" onclick="openModal('loginModal')">Đăng nhập</button>
-                    <button class="user-btn" onclick="openModal('registerModal')">Đăng ký</button>
-                </div>
-                
-                <!-- Hiển thị khi đã đăng nhập -->
-                <div id="userView" style="display: none;">
-                    <div class="user-profile" onclick="toggleDropdown()">
-                        <div class="avatar" id="userAvatar">U</div>
-                        <span id="username">Người dùng</span>
-                        <i class="fas fa-chevron-down"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <h1><i class="fas fa-calculator"></i> MathHub</h1>
+        <p>Trang web giáo dục toán học - vừa CHƠI vừa HỌC - HỌC qua TRÒ CHƠI</p>
     </div>
-    
-    <!-- Dropdown menu cho người dùng đã đăng nhập -->
-    <div class="profile-dropdown" id="profileDropdown">
-        <div class="dropdown-header">
-            <div class="avatar" id="dropdownAvatar">U</div>
-            <div>
-                <div id="dropdownUsername">Người dùng</div>
-                <small id="dropdownEmail">user@example.com</small>
-            </div>
-        </div>
-        <div class="dropdown-item" onclick="viewProfile()">
-            <i class="fas fa-user"></i>
-            <span>Hồ sơ của tôi</span>
-        </div>
-        <div class="dropdown-item" onclick="viewProgress()">
-            <i class="fas fa-chart-line"></i>
-            <span>Tiến trình học tập</span>
-        </div>
-        <div class="dropdown-item" onclick="viewAchievements()">
-            <i class="fas fa-trophy"></i>
-            <span>Thành tích</span>
-        </div>
-        <div class="dropdown-item" onclick="logout()">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Đăng xuất</span>
-        </div>
-    </div>
-    
-    <!-- Modal đăng nhập -->
-    <div class="modal" id="loginModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('loginModal')">&times;</span>
-            <div class="auth-form">
-                <h2>Đăng nhập</h2>
-                <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" placeholder="Nhập email của bạn">
-                </div>
-                <div class="form-group">
-                    <label for="loginPassword">Mật khẩu</label>
-                    <input type="password" id="loginPassword" placeholder="Nhập mật khẩu">
-                </div>
-                <button class="auth-submit" onclick="login()">Đăng nhập</button>
-                <div class="auth-switch">
-                    Chưa có tài khoản? <a onclick="switchToRegister()">Đăng ký ngay</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal đăng ký -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="closeModal('registerModal')">&times;</span>
-            <div class="auth-form">
-                <h2>Đăng ký tài khoản</h2>
-                <div class="form-group">
-                    <label for="registerName">Họ và tên</label>
-                    <input type="text" id="registerName" placeholder="Nhập họ và tên">
-                </div>
-                <div class="form-group">
-                    <label for="registerEmail">Email</label>
-                    <input type="email" id="registerEmail" placeholder="Nhập email">
-                </div>
-                <div class="form-group">
-                    <label for="registerPassword">Mật khẩu</label>
-                    <input type="password" id="registerPassword" placeholder="Tạo mật khẩu">
-                </div>
-                <div class="form-group">
-                    <label for="registerConfirmPassword">Xác nhận mật khẩu</label>
-                    <input type="password" id="registerConfirmPassword" placeholder="Xác nhận mật khẩu">
-                </div>
-                <button class="auth-submit" onclick="register()">Đăng ký</button>
-                <div class="auth-switch">
-                    Đã có tài khoản? <a onclick="switchToLogin()">Đăng nhập</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Nội dung chính -->
-    <h2 class="section-title">Trò chơi hiện có</h2>
-    <div class="section-divider"></div>
     
     <div class="container">
         <!-- Game Toán lớp 1 - Nổi bật -->
@@ -576,73 +207,21 @@
             </div>
         </div>
         
-        <!-- Game Bắn Bóng Số - Mới -->
+        <!-- Game Toán lớp 2 - Mới -->
         <div class="game-card">
             <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #ff6b6b, #e55656);">
-                <i class="fas fa-bullseye"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Bắn Bóng Số</h3>
-                <p>Game toán lớp 2 thú vị. Bắn các bóng bay chứa phép tính bằng cách nhập kết quả chính xác.</p>
-                <a href="banbongsotoan2.html" class="game-card-btn new">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Game Bảng cửu chương -->
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #8e2de2, #4a00e0);">
-                <i class="fas fa-times-circle"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Bảng cửu chương</h3>
-                <p>Học thuộc bảng cửu chương từ 2 đến 10 một cách dễ dàng và thú vị. Chế độ tổng hợp giúp ôn tập hiệu quả.</p>
-                <a href="bangcuuchuong.html" class="game-card-btn">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Game Toán lớp 2 - Phổ biến -->
-        <div class="game-card">
-            <div class="popular-badge">Phổ biến</div>
             <div class="game-card-img" style="background-color: #4e73df;">
                 <i class="fas fa-plus-circle"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ có nhớ lớp 2</h3>
                 <p>Game toán học dành cho học sinh lớp 2. Rèn luyện kỹ năng cộng trừ có nhớ với nhiều cấp độ từ dễ đến khó.</p>
-                <a href="congtruconhotoan2.html" class="game-card-btn popular">Chơi ngay</a>
+                <a href="congtruconhotoan2.html" class="game-card-btn">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Cộng trừ số nguyên lớp 6 -->
         <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
-                <i class="fas fa-infinity"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ số nguyên lớp 6</h3>
-                <p>Làm chủ phép cộng trừ số nguyên âm và dương. Game dành cho học sinh lớp 6 với nhiều thử thách thú vị.</p>
-                <a href="congtrusonguyen.html" class="game-card-btn new">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Nhân chia nâng cao lớp 3-4 -->
-        <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #6f42c1, #4e2a8e);">
-                <i class="fas fa-divide"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Nhân chia nâng cao lớp 3-4</h3>
-                <p>Rèn luyện kỹ năng nhân chia với các số lớn hơn. Nhiều cấp độ từ cơ bản đến nâng cao cho học sinh lớp 3-4.</p>
-                <a href="nhanchianangcao.html" class="game-card-btn new">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Đường đua phép tính -->
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
+            <div class="game-card-img">
                 <i class="fas fa-flag-checkered"></i>
             </div>
             <div class="game-card-content">
@@ -651,13 +230,7 @@
                 <a href="duongduapheptinh.html" class="game-card-btn">Chơi ngay</a>
             </div>
         </div>
-    </div>
-    
-    <h2 class="section-title">Trò chơi sắp ra mắt</h2>
-    <div class="section-divider"></div>
-    
-    <div class="container">
-        <!-- Toán đố vui -->
+        
         <div class="game-card">
             <div class="game-card-img" style="background-color: #f6c23e;">
                 <i class="fas fa-puzzle-piece"></i>
@@ -665,11 +238,10 @@
             <div class="game-card-content">
                 <h3>Toán đố vui</h3>
                 <p>Giải các bài toán đố thú vị và rèn luyện tư duy logic. Phù hợp với mọi lứa tuổi.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn">Sắp ra mắt</a>
             </div>
         </div>
         
-        <!-- Cờ toán học -->
         <div class="game-card">
             <div class="game-card-img" style="background-color: #e74a3b;">
                 <i class="fas fa-chess-board"></i>
@@ -677,11 +249,10 @@
             <div class="game-card-content">
                 <h3>Cờ toán học</h3>
                 <p>Kết hợp giữa cờ vua và toán học. Chiến thắng bằng cách giải các phép tính.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn">Sắp ra mắt</a>
             </div>
         </div>
         
-        <!-- Đấu trường toán học -->
         <div class="game-card">
             <div class="game-card-img" style="background-color: #36b9cc;">
                 <i class="fas fa-trophy"></i>
@@ -689,201 +260,78 @@
             <div class="game-card-content">
                 <h3>Đấu trường toán học</h3>
                 <p>Thi đấu với bạn bè và người chơi khác để trở thành nhà vô địch toán học.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-
-        <!-- Hình học vui nhộn -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #8e2de2;">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Hình học vui nhộn</h3>
-                <p>Khám phá thế giới hình học qua các trò chơi thú vị. Nhận diện hình khối và tính chu vi, diện tích.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <a href="#" class="game-card-btn">Sắp ra mắt</a>
             </div>
         </div>
     </div>
     
     <div class="footer">
-        <p>© 2023 MathHub - Website của thầy Võ Viết Chương - THPT Lê Quảng Chí</p>
-        <p>Liên hệ: gnouhcteiv@gmail.com</p>
+        <p>© 2023 MathHub - Website của thầy Võ Viết Chương - THPT Lê Quảng Chí </p>
     </div>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
 
     <!-- Font Awesome for icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     
     <script>
-        // 1. KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP KHI TRANG TẢI
-        document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
+            authDomain: "mathhubvn.firebaseapp.com",
+            projectId: "mathhubvn",
+            storageBucket: "mathhubvn.firebasestorage.app",
+            messagingSenderId: "1001364433767",
+            appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
+            measurementId: "G-2YNQZ48JVK"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const analytics = firebase.analytics();
+        
+        // Track page view
+        analytics.logEvent('page_view', {
+            page_title: 'MathHub Trang Chủ',
+            page_location: window.location.href
         });
         
-        // 2. ĐÓNG MODAL KHI CLICK BÊN NGOÀI
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
+        // Track game clicks
+        document.querySelectorAll('.game-card-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                const gameName = this.closest('.game-card').querySelector('h3').textContent;
+                analytics.logEvent('select_content', {
+                    content_type: 'game',
+                    item_id: gameName
+                });
+                
+                // Show notification
+                showToast(`Đang mở trò chơi: ${gameName}`);
+            });
         });
         
-        // 3. KIỂM TRA XEM NGƯỜI DÙNG ĐÃ ĐĂNG NHẬP CHƯA
-        function checkLoginStatus() {
-            const user = getCurrentUser();
-            if (user) {
-                showUserView(user);
-            } else {
-                showGuestView();
+        // Function to show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Track user engagement
+        let timeSpent = 0;
+        setInterval(() => {
+            timeSpent += 5;
+            if (timeSpent % 30 === 0) { // Every 30 seconds
+                analytics.logEvent('user_engagement', {
+                    time_spent: timeSpent
+                });
             }
-        }
-        
-        // 4. HIỂN THỊ GIAO DIỆN CHO KHÁCH (CHƯA ĐĂNG NHẬP)
-        function showGuestView() {
-            document.getElementById('guestView').style.display = 'flex';
-            document.getElementById('userView').style.display = 'none';
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
-        
-        // 5. HIỂN THỊ GIAO DIỆN CHO NGƯỜI DÙNG Đã ĐĂNG NHẬP
-        function showUserView(user) {
-            document.getElementById('guestView').style.display = 'none';
-            document.getElementById('userView').style.display = 'flex';
-            
-            // Cập nhật thông tin người dùng
-            document.getElementById('userAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('username').textContent = user.name;
-            document.getElementById('dropdownAvatar').textContent = user.name.charAt(0).toUpperCase();
-            document.getElementById('dropdownUsername').textContent = user.name;
-            document.getElementById('dropdownEmail').textContent = user.email;
-        }
-        
-        // 6. MỞ MODAL
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
-        
-        // 7. ĐÓNG MODAL
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-        
-        // 8. CHUYỂN TỪ ĐĂNG NHẬP SANG ĐĂNG KÝ
-        function switchToRegister() {
-            closeModal('loginModal');
-            openModal('registerModal');
-        }
-        
-        // 9. CHUYỂN TỪ ĐĂNG KÝ SANG ĐĂNG NHẬP
-        function switchToLogin() {
-            closeModal('registerModal');
-            openModal('loginModal');
-        }
-        
-        // 10. HIỂN THỊ/ẨN DROPDOWN PROFILE
-        function toggleDropdown() {
-            document.getElementById('profileDropdown').classList.toggle('show');
-        }
-        
-        // 11. ĐĂNG KÝ TÀI KHOẢN MỚI
-        function register() {
-            const name = document.getElementById('registerName').value;
-            const email = document.getElementById('registerEmail').value;
-            const password = document.getElementById('registerPassword').value;
-            const confirmPassword = document.getElementById('registerConfirmPassword').value;
-            
-            // Kiểm tra tính hợp lệ
-            if (!name || !email || !password || !confirmPassword) {
-                alert('Vui lòng điền đầy đủ thông tin!');
-                return;
-            }
-            
-            if (password !== confirmPassword) {
-                alert('Mật khẩu xác nhận không khớp!');
-                return;
-            }
-            
-            if (password.length < 6) {
-                alert('Mật khẩu phải có ít nhất 6 ký tự!');
-                return;
-            }
-            
-            // Kiểm tra xem email đã tồn tại chưa
-            if (isEmailExists(email)) {
-                alert('Email này đã được đăng ký! Vui lòng sử dụng email khác.');
-                return;
-            }
-            
-            // Tạo thông tin người dùng
-            const userData = {
-                name: name,
-                email: email,
-                password: password,
-                joinDate: new Date().toISOString(),
-                progress: {},
-                achievements: []
-            };
-            
-            // Thêm người dùng mới
-            addUser(userData);
-            
-            // Đặt làm người dùng hiện tại
-            setCurrentUser(userData);
-            
-            // Đóng modal và cập nhật giao diện
-            closeModal('registerModal');
-            showUserView(userData);
-            
-            alert('Đăng ký thành công! Chào mừng bạn đến với MathHub.');
-        }
-        
-        // 12. ĐĂNG NHẬP
-        function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Kiểm tra tính hợp lệ
-            if (!email || !password) {
-                alert('Vui lòng điền đầy đủ thông tin!');
-                return;
-            }
-            
-            // Xác thực người dùng
-            const user = authenticateUser(email, password);
-            
-            if (user) {
-                // Đăng nhập thành công
-                setCurrentUser(user);
-                closeModal('loginModal');
-                showUserView(user);
-            } else {
-                alert('Email hoặc mật khẩu không đúng!');
-            }
-        }
-        
-        // 13. ĐĂNG XUẤT
-        function logout() {
-            setCurrentUser(null);
-            showGuestView();
-            alert('Đã đăng xuất thành công!');
-        }
-        
-        // 14. XEM HỒ SƠ
-        function viewProfile() {
-            alert('Tính năng xem hồ sơ sẽ sớm được cập nhật!');
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
-        
-        // 15. XEM TIẾN TRÌNH
-        function viewProgress() {
-            alert('Tính năng theo dõi tiến trình sẽ sớm được cập nhật!');
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
-        
-        // 16. XEM THÀNH TÍCH
-        function viewAchievements() {
-            alert('Tính năng thành tích sẽ sớm được cập nhật!');
-            document.getElementById('profileDropdown').classList.remove('show');
-        }
+        }, 5000);
     </script>
 </body>
 </html>
