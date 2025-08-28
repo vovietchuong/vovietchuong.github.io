@@ -31,9 +31,12 @@
 
     /* AREA */
     #gameArea{position:relative; flex:1; overflow:hidden; background:linear-gradient(180deg, #ffffff33, #ffffff14)}
+    #pauseOverlay{position:absolute; inset:0; background:rgba(2,6,23,0.7); display:none; align-items:center; justify-content:center; z-index:8; flex-direction:column; gap:20px; color:white; font-weight:800; font-size:28px; backdrop-filter:blur(4px)}
+    #pauseOverlay.show{display:flex}
 
     /* BALLOON */
-    .balloon{position:absolute; bottom:-120px; width:90px; height:110px; display:flex; align-items:center; justify-content:center; padding:8px; cursor:pointer; filter:drop-shadow(0 6px 12px rgba(0,0,0,.15)); user-select:none}
+    .balloon{position:absolute; bottom:-120px; width:90px; height:110px; display:flex; align-items:center; justify-content:center; padding:8px; cursor:pointer; filter:drop-shadow(0 6px 12px rgba(0,0,0,.15)); user-select:none; transition:transform 0.2s}
+    .balloon.paused{animation-play-state:paused}
     .balloon .txt{font-size:18px; font-weight:900; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.5)}
     .pop{animation:pop .45s both}
     @keyframes pop{0%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.8}100%{transform:scale(0);opacity:0}}
@@ -41,7 +44,8 @@
     /* CONTROLS */
     .controls{z-index:2; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center; padding:10px; background:var(--panel); box-shadow: var(--shadow)}
     input[type=number]{font-size:18px; padding:10px 14px; width:140px; border-radius:12px; border:2px solid #38bdf8; text-align:center}
-    button{border:0; padding:10px 16px; border-radius:12px; font-weight:900; cursor:pointer; box-shadow: var(--shadow)}
+    button{border:0; padding:10px 16px; border-radius:12px; font-weight:900; cursor:pointer; box-shadow: var(--shadow); transition:all 0.2s}
+    button:active{transform:scale(0.96)}
     .btn-primary{background:linear-gradient(180deg, #fb923c, #f97316); color:#fff}
     .btn-green{background:linear-gradient(180deg, #22c55e, #16a34a); color:#fff}
     .btn-muted{background:#e2e8f0}
@@ -52,9 +56,10 @@
     .chip{padding:8px 12px; border-radius:999px; background:#fff; font-weight:800; cursor:pointer; box-shadow: var(--shadow); display:flex; align-items:center; gap:6px; transition:all 0.2s}
     .chip:hover{transform:translateY(-2px); box-shadow:0 12px 20px rgba(2,6,23,0.2)}
     .chip.active{background:#3730a3; color:#fff}
+    .chip.pause-active{background:#f97316; color:#fff}
     .chip-icon{font-size:16px}
 
-    .modal{position:fixed; inset:0; background:rgba(2,6,23,.4); display:none; align-items:center; justify-content:center; z-index:10}
+    .modal{position:fixed; inset:0; background:rgba(2,6,23,.4); display:none; align-items:center; justify-content:center; z-index:10; backdrop-filter:blur(4px)}
     .modal.show{display:flex}
     .card{width:min(720px, 92vw); background:#fff; border-radius:20px; padding:16px; box-shadow: var(--shadow)}
     .grid{display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px}
@@ -98,7 +103,12 @@
     </div>
   </header>
 
-  <div id="gameArea"></div>
+  <div id="gameArea">
+    <div id="pauseOverlay">
+      <div>⏸️ TRÒ CHƠI ĐANG TẠM DỪNG</div>
+      <button class="btn-green" id="btnResumeFromOverlay">Tiếp tục chơi</button>
+    </div>
+  </div>
 
   <!-- Home Button -->
   <button id="btnHome" class="home-btn">🏠 Trang chủ</button>
@@ -176,7 +186,8 @@
       area: $('#gameArea'), score: $('#score'), correct: $('#correct'), wrong: $('#wrong'), lives: $('#lives'),
       best: $('#best'), time: $('#time'), timebar: $('#timebar'), ans: $('#answer'), toast: $('#toast'),
       btnShoot: $('#btnShoot'), btnStart: $('#btnStart'), btnReset: $('#btnReset'), btnPause: $('#btnPause'), btnSettings: $('#btnSettings'), btnMute: $('#btnMute'),
-      btnHome: $('#btnHome'), modal: $('#settingsModal'),
+      btnHome: $('#btnHome'), modal: $('#settingsModal'), pauseOverlay: $('#pauseOverlay'),
+      btnResumeFromOverlay: $('#btnResumeFromOverlay'),
       maxN: $('#maxN'), maxNLabel: $('#maxNLabel'), speed: $('#speed'), speedLabel: $('#speedLabel'),
       duration: $('#duration'), durationLabel: $('#durationLabel'), bonus: $('#bonus'), bonusLabel: $('#bonusLabel'),
     };
@@ -187,6 +198,7 @@
       diff: 'easy', ops: ['+','-'], maxN: 20, speed: 1.2, spawnEvery: 1400, bonus: 1, muted: false,
       balloons: [],
       lastSpawn: 0, lastFrame: 0,
+      animationFrameId: null
     };
     ui.best.textContent = state.best;
 
@@ -255,36 +267,175 @@
       state.timeLeft = +ui.duration.value || 60; state.lives=3; state.score=0; state.correct=0; state.wrong=0; state.combo=0;
       ui.ans.value=''; ui.ans.focus();
       ui.area.innerHTML=''; state.balloons.length=0; state.lastSpawn=0; state.lastFrame=performance.now();
+      
+      // Cập nhật giao diện nút tạm dừng
+      updatePauseButton();
+      
+      // Ẩn overlay tạm dừng nếu có
+      ui.pauseOverlay.classList.remove('show');
+      
+      // Khởi động game loop
+      if (state.animationFrameId) {
+        cancelAnimationFrame(state.animationFrameId);
+      }
       loop(performance.now());
     }
 
     function endGame(){
-      state.running=false; flash(`Hết giờ! Điểm: ${state.score}`, 'bad');
-      if(state.score>state.best){ state.best=state.score; localStorage.setItem('bb_best', state.best); ui.best.textContent = state.best; }
+      state.running=false; 
+      flash(`Hết giờ! Điểm: ${state.score}`, 'bad');
+      if(state.score>state.best){ 
+        state.best=state.score; 
+        localStorage.setItem('bb_best', state.best); 
+        ui.best.textContent = state.best; 
+      }
+      
+      // Hủy animation frame khi kết thúc game
+      if (state.animationFrameId) {
+        cancelAnimationFrame(state.animationFrameId);
+        state.animationFrameId = null;
+      }
     }
 
-    function pauseToggle(){ if(!state.running) return; state.paused = !state.paused; ui.btnPause.textContent = state.paused ? '▶️ Tiếp tục' : '⏸ Tạm dừng'; ui.btnPause.querySelector('.chip-icon').textContent = state.paused ? '▶️' : '⏸'; if(!state.paused) { state.lastFrame = performance.now(); loop(state.lastFrame);} }
+    function pauseGame() {
+      if(!state.running || state.paused) return;
+      
+      state.paused = true;
+      beep(440, 0.1);
+      
+      // Hiển thị overlay tạm dừng
+      ui.pauseOverlay.classList.add('show');
+      
+      // Dừng tất cả animation của bóng
+      state.balloons.forEach(b => {
+        b.el.classList.add('paused');
+      });
+      
+      // Cập nhật giao diện nút tạm dừng
+      updatePauseButton();
+      
+      // Hủy animation frame để tiết kiệm tài nguyên
+      if (state.animationFrameId) {
+        cancelAnimationFrame(state.animationFrameId);
+        state.animationFrameId = null;
+      }
+    }
 
-    function shoot(val){ if(!state.running || state.paused) return; if(Number.isNaN(+val)) return;
+    function resumeGame() {
+      if(!state.running || !state.paused) return;
+      
+      state.paused = false;
+      beep(660, 0.1);
+      
+      // Ẩn overlay tạm dừng
+      ui.pauseOverlay.classList.remove('show');
+      
+      // Tiếp tục animation của bóng
+      state.balloons.forEach(b => {
+        b.el.classList.remove('paused');
+      });
+      
+      // Cập nhật giao diện nút tạm dừng
+      updatePauseButton();
+      
+      // Khởi động lại game loop
+      state.lastFrame = performance.now();
+      if (!state.animationFrameId) {
+        state.animationFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function pauseToggle(){ 
+      if(!state.running) return;
+      
+      if(state.paused) {
+        resumeGame();
+      } else {
+        pauseGame();
+      }
+    }
+
+    function updatePauseButton() {
+      if (state.paused) {
+        ui.btnPause.querySelector('.chip-icon').textContent = '▶️';
+        ui.btnPause.querySelector('.chip-text').textContent = 'Tiếp tục';
+        ui.btnPause.classList.add('pause-active');
+      } else {
+        ui.btnPause.querySelector('.chip-icon').textContent = '⏸';
+        ui.btnPause.querySelector('.chip-text').textContent = 'Tạm dừng';
+        ui.btnPause.classList.remove('pause-active');
+      }
+    }
+
+    function shoot(val){ 
+      if(!state.running || state.paused) return; 
+      if(Number.isNaN(+val)) return;
+      
       // tìm bóng có đáp án đúng gần đáy nhất
-      let idx=-1, maxY=-1; for(let i=0;i<state.balloons.length;i++){ const b=state.balloons[i]; if(b.ans===+val && b.y>maxY){ idx=i; maxY=b.y; }}
+      let idx=-1, maxY=-1; 
+      for(let i=0;i<state.balloons.length;i++){ 
+        const b=state.balloons[i]; 
+        if(b.ans===+val && b.y>maxY){ 
+          idx=i; maxY=b.y; 
+        }
+      }
+      
       if(idx>-1){
-        removeBalloon(idx, true); state.correct++; state.combo++; const bonus = 10 + Math.min(20, state.combo*2);
-        state.score += bonus; state.timeLeft += (+ui.bonus.value||0); flash(`+${bonus} điểm`, 'ok'); beep(880, .08, 'triangle');
-      } else { state.wrong++; state.combo=0; state.score = Math.max(0, state.score-2); flash('Trượt!', 'bad'); beep(320, .09, 'square'); }
-      ui.ans.value=''; ui.ans.focus(); updateHUD();
+        removeBalloon(idx, true); 
+        state.correct++; 
+        state.combo++; 
+        const bonus = 10 + Math.min(20, state.combo*2);
+        state.score += bonus; 
+        state.timeLeft += (+ui.bonus.value||0); 
+        flash(`+${bonus} điểm`, 'ok'); 
+        beep(880, .08, 'triangle');
+      } else { 
+        state.wrong++; 
+        state.combo=0; 
+        state.score = Math.max(0, state.score-2); 
+        flash('Trượt!', 'bad'); 
+        beep(320, .09, 'square'); 
+      }
+      ui.ans.value=''; 
+      ui.ans.focus(); 
+      updateHUD();
     }
 
     function loop(ts){
-      if(!state.running) return; const dt = (ts - state.lastFrame); state.lastFrame = ts; if(state.paused) return;
+      if(!state.running || state.paused) return;
+      
+      state.animationFrameId = requestAnimationFrame(loop);
+      const dt = (ts - state.lastFrame); 
+      state.lastFrame = ts; 
+      
       // time
-      state.timeLeft -= dt/1000; if(state.timeLeft<=0){ endGame(); updateHUD(); return; }
+      state.timeLeft -= dt/1000; 
+      if(state.timeLeft<=0){ 
+        endGame(); 
+        updateHUD(); 
+        return; 
+      }
+      
       // spawn rate adapts by difficulty + performance
-      state.lastSpawn += dt; const target = Math.max(600, state.spawnEvery - state.correct*6);
-      if(state.lastSpawn >= target){ spawnBalloon(); state.lastSpawn = 0; }
+      state.lastSpawn += dt; 
+      const target = Math.max(600, state.spawnEvery - state.correct*6);
+      if(state.lastSpawn >= target){ 
+        spawnBalloon(); 
+        state.lastSpawn = 0; 
+      }
+      
       // move balloons
-      for(let i=state.balloons.length-1;i>=0;i--){ const b = state.balloons[i]; b.y += b.v * (dt/16); b.el.style.bottom = b.y + 'px'; if(b.y > ui.area.clientHeight){ removeBalloon(i,false); loseLife(); }}
-      updateHUD(); requestAnimationFrame(loop);
+      for(let i=state.balloons.length-1;i>=0;i--){ 
+        const b = state.balloons[i]; 
+        b.y += b.v * (dt/16); 
+        b.el.style.bottom = b.y + 'px'; 
+        if(b.y > ui.area.clientHeight){ 
+          removeBalloon(i,false); 
+          loseLife(); 
+        }
+      }
+      
+      updateHUD();
     }
 
     // ======= EVENTS =======
@@ -293,6 +444,8 @@
     ui.btnShoot.addEventListener('click', ()=> shoot(+ui.ans.value));
     ui.ans.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); shoot(+ui.ans.value); }});
     ui.btnPause.addEventListener('click', pauseToggle);
+    ui.btnResumeFromOverlay.addEventListener('click', resumeGame);
+    
     ui.btnMute.addEventListener('click', ()=>{ 
       state.muted = !state.muted; 
       ui.btnMute.querySelector('.chip-icon').textContent = state.muted ? '🔇' : '🔊';
@@ -310,19 +463,48 @@
 
     // click vào bóng để autofill đáp án
     $('#gameArea').addEventListener('click', (ev)=>{
-      const b = ev.target.closest('.balloon'); if(!b || !state.running || state.paused) return;
+      const b = ev.target.closest('.balloon'); 
+      if(!b || !state.running || state.paused) return;
+      
       // tìm bản ghi
-      const i = state.balloons.findIndex(x=>x.el===b); if(i>-1){ ui.ans.value = state.balloons[i].ans; shoot(state.balloons[i].ans); }
+      const i = state.balloons.findIndex(x=>x.el===b); 
+      if(i>-1){ 
+        ui.ans.value = state.balloons[i].ans; 
+        shoot(state.balloons[i].ans); 
+      }
     });
 
     // ======= SETTINGS MODAL =======
-    const openSettings = ()=> ui.modal.classList.add('show');
+    const openSettings = ()=> {
+      // Tạm dừng game khi mở cài đặt
+      if(state.running && !state.paused) {
+        pauseGame();
+      }
+      ui.modal.classList.add('show');
+    }
+    
     const closeSettings = ()=> ui.modal.classList.remove('show');
+    
     ui.btnSettings.addEventListener('click', openSettings);
     $('#btnCloseSettings').addEventListener('click', closeSettings);
 
     // controls in modal
-    $$('.diff').forEach(btn=> btn.addEventListener('click', ()=>{ $$('.diff').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); state.diff = btn.dataset.diff; const d = {easy:{speed:1, maxN:20}, medium:{speed:1.4, maxN:40}, hard:{speed:1.8, maxN:80}}[state.diff]; ui.speed.value = d.speed; ui.speedLabel.textContent=d.speed+'x'; ui.maxN.value=d.maxN; ui.maxNLabel.textContent=d.maxN; state.speed=+ui.speed.value; state.maxN=+ui.maxN.value; }));
+    $$('.diff').forEach(btn=> btn.addEventListener('click', ()=>{ 
+      $$('.diff').forEach(x=>x.classList.remove('active')); 
+      btn.classList.add('active'); 
+      state.diff = btn.dataset.diff; 
+      const d = {
+        easy:{speed:1, maxN:20}, 
+        medium:{speed:1.4, maxN:40}, 
+        hard:{speed:1.8, maxN:80}
+      }[state.diff]; 
+      ui.speed.value = d.speed; 
+      ui.speedLabel.textContent=d.speed+'x'; 
+      ui.maxN.value=d.maxN; 
+      ui.maxNLabel.textContent=d.maxN; 
+      state.speed=+ui.speed.value; 
+      state.maxN=+ui.maxN.value; 
+    }));
 
     ui.maxN.addEventListener('input', ()=>{ ui.maxNLabel.textContent = ui.maxN.value; state.maxN = +ui.maxN.value;});
     ui.speed.addEventListener('input', ()=>{ ui.speedLabel.textContent = ui.speed.value+'x'; state.speed = +ui.speed.value;});
@@ -342,8 +524,7 @@
       $$('.diff')[0].classList.add('active'); 
       
       // Cập nhật icon cho nút tạm dừng
-      ui.btnPause.querySelector('.chip-icon').textContent = '⏸';
-      ui.btnPause.querySelector('.chip-text').textContent = 'Tạm dừng';
+      updatePauseButton();
     })();
 
     // Prevent wheel from changing number on scroll while focused
