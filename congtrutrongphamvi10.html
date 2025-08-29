@@ -95,7 +95,15 @@ const ui={q:document.getElementById('question'),illus:document.getElementById('i
 
 let leaderboard = JSON.parse(localStorage.getItem('leaderboard')||'[]');
 
-function init(){genButtons(); bindMode(); newGame(); renderLeaderboard(); document.getElementById('home').onclick=()=>{window.location.href='index.html';}; document.addEventListener('keydown',handleKey); ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};}
+function init(){
+  genButtons();
+  bindMode();
+  newGame();
+  renderLeaderboard();
+  document.getElementById('home').onclick=()=>{window.location.href='index.html';};
+  document.addEventListener('keydown',handleKey);
+  ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};
+}
 function genButtons(){const box=document.getElementById('answer-buttons'); for(let i=0;i<=9;i++){const b=document.createElement('button'); b.textContent=i; b.className='number-btn'; b.onclick=()=>{if(state.ans.length<2){state.ans+=i; renderAns();}}; box.appendChild(b);}}
 function bindMode(){document.querySelectorAll('.mode-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); state.mode=btn.dataset.mode; reset();});}
 function reset(){state.score=0; state.streak=0; state.ans=''; state.time= state.infinite?Infinity:60; update(); newQ(); if(!state.infinite) startTimer(); else state.running=true;}
@@ -117,9 +125,25 @@ function playSound(ok){const ctx=new (window.AudioContext||window.webkitAudioCon
 // Confetti
 function launchConfetti(){const canvas=document.getElementById('confetti');const ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;let pieces=[];for(let i=0;i<150;i++){pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,color:`hsl(${Math.random()*360},100%,50%)`,ys:Math.random()*3+2,size:Math.random()*5+2});}function updateC(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.y+=p.ys;if(p.y>canvas.height)p.y=-10;ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}); if(state.streak===3) requestAnimationFrame(updateC);}updateC();}
 
-// Leaderboard
-function updateLeaderboard(){leaderboard.push(state.score); leaderboard.sort((a,b)=>b-a); leaderboard=leaderboard.slice(0,5); localStorage.setItem('leaderboard',JSON.stringify(leaderboard)); renderLeaderboard();}
-function renderLeaderboard(){ui.leader.innerHTML=''; leaderboard.forEach((s,i)=>{const li=document.createElement('li'); li.textContent=`${s} điểm`; ui.leader.appendChild(li);});}
+// ✅ Leaderboard nâng cấp: lưu cả tên + điểm
+function updateLeaderboard(){
+  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  const playerName = currentUser.name || "Khách";
+
+  leaderboard.push({user: playerName, score: state.score});
+  leaderboard.sort((a,b)=> b.score - a.score);
+  leaderboard = leaderboard.slice(0,5);
+  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+  renderLeaderboard();
+}
+function renderLeaderboard(){
+  ui.leader.innerHTML='';
+  leaderboard.forEach((entry,i)=>{
+    const li=document.createElement('li');
+    li.textContent=`${entry.user}: ${entry.score} điểm`;
+    ui.leader.appendChild(li);
+  });
+}
 
 // Keyboard input
 function handleKey(e){if(!state.running)return; if(e.key>='0'&&e.key<='9'){if(state.ans.length<2){state.ans+=e.key; renderAns();}} else if(e.key==='Backspace'){state.ans=''; renderAns();} else if(e.key==='Enter'){submit();}}
