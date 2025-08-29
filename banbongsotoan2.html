@@ -7,6 +7,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  
   <style>
     :root{
       --bg-1:#0ea5e9; --bg-2:#7dd3fc; --panel:#ffffffee; --ink:#0f172a;
@@ -183,6 +190,22 @@
   <div class="toast" id="toast"></div>
 
   <script>
+    // ======= FIREBASE CONFIG =======
+    const firebaseConfig = {
+      apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
+      authDomain: "mathhubvn.firebaseapp.com",
+      projectId: "mathhubvn",
+      storageBucket: "mathhubvn.firebasestorage.app",
+      messagingSenderId: "1001364433767",
+      appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
+      measurementId: "G-2YNQZ48JVK"
+    };
+
+    // Khởi tạo Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
     // ======= STATE =======
     const $ = (s, r=document) => r.querySelector(s);
     const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
@@ -292,6 +315,11 @@
     function endGame(){
       state.running=false; 
       flash(`Hết giờ! Điểm: ${state.score}`, 'bad');
+      
+      // Lưu điểm vào Firestore
+      saveScoreToFirestore();
+      
+      // Cập nhật kỷ lục cá nhân
       if(state.score>state.best){ 
         state.best=state.score; 
         localStorage.setItem('bb_best', state.best); 
@@ -447,6 +475,44 @@
       updateHUD();
     }
 
+    // ======= LƯU ĐIỂM VÀO FIRESTORE =======
+    async function saveScoreToFirestore() {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+      
+      // Kiểm tra xem người dùng đã đăng nhập chưa
+      if (!currentUser.uid) {
+        console.log("Người dùng chưa đăng nhập, không lưu điểm");
+        return;
+      }
+      
+      const playerName = currentUser.name || "Khách";
+      const uid = currentUser.uid;
+
+      try {
+        // Lưu điểm vào collection scores (theo cấu trúc mới)
+        await db.collection("scores").add({
+          userId: uid,
+          gameId: "banbongsotoan2",
+          gameName: "Bắn Bóng Số",
+          score: state.score,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+        
+        // Cũng lưu vào leaderboard để hiển thị bảng xếp hạng
+        await db.collection("leaderboard").add({
+          userId: uid,
+          name: playerName,
+          score: state.score,
+          game: "banbongso",
+          timestamp: new Date()
+        });
+        
+        console.log("Điểm đã được lưu thành công!");
+      } catch (err) {
+        console.error("Lỗi lưu điểm:", err);
+      }
+    }
+
     // ======= EVENTS =======
     ui.btnStart.addEventListener('click', startGame);
     ui.btnReset.addEventListener('click', startGame);
@@ -465,8 +531,11 @@
     // Home button functionality
     ui.btnHome.addEventListener('click', () => {
       if(confirm('Bạn có muốn trở về trang chủ không? Tiến trình hiện tại sẽ bị mất.')) {
-        // Thực tế có thể chuyển hướng đến trang chủ, ở đây tôi chỉ reset game
-        window.location.href = '/'; // Thay đổi URL này theo trang chủ thực tế
+        // Lưu điểm trước khi về trang chủ
+        if (state.running && state.score > 0) {
+          saveScoreToFirestore();
+        }
+        window.location.href = 'index.html';
       }
     });
 
@@ -543,6 +612,13 @@
 
     // Prevent wheel from changing number on scroll while focused
     ui.ans.addEventListener('wheel', e=> e.target === document.activeElement && e.preventDefault(), {passive:false});
+
+    // Lưu điểm khi người dùng rời trang
+    window.addEventListener('beforeunload', function() {
+      if (state.running && state.score > 0) {
+        saveScoreToFirestore();
+      }
+    });
   </script>
 </body>
 </html>
