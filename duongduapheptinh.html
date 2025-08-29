@@ -32,6 +32,7 @@
             width: 100%;
             max-width: 800px;
             overflow: hidden;
+            position: relative;
         }
         
         .game-header {
@@ -45,6 +46,19 @@
         .game-header h1 {
             font-size: 2rem;
             margin-bottom: 10px;
+        }
+        
+        .level-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         
         .game-stats {
@@ -62,6 +76,7 @@
             flex-direction: column;
             align-items: center;
             margin: 5px 10px;
+            min-width: 60px;
         }
         
         .stat-value {
@@ -189,6 +204,15 @@
             align-items: center;
             justify-content: center;
             box-shadow: 0 5px 15px rgba(78, 115, 223, 0.3);
+            position: relative;
+        }
+        
+        .difficulty-indicator {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 0.8rem;
+            opacity: 0.8;
         }
         
         .timer-container {
@@ -231,6 +255,22 @@
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .answer-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
         }
         
         .answer-btn:hover:not(:disabled) {
@@ -242,6 +282,10 @@
         
         .answer-btn:active:not(:disabled) {
             transform: translateY(0);
+        }
+        
+        .answer-btn:active:not(:disabled)::after {
+            animation: ripple 1s ease-out;
         }
         
         .answer-btn:disabled {
@@ -278,6 +322,22 @@
             gap: 8px;
             transition: all 0.3s;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .control-btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
         }
         
         .btn-start {
@@ -290,6 +350,11 @@
             color: #333;
         }
         
+        .btn-settings {
+            background: #6f42c1;
+            color: white;
+        }
+        
         .control-btn:hover:not(:disabled) {
             transform: translateY(-3px);
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
@@ -297,6 +362,10 @@
         
         .control-btn:active:not(:disabled) {
             transform: translateY(0);
+        }
+        
+        .control-btn:active::after {
+            animation: ripple 1s ease-out;
         }
         
         .control-btn:disabled {
@@ -371,6 +440,200 @@
             margin-bottom: 8px;
         }
         
+        .settings-panel {
+            position: absolute;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            transition: right 0.3s ease;
+            z-index: 100;
+            overflow-y: auto;
+        }
+        
+        .settings-panel.open {
+            right: 0;
+        }
+        
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .settings-group {
+            margin-bottom: 20px;
+        }
+        
+        .settings-group h3 {
+            margin-bottom: 10px;
+            color: #4e73df;
+        }
+        
+        .settings-option {
+            margin-bottom: 15px;
+        }
+        
+        .settings-option label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .settings-option select, .settings-option input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .highscores-list {
+            list-style: none;
+        }
+        
+        .highscores-list li {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .highscores-list li:first-child {
+            background: #fff9e6;
+            font-weight: bold;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 90;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+        
+        .overlay.visible .modal {
+            transform: translateY(0);
+        }
+        
+        .modal h2 {
+            margin-bottom: 15px;
+            color: #2e59d9;
+        }
+        
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn-primary {
+            background: #4e73df;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .powerup-container {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .powerup {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16);
+            position: relative;
+        }
+        
+        .powerup-time {
+            background: linear-gradient(to bottom, #4e73df, #2e59d9);
+        }
+        
+        .powerup-life {
+            background: linear-gradient(to bottom, #e74a3b, #c0352d);
+        }
+        
+        .powerup-hint {
+            background: linear-gradient(to bottom, #f6c23e, #dda20a);
+        }
+        
+        .powerup.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .powerup-count {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            background: #333;
+            color: white;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         /* Animations */
         @keyframes laneMove {
             0% { transform: translateX(0); }
@@ -382,18 +645,10 @@
             50% { transform: scale(1.1); }
         }
         
-        .celebrate {
-            animation: celebrate 0.5s ease-in-out 2;
-        }
-        
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
             20%, 40%, 60%, 80% { transform: translateX(5px); }
-        }
-        
-        .shake {
-            animation: shake 0.5s ease-in-out;
         }
         
         @keyframes pulse {
@@ -401,8 +656,72 @@
             50% { opacity: 0.5; }
         }
         
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            20% {
+                transform: scale(25, 25);
+                opacity: 0.3;
+            }
+            100% {
+                transform: scale(50, 50);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40%, 43% {
+                transform: translateY(-15px);
+            }
+            70% {
+                transform: translateY(-7px);
+            }
+            90% {
+                transform: translateY(-3px);
+            }
+        }
+        
+        @keyframes tada {
+            0% {
+                transform: scale(1);
+            }
+            10%, 20% {
+                transform: scale(0.9) rotate(-5deg);
+            }
+            30%, 50%, 70%, 90% {
+                transform: scale(1.1) rotate(5deg);
+            }
+            40%, 60%, 80% {
+                transform: scale(1.1) rotate(-5deg);
+            }
+            100% {
+                transform: scale(1) rotate(0);
+            }
+        }
+        
+        .celebrate {
+            animation: celebrate 0.5s ease-in-out 2;
+        }
+        
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+        
         .pulse {
             animation: pulse 1s infinite;
+        }
+        
+        .bounce {
+            animation: bounce 1s;
+        }
+        
+        .tada {
+            animation: tada 1s;
         }
         
         /* Toast notification */
@@ -426,10 +745,55 @@
             transform: translateX(-50%) translateY(0);
         }
         
+        /* Confetti effect */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffd300;
+            opacity: 0;
+        }
+        
+        .confetti:nth-child(1) {
+            background: #ffd300;
+        }
+        
+        .confetti:nth-child(2) {
+            background: #17d3ff;
+        }
+        
+        .confetti:nth-child(3) {
+            background: #ff4e91;
+        }
+        
+        .confetti:nth-child(4) {
+            background: #1cc88a;
+        }
+        
+        .confetti:nth-child(5) {
+            background: #4e73df;
+        }
+        
         /* Responsive design */
         @media (max-width: 900px) {
             .game-container {
                 max-width: 600px;
+            }
+            
+            .settings-panel {
+                width: 250px;
+                right: -250px;
             }
         }
         
@@ -486,6 +850,12 @@
             .game-body {
                 padding: 20px;
             }
+            
+            .powerup {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -506,6 +876,11 @@
             .timer {
                 font-size: 1rem;
             }
+            
+            .settings-panel {
+                width: 85%;
+                right: -85%;
+            }
         }
     </style>
 </head>
@@ -514,6 +889,10 @@
         <div class="game-header">
             <h1><i class="fas fa-flag-checkered"></i> Đường đua phép tính</h1>
             <p>Giải đúng để đưa xe về đích!</p>
+            
+            <div class="level-badge">
+                <i class="fas fa-star"></i> Cấp <span id="level-display">1</span>
+            </div>
             
             <div class="game-stats">
                 <div class="stat">
@@ -557,6 +936,7 @@
             </div>
             
             <div class="math-problem" id="math-problem">
+                <span class="difficulty-indicator" id="difficulty-indicator">Dễ</span>
                 Nhấn Bắt đầu để chơi!
             </div>
             
@@ -567,12 +947,30 @@
                 <button class="answer-btn" disabled>?</button>
             </div>
             
+            <div class="powerup-container">
+                <div class="powerup powerup-time" id="time-powerup" title="+5 giây">
+                    <i class="fas fa-plus-circle"></i>
+                    <div class="powerup-count" id="time-powerup-count">1</div>
+                </div>
+                <div class="powerup powerup-life" id="life-powerup" title="+1 mạng">
+                    <i class="fas fa-heart"></i>
+                    <div class="powerup-count" id="life-powerup-count">1</div>
+                </div>
+                <div class="powerup powerup-hint" id="hint-powerup" title="Gợi ý">
+                    <i class="fas fa-lightbulb"></i>
+                    <div class="powerup-count" id="hint-powerup-count">1</div>
+                </div>
+            </div>
+            
             <div class="game-controls">
                 <button class="control-btn btn-start" id="start-btn">
                     <i class="fas fa-play"></i> Bắt đầu
                 </button>
                 <button class="control-btn btn-reset" id="reset-btn" disabled>
                     <i class="fas fa-redo"></i> Chơi lại
+                </button>
+                <button class="control-btn btn-settings" id="settings-btn">
+                    <i class="fas fa-cog"></i> Cài đặt
                 </button>
             </div>
         </div>
@@ -586,7 +984,71 @@
                 <li>Trả lời sai hoặc hết thời gian sẽ mất một mạng</li>
                 <li>Trả lời sai quá 3 lần sẽ thua cuộc</li>
                 <li>Về đích để hoàn thành cấp độ và chuyển sang cấp độ khó hơn</li>
+                <li>Sử dụng các vật phẩm hỗ trợ khi cần thiết</li>
             </ul>
+        </div>
+        
+        <div class="settings-panel" id="settings-panel">
+            <div class="settings-header">
+                <h2><i class="fas fa-cog"></i> Cài đặt</h2>
+                <button id="close-settings"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <div class="settings-group">
+                <h3>Âm thanh</h3>
+                <div class="settings-option">
+                    <label for="sound-effects">Hiệu ứng âm thanh</label>
+                    <select id="sound-effects">
+                        <option value="on">Bật</option>
+                        <option value="off">Tắt</option>
+                    </select>
+                </div>
+                <div class="settings-option">
+                    <label for="background-music">Nhạc nền</label>
+                    <select id="background-music">
+                        <option value="on">Bật</option>
+                        <option value="off">Tắt</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <h3>Độ khó</h3>
+                <div class="settings-option">
+                    <label for="difficulty">Mức độ khó</label>
+                    <select id="difficulty">
+                        <option value="easy">Dễ</option>
+                        <option value="medium">Trung bình</option>
+                        <option value="hard">Khó</option>
+                    </select>
+                </div>
+                <div class="settings-option">
+                    <label for="time-per-question">Thời gian mỗi câu (giây)</label>
+                    <input type="number" id="time-per-question" min="5" max="30" value="15">
+                </div>
+            </div>
+            
+            <div class="settings-group">
+                <h3>Điểm cao</h3>
+                <ul class="highscores-list" id="highscores-list">
+                    <li>Đang tải...</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="overlay" id="settings-overlay">
+            <!-- Overlay sẽ được kích hoạt khi mở settings -->
+        </div>
+    </div>
+    
+    <div class="overlay" id="game-over-overlay">
+        <div class="modal">
+            <h2 id="game-result-title">Kết quả</h2>
+            <p id="game-result-message">Bạn đã hoàn thành trò chơi với số điểm: <span id="final-score">0</span></p>
+            <div class="modal-buttons">
+                <button class="modal-btn btn-primary" id="play-again-btn">Chơi lại</button>
+                <button class="modal-btn btn-secondary" id="main-menu-btn">Trang chủ</button>
+            </div>
         </div>
     </div>
     
@@ -597,6 +1059,10 @@
     <div class="toast" id="toast">
         <i class="fas fa-check-circle"></i>
         <span id="toast-message"></span>
+    </div>
+    
+    <div class="confetti-container" id="confetti-container">
+        <!-- Confetti sẽ được tạo bằng JavaScript -->
     </div>
 
     <script>
@@ -617,112 +1083,224 @@
             // Các phần tử DOM
             const scoreElement = document.getElementById('score');
             const levelElement = document.getElementById('level');
+            const levelDisplayElement = document.getElementById('level-display');
             const livesElement = document.getElementById('lives');
             const mathProblemElement = document.getElementById('math-problem');
+            const difficultyIndicatorElement = document.getElementById('difficulty-indicator');
             const answerOptionsElement = document.getElementById('answer-options');
             const startButton = document.getElementById('start-btn');
             const resetButton = document.getElementById('reset-btn');
+            const settingsButton = document.getElementById('settings-btn');
             const playerCar = document.getElementById('player-car');
             const progressBar = document.getElementById('progress');
             const questionCounterElement = document.getElementById('question-counter');
             const timeElement = document.getElementById('time');
             const toastElement = document.getElementById('toast');
             const toastMessageElement = document.getElementById('toast-message');
+            const settingsPanel = document.getElementById('settings-panel');
+            const closeSettingsButton = document.getElementById('close-settings');
+            const settingsOverlay = document.getElementById('settings-overlay');
+            const gameOverOverlay = document.getElementById('game-over-overlay');
+            const finalScoreElement = document.getElementById('final-score');
+            const gameResultTitleElement = document.getElementById('game-result-title');
+            const gameResultMessageElement = document.getElementById('game-result-message');
+            const playAgainButton = document.getElementById('play-again-btn');
+            const mainMenuButton = document.getElementById('main-menu-btn');
+            const confettiContainer = document.getElementById('confetti-container');
             
-            // Hàm hiển thị thông báo
-            function showToast(message, isSuccess = true) {
-                toastMessageElement.textContent = message;
-                toastElement.innerHTML = isSuccess ? 
-                    '<i class="fas fa-check-circle"></i>' : 
-                    '<i class="fas fa-exclamation-circle"></i>';
-                toastElement.innerHTML += `<span>${message}</span>`;
+            // Power-up elements
+            const timePowerup = document.getElementById('time-powerup');
+            const lifePowerup = document.getElementById('life-powerup');
+            const hintPowerup = document.getElementById('hint-powerup');
+            const timePowerupCount = document.getElementById('time-powerup-count');
+            const lifePowerupCount = document.getElementById('life-powerup-count');
+            const hintPowerupCount = document.getElementById('hint-powerup-count');
+            
+            // Power-up counts
+            let timePowerups = 1;
+            let lifePowerups = 1;
+            let hintPowerups = 1;
+            
+            // Cài đặt game
+            let soundEnabled = true;
+            let musicEnabled = true;
+            let difficulty = 'easy';
+            let timePerQuestion = 15;
+            
+            // Điểm cao
+            let highScores = [];
+            
+            // Khởi tạo trò chơi
+            function initGame() {
+                // Tải điểm cao từ localStorage
+                loadHighScores();
                 
-                toastElement.classList.add('show');
+                // Thiết lập sự kiện
+                setupEventListeners();
                 
-                setTimeout(() => {
-                    toastElement.classList.remove('show');
-                }, 3000);
+                // Cập nhật giao diện
+                updateUI();
             }
             
-            // Hàm reset bộ đếm thời gian
-            function resetTimer() {
+            // Thiết lập các sự kiện
+            function setupEventListeners() {
+                startButton.addEventListener('click', startGame);
+                resetButton.addEventListener('click', resetGame);
+                settingsButton.addEventListener('click', openSettings);
+                closeSettingsButton.addEventListener('click', closeSettings);
+                settingsOverlay.addEventListener('click', closeSettings);
+                playAgainButton.addEventListener('click', resetGame);
+                mainMenuButton.addEventListener('click', goToMainMenu);
+                
+                // Power-up events
+                timePowerup.addEventListener('click', useTimePowerup);
+                lifePowerup.addEventListener('click', useLifePowerup);
+                hintPowerup.addEventListener('click', useHintPowerup);
+                
+                // Cài đặt sự kiện
+                document.getElementById('sound-effects').addEventListener('change', function(e) {
+                    soundEnabled = e.target.value === 'on';
+                    playSound('click');
+                });
+                
+                document.getElementById('background-music').addEventListener('change', function(e) {
+                    musicEnabled = e.target.value === 'on';
+                    playSound('click');
+                });
+                
+                document.getElementById('difficulty').addEventListener('change', function(e) {
+                    difficulty = e.target.value;
+                    playSound('click');
+                });
+                
+                document.getElementById('time-per-question').addEventListener('change', function(e) {
+                    timePerQuestion = parseInt(e.target.value);
+                    playSound('click');
+                });
+            }
+            
+            // Bắt đầu trò chơi
+            function startGame() {
+                if (gameActive) return;
+                
+                gameActive = true;
+                score = 0;
+                level = 1;
+                lives = 3;
+                progress = 0;
+                questionsAnswered = 0;
+                timeLeft = timePerQuestion;
+                
+                // Reset power-ups
+                timePowerups = 1;
+                lifePowerups = 1;
+                hintPowerups = 1;
+                
+                updatePowerupUI();
+                
+                startButton.disabled = true;
+                resetButton.disabled = false;
+                
+                // Cập nhật giao diện
+                updateUI();
+                
+                // Tạo câu hỏi mới
+                generateQuestion();
+                
+                // Bắt đầu đếm thời gian
+                startTimer();
+                
+                playSound('start');
+                showToast('Trò chơi bắt đầu! Hãy chọn đáp án đúng.');
+            }
+            
+            // Reset trò chơi
+            function resetGame() {
                 clearInterval(timerInterval);
-                timeLeft = 15;
-                timeElement.textContent = timeLeft;
-                timeElement.classList.remove('pulse');
+                gameActive = false;
                 
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    timeElement.textContent = timeLeft;
-                    
-                    // Cảnh báo khi thời gian sắp hết
-                    if (timeLeft <= 5) {
-                        timeElement.classList.add('pulse');
-                    }
-                    
-                    if (timeLeft <= 0) {
-                        clearInterval(timerInterval);
-                        timeUp();
-                    }
-                }, 1000);
+                startButton.disabled = false;
+                resetButton.disabled = true;
+                
+                playerCar.style.left = '30px';
+                progressBar.style.width = '0%';
+                
+                mathProblemElement.textContent = 'Nhấn Bắt đầu để chơi!';
+                difficultyIndicatorElement.textContent = '';
+                
+                // Vô hiệu hóa các nút trả lời
+                const answerButtons = answerOptionsElement.querySelectorAll('.answer-btn');
+                answerButtons.forEach(button => {
+                    button.disabled = true;
+                    button.textContent = '?';
+                    button.classList.remove('correct', 'incorrect');
+                });
+                
+                // Ẩn overlay kết thúc game
+                gameOverOverlay.classList.remove('visible');
+                
+                playSound('reset');
+                showToast('Trò chơi đã được thiết lập lại.');
             }
             
-            // Hàm xử lý khi hết thời gian
-            function timeUp() {
+            // Kết thúc trò chơi
+            function endGame(isWin) {
+                clearInterval(timerInterval);
+                gameActive = false;
+                
+                // Hiển thị kết quả
+                if (isWin) {
+                    gameResultTitleElement.textContent = 'Chúc mừng!';
+                    gameResultMessageElement.innerHTML = `Bạn đã hoàn thành cấp độ ${level} với số điểm: <span id="final-score">${score}</span>`;
+                    playSound('win');
+                    createConfetti();
+                } else {
+                    gameResultTitleElement.textContent = 'Thua rồi!';
+                    gameResultMessageElement.innerHTML = `Bạn đã thua với số điểm: <span id="final-score">${score}</span>`;
+                    playSound('lose');
+                }
+                
+                // Cập nhật điểm cao
+                updateHighScores(score);
+                
+                // Hiển thị overlay kết thúc game
+                gameOverOverlay.classList.add('visible');
+            }
+            
+            // Tạo câu hỏi toán học
+            function generateQuestion() {
                 if (!gameActive) return;
                 
-                // Vô hiệu hóa tất cả các nút để tránh nhiều lần nhấn
-                const allButtons = document.querySelectorAll('.answer-btn');
-                allButtons.forEach(btn => btn.disabled = true);
+                let num1, num2, operator, operators;
                 
-                lives--;
-                livesElement.textContent = lives;
-                
-                // Hiệu ứng
-                mathProblemElement.classList.add('shake');
-                showToast('Hết thời gian! Mất một mạng', false);
-                
-                if (lives <= 0) {
-                    setTimeout(() => endGame(false), 1000);
-                } else {
-                    // Tạo bài toán mới sau 1.5 giây
-                    setTimeout(() => {
-                        resetTimer();
-                        generateMathProblem();
-                        mathProblemElement.classList.remove('shake');
-                    }, 1500);
-                }
-            }
-            
-            // Hàm tạo phép toán ngẫu nhiên
-            function generateMathProblem() {
-                let num1, num2, operator, problemText;
-                
-                // Tăng độ khó theo cấp độ
-                if (level <= 3) {
-                    // Cấp độ 1-3: Phép cộng và trừ đơn giản
-                    num1 = Math.floor(Math.random() * 10) + 1;
-                    num2 = Math.floor(Math.random() * 10) + 1;
-                    operator = Math.random() > 0.5 ? '+' : '-';
-                } else if (level <= 6) {
-                    // Cấp độ 4-6: Phép nhân và số lớn hơn
-                    num1 = Math.floor(Math.random() * 12) + 1;
-                    num2 = Math.floor(Math.random() * 12) + 1;
-                    operator = ['+', '-', '×'][Math.floor(Math.random() * 3)];
-                } else {
-                    // Cấp độ 7+: Phép chia và phức tạp hơn
-                    operator = ['+', '-', '×', '÷'][Math.floor(Math.random() * 4)];
-                    
-                    if (operator === '÷') {
-                        num2 = Math.floor(Math.random() * 6) + 1;
-                        num1 = num2 * (Math.floor(Math.random() * 10) + 2);
-                    } else {
-                        num1 = Math.floor(Math.random() * 15) + 5;
-                        num2 = Math.floor(Math.random() * 15) + 5;
-                    }
+                // Xác định toán tử và số dựa trên cấp độ
+                switch(difficulty) {
+                    case 'easy':
+                        operators = ['+', '-'];
+                        num1 = Math.floor(Math.random() * 10) + 1;
+                        num2 = Math.floor(Math.random() * 10) + 1;
+                        break;
+                    case 'medium':
+                        operators = ['+', '-', '*'];
+                        num1 = Math.floor(Math.random() * 15) + 1;
+                        num2 = Math.floor(Math.random() * 10) + 1;
+                        break;
+                    case 'hard':
+                        operators = ['+', '-', '*', '/'];
+                        num1 = Math.floor(Math.random() * 20) + 1;
+                        num2 = Math.floor(Math.random() * 10) + 1;
+                        
+                        // Đảm bảo phép chia là số nguyên
+                        if (operators[3] === '/') {
+                            num1 = num2 * (Math.floor(Math.random() * 10) + 1);
+                        }
+                        break;
                 }
                 
-                // Tính toán kết quả đúng
+                // Chọn ngẫu nhiên một toán tử
+                operator = operators[Math.floor(Math.random() * operators.length)];
+                
+                // Tính toán kết quả
                 switch(operator) {
                     case '+':
                         correctAnswer = num1 + num2;
@@ -732,236 +1310,517 @@
                         if (num1 < num2) [num1, num2] = [num2, num1];
                         correctAnswer = num1 - num2;
                         break;
-                    case '×':
+                    case '*':
                         correctAnswer = num1 * num2;
                         break;
-                    case '÷':
+                    case '/':
                         correctAnswer = num1 / num2;
                         break;
                 }
                 
-                // Làm tròn kết quả nếu là số thập phân
-                if (!Number.isInteger(correctAnswer)) {
-                    correctAnswer = Math.round(correctAnswer * 100) / 100;
-                }
+                // Hiển thị câu hỏi
+                mathProblemElement.textContent = `${num1} ${operator} ${num2} = ?`;
                 
-                // Tạo văn bản bài toán
-                problemText = `${num1} ${operator} ${num2} = ?`;
-                mathProblemElement.textContent = problemText;
-                
-                // Tạo các lựa chọn câu trả lời
+                // Tạo các lựa chọn trả lời
                 generateAnswerOptions(correctAnswer);
+                
+                // Cập nhật bộ đếm câu hỏi
+                questionsAnswered++;
+                questionCounterElement.textContent = `Câu hỏi: ${questionsAnswered}/${questionsPerLevel}`;
+                
+                // Cập nhật chỉ báo độ khó
+                updateDifficultyIndicator();
             }
             
-            // Hàm tạo các lựa chọn câu trả lời
-            function generateAnswerOptions(correctAnswer) {
-                // Xóa các nút cũ
-                answerOptionsElement.innerHTML = '';
+            // Tạo các lựa chọn trả lời
+            function generateAnswerOptions(correct) {
+                const answers = new Set([correct]);
                 
-                // Tạo mảng các câu trả lời (bao gồm đáp án đúng)
-                let answers = [correctAnswer];
-                
-                // Thêm các đáp án sai
-                while(answers.length < 4) {
+                // Tạo các đáp án sai
+                while (answers.size < 4) {
                     // Tạo đáp án sai ngẫu nhiên
-                    let randomAnswer;
-                    let variation;
+                    let wrongAnswer;
+                    const variation = Math.floor(Math.random() * 5) + 1;
                     
-                    if (level <= 3) {
-                        variation = Math.floor(Math.random() * 5) + 1;
-                    } else if (level <= 6) {
-                        variation = Math.floor(Math.random() * 8) + 1;
+                    // Tạo đáp án sai gần với đáp án đúng
+                    if (Math.random() > 0.5) {
+                        wrongAnswer = correct + variation;
                     } else {
-                        variation = Math.floor(Math.random() * 10) + 1;
+                        wrongAnswer = correct - variation;
                     }
                     
-                    // Quyết định cộng hoặc trừ để tạo đáp án sai
-                    randomAnswer = Math.random() > 0.5 
-                        ? correctAnswer + variation 
-                        : correctAnswer - variation;
-                    
-                    // Đảm bảo đáp án sai không trùng với đáp án đúng, không âm và không trùng với đáp án sai khác
-                    if (randomAnswer !== correctAnswer && 
-                        !answers.includes(randomAnswer) && 
-                        randomAnswer > 0 &&
-                        (Number.isInteger(randomAnswer) || level > 5)) {
-                        answers.push(randomAnswer);
+                    // Đảm bảo đáp án sai không trùng với đáp án đúng
+                    if (wrongAnswer !== correct) {
+                        answers.add(wrongAnswer);
                     }
                 }
                 
-                // Trộn ngẫu nhiên các đáp án
-                answers.sort(() => Math.random() - 0.5);
+                // Chuyển Set thành mảng và xáo trộn
+                const answerArray = Array.from(answers);
+                shuffleArray(answerArray);
                 
-                // Tạo nút cho mỗi đáp án
-                answers.forEach(answer => {
-                    const button = document.createElement('button');
-                    button.className = 'answer-btn';
-                    button.textContent = answer;
+                // Hiển thị các đáp án lên nút
+                const answerButtons = answerOptionsElement.querySelectorAll('.answer-btn');
+                answerButtons.forEach((button, index) => {
+                    button.textContent = answerArray[index];
+                    button.disabled = false;
+                    button.classList.remove('correct', 'incorrect');
                     
+                    // Xóa sự kiện cũ và thêm sự kiện mới
+                    button.replaceWith(button.cloneNode(true));
+                });
+                
+                // Thêm sự kiện click cho các nút
+                document.querySelectorAll('.answer-btn').forEach(button => {
                     button.addEventListener('click', function() {
-                        if (!gameActive) return;
-                        checkAnswer(answer, button);
+                        checkAnswer(parseInt(this.textContent));
                     });
-                    
-                    answerOptionsElement.appendChild(button);
                 });
             }
             
-            // Hàm kiểm tra câu trả lời
-            function checkAnswer(selectedAnswer, buttonElement) {
-                // Dừng bộ đếm thời gian
+            // Kiểm tra đáp án
+            function checkAnswer(selectedAnswer) {
+                if (!gameActive) return;
+                
                 clearInterval(timerInterval);
                 
-                // Vô hiệu hóa tất cả các nút để tránh nhiều lần nhấn
-                const allButtons = document.querySelectorAll('.answer-btn');
-                allButtons.forEach(btn => btn.disabled = true);
+                const answerButtons = answerOptionsElement.querySelectorAll('.answer-btn');
                 
+                // Vô hiệu hóa tất cả các nút
+                answerButtons.forEach(button => {
+                    button.disabled = true;
+                });
+                
+                // Đánh dấu đáp án đúng và sai
+                answerButtons.forEach(button => {
+                    if (parseInt(button.textContent) === correctAnswer) {
+                        button.classList.add('correct');
+                    } else if (parseInt(button.textContent) === selectedAnswer) {
+                        button.classList.add('incorrect');
+                    }
+                });
+                
+                // Kiểm tra kết quả
                 if (selectedAnswer === correctAnswer) {
-                    // Đáp án đúng
-                    buttonElement.classList.add('correct');
+                    // Trả lời đúng
                     score += 10 * level;
-                    scoreElement.textContent = score;
-                    questionsAnswered++;
-                    questionCounterElement.textContent = `Câu hỏi: ${questionsAnswered}/${questionsPerLevel}`;
-                    
-                    // Di chuyển xe theo tỷ lệ số câu hỏi đã trả lời
-                    progress = (questionsAnswered / questionsPerLevel) * maxProgress;
+                    progress += maxProgress / questionsPerLevel;
                     playerCar.style.left = `${30 + progress}px`;
                     progressBar.style.width = `${(progress / maxProgress) * 100}%`;
                     
-                    // Hiệu ứng
-                    mathProblemElement.classList.add('celebrate');
-                    showToast('Chính xác! +' + (10 * level) + ' điểm', true);
+                    playSound('correct');
+                    showToast('Chính xác! +' + (10 * level) + ' điểm');
                     
                     // Kiểm tra nếu về đích
-                    if (questionsAnswered >= questionsPerLevel) {
-                        setTimeout(() => levelUp(), 1000);
-                    } else {
-                        // Tạo bài toán mới sau 1 giây
-                        setTimeout(() => {
-                            resetTimer();
-                            generateMathProblem();
-                            mathProblemElement.classList.remove('celebrate');
-                        }, 1000);
+                    if (progress >= maxProgress) {
+                        levelComplete();
+                        return;
                     }
                 } else {
-                    // Đáp án sai
-                    buttonElement.classList.add('incorrect');
-                    
-                    // Đánh dấu đáp án đúng
-                    allButtons.forEach(btn => {
-                        if (parseFloat(btn.textContent) === correctAnswer) {
-                            btn.classList.add('correct');
-                        }
-                    });
-                    
+                    // Trả lời sai
                     lives--;
-                    livesElement.textContent = lives;
-                    
-                    // Hiệu ứng
-                    mathProblemElement.classList.add('shake');
-                    showToast('Sai rồi! Mất một mạng', false);
+                    playSound('incorrect');
+                    showToast('Sai rồi! Mất một mạng.', 'error');
                     
                     if (lives <= 0) {
-                        setTimeout(() => endGame(false), 1000);
-                    } else {
-                        // Tạo bài toán mới sau 1.5 giây
+                        // Hết mạng, thua cuộc
                         setTimeout(() => {
-                            resetTimer();
-                            generateMathProblem();
-                            mathProblemElement.classList.remove('shake');
+                            endGame(false);
                         }, 1500);
+                        return;
                     }
                 }
+                
+                // Cập nhật giao diện
+                updateUI();
+                
+                // Chờ 1.5 giây trước khi tạo câu hỏi mới
+                setTimeout(() => {
+                    if (gameActive) {
+                        timeLeft = timePerQuestion;
+                        generateQuestion();
+                        startTimer();
+                    }
+                }, 1500);
             }
             
-            // Hàm tăng cấp độ
-            function levelUp() {
+            // Hoàn thành cấp độ
+            function levelComplete() {
                 level++;
-                levelElement.textContent = level;
+                playSound('levelup');
+                showToast(`Chúc mừng! Bạn đã lên cấp ${level}`, 'success');
+                
+                // Thưởng điểm khi hoàn thành cấp độ
+                score += 50 * (level - 1);
+                
+                // Reset tiến trình
                 progress = 0;
                 questionsAnswered = 0;
-                playerCar.style.left = '30px';
-                progressBar.style.width = '0%';
-                questionCounterElement.textContent = `Câu hỏi: 0/${questionsPerLevel}`;
                 
-                // Hiệu ứng ăn mừng
-                mathProblemElement.classList.add('celebrate');
-                mathProblemElement.textContent = `Chúc mừng! Bạn đã lên cấp ${level}!`;
-                showToast(`Chúc mừng! Lên cấp ${level}`, true);
+                // Tăng độ khó sau mỗi 2 cấp độ
+                if (level % 2 === 1 && difficulty !== 'hard') {
+                    if (difficulty === 'easy') {
+                        difficulty = 'medium';
+                    } else if (difficulty === 'medium') {
+                        difficulty = 'hard';
+                    }
+                    
+                    showToast(`Độ khó tăng lên: ${getDifficultyName(difficulty)}`, 'info');
+                }
                 
-                // Tạm dừng trò chơi trong 2 giây
-                gameActive = false;
+                // Cập nhật giao diện
+                updateUI();
+                
+                // Chờ 2 giây trước khi bắt đầu cấp độ mới
                 setTimeout(() => {
-                    mathProblemElement.classList.remove('celebrate');
-                    gameActive = true;
-                    resetTimer();
-                    generateMathProblem();
+                    if (gameActive) {
+                        timeLeft = timePerQuestion;
+                        generateQuestion();
+                        startTimer();
+                    }
                 }, 2000);
             }
             
-            // Hàm kết thúc trò chơi
-            function endGame(isWin) {
-                gameActive = false;
+            // Bắt đầu đếm thời gian
+            function startTimer() {
                 clearInterval(timerInterval);
-                startButton.disabled = false;
-                resetButton.disabled = false;
+                timeElement.textContent = timeLeft;
                 
-                if (isWin) {
-                    mathProblemElement.textContent = `Chiến thắng! Điểm số: ${score}`;
-                    showToast(`Chiến thắng! Điểm: ${score}`, true);
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    timeElement.textContent = timeLeft;
+                    
+                    // Cập nhật màu sắc khi thời gian sắp hết
+                    if (timeLeft <= 5) {
+                        timeElement.parentElement.style.color = '#e74a3b';
+                        timeElement.classList.add('pulse');
+                    } else {
+                        timeElement.parentElement.style.color = 'white';
+                        timeElement.classList.remove('pulse');
+                    }
+                    
+                    // Hết thời gian
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        
+                        // Xử lý hết thời gian
+                        lives--;
+                        playSound('timeup');
+                        showToast('Hết thời gian! Mất một mạng.', 'error');
+                        
+                        if (lives <= 0) {
+                            // Hết mạng, thua cuộc
+                            setTimeout(() => {
+                                endGame(false);
+                            }, 1500);
+                            return;
+                        }
+                        
+                        // Cập nhật giao diện
+                        updateUI();
+                        
+                        // Chờ 1.5 giây trước khi tạo câu hỏi mới
+                        setTimeout(() => {
+                            if (gameActive) {
+                                timeLeft = timePerQuestion;
+                                generateQuestion();
+                                startTimer();
+                            }
+                        }, 1500);
+                    }
+                }, 1000);
+            }
+            
+            // Cập nhật giao diện
+            function updateUI() {
+                scoreElement.textContent = score;
+                levelElement.textContent = level;
+                levelDisplayElement.textContent = level;
+                livesElement.textContent = lives;
+                
+                // Cập nhật trạng thái mạng
+                if (lives === 1) {
+                    livesElement.style.color = '#e74a3b';
                 } else {
-                    mathProblemElement.textContent = `Game Over! Điểm số: ${score}`;
-                    showToast(`Game Over! Điểm: ${score}`, false);
+                    livesElement.style.color = 'white';
                 }
             }
             
-            // Hàm bắt đầu trò chơi
-            function startGame() {
-                score = 0;
-                level = 1;
-                lives = 3;
-                progress = 0;
-                questionsAnswered = 0;
+            // Cập nhật chỉ báo độ khó
+            function updateDifficultyIndicator() {
+                difficultyIndicatorElement.textContent = getDifficultyName(difficulty);
                 
-                scoreElement.textContent = score;
-                levelElement.textContent = level;
-                livesElement.textContent = lives;
-                progressBar.style.width = '0%';
-                questionCounterElement.textContent = `Câu hỏi: 0/${questionsPerLevel}`;
+                // Đặt màu sắc dựa trên độ khó
+                switch(difficulty) {
+                    case 'easy':
+                        difficultyIndicatorElement.style.color = '#1cc88a';
+                        break;
+                    case 'medium':
+                        difficultyIndicatorElement.style.color = '#f6c23e';
+                        break;
+                    case 'hard':
+                        difficultyIndicatorElement.style.color = '#e74a3b';
+                        break;
+                }
+            }
+            
+            // Lấy tên độ khó
+            function getDifficultyName(diff) {
+                switch(diff) {
+                    case 'easy': return 'Dễ';
+                    case 'medium': return 'Trung bình';
+                    case 'hard': return 'Khó';
+                    default: return 'Dễ';
+                }
+            }
+            
+            // Cập nhật giao diện power-up
+            function updatePowerupUI() {
+                timePowerupCount.textContent = timePowerups;
+                lifePowerupCount.textContent = lifePowerups;
+                hintPowerupCount.textContent = hintPowerups;
                 
-                playerCar.style.left = '30px';
+                // Cập nhật trạng thái power-up
+                timePowerup.classList.toggle('disabled', timePowerups === 0);
+                lifePowerup.classList.toggle('disabled', lifePowerups === 0);
+                hintPowerup.classList.toggle('disabled', hintPowerups === 0);
+            }
+            
+            // Sử dụng power-up thời gian
+            function useTimePowerup() {
+                if (!gameActive || timePowerups === 0) return;
                 
-                generateMathProblem();
-                resetTimer();
+                timeLeft += 5;
+                timePowerups--;
                 
-                gameActive = true;
-                startButton.disabled = true;
-                resetButton.disabled = false;
+                playSound('powerup');
+                showToast('+5 giây!');
+                updatePowerupUI();
+            }
+            
+            // Sử dụng power-up mạng
+            function useLifePowerup() {
+                if (!gameActive || lifePowerups === 0) return;
                 
-                // Kích hoạt các nút trả lời
-                const buttons = document.querySelectorAll('.answer-btn');
-                buttons.forEach(button => {
-                    button.disabled = false;
+                lives++;
+                lifePowerups--;
+                
+                playSound('powerup');
+                showToast('+1 mạng!');
+                updateUI();
+                updatePowerupUI();
+            }
+            
+            // Sử dụng power-up gợi ý
+            function useHintPowerup() {
+                if (!gameActive || hintPowerups === 0) return;
+                
+                // Làm nổi bật đáp án đúng
+                const answerButtons = answerOptionsElement.querySelectorAll('.answer-btn');
+                answerButtons.forEach(button => {
+                    if (parseInt(button.textContent) === correctAnswer) {
+                        button.classList.add('pulse');
+                    }
                 });
                 
-                showToast('Bắt đầu! Chúc may mắn!', true);
+                hintPowerups--;
+                
+                playSound('powerup');
+                showToast('Gợi ý đáp án đúng!');
+                updatePowerupUI();
             }
             
-            // Hàm reset trò chơi
-            function resetGame() {
-                startGame();
+            // Mở cài đặt
+            function openSettings() {
+                settingsPanel.classList.add('open');
+                settingsOverlay.classList.add('visible');
+                playSound('click');
             }
             
-            // Gán sự kiện cho các nút
-            startButton.addEventListener('click', startGame);
-            resetButton.addEventListener('click', resetGame);
+            // Đóng cài đặt
+            function closeSettings() {
+                settingsPanel.classList.remove('open');
+                settingsOverlay.classList.remove('visible');
+                playSound('click');
+            }
             
-            // Khởi tạo trạng thái ban đầu
-            mathProblemElement.textContent = "Nhấn Bắt đầu để chơi!";
-            resetButton.disabled = true;
-            questionCounterElement.textContent = "Câu hỏi: 0/5";
-            timeElement.textContent = timeLeft;
+            // Đi đến trang chủ
+            function goToMainMenu() {
+                // Trong thực tế, đây sẽ là chuyển hướng đến trang chủ
+                // window.location.href = 'index.html';
+                resetGame();
+                showToast('Đã trở về menu chính');
+            }
+            
+            // Phát âm thanh
+            function playSound(sound) {
+                if (!soundEnabled) return;
+                
+                // Trong thực tế, đây sẽ là code để phát âm thanh
+                // console.log('Playing sound:', sound);
+            }
+            
+            // Hiển thị thông báo toast
+            function showToast(message, type = 'success') {
+                toastMessageElement.textContent = message;
+                
+                // Đặt biểu tượng và màu nền dựa trên loại thông báo
+                let iconClass, backgroundColor;
+                switch(type) {
+                    case 'success':
+                        iconClass = 'fas fa-check-circle';
+                        backgroundColor = 'rgba(28, 200, 138, 0.9)';
+                        break;
+                    case 'error':
+                        iconClass = 'fas fa-exclamation-circle';
+                        backgroundColor = 'rgba(231, 74, 59, 0.9)';
+                        break;
+                    case 'info':
+                        iconClass = 'fas fa-info-circle';
+                        backgroundColor = 'rgba(78, 115, 223, 0.9)';
+                        break;
+                    default:
+                        iconClass = 'fas fa-check-circle';
+                        backgroundColor = 'rgba(28, 200, 138, 0.9)';
+                }
+                
+                toastElement.innerHTML = `<i class="${iconClass}"></i> <span id="toast-message">${message}</span>`;
+                toastElement.style.background = backgroundColor;
+                
+                // Hiển thị toast
+                toastElement.classList.add('show');
+                
+                // Ẩn toast sau 3 giây
+                setTimeout(() => {
+                    toastElement.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Tạo hiệu ứng confetti
+            function createConfetti() {
+                // Xóa confetti cũ
+                confettiContainer.innerHTML = '';
+                
+                // Tạo confetti mới
+                for (let i = 0; i < 100; i++) {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    confettiContainer.appendChild(confetti);
+                    
+                    // Vị trí ngẫu nhiên
+                    const startPosition = Math.random() * window.innerWidth;
+                    
+                    // Kích thước ngẫu nhiên
+                    const size = Math.floor(Math.random() * 10) + 5;
+                    
+                    // Màu sắc ngẫu nhiên (đã được xác định trong CSS)
+                    const colorIndex = Math.floor(Math.random() * 5) + 1;
+                    
+                    // Thiết lập style
+                    confetti.style.left = `${startPosition}px`;
+                    confetti.style.width = `${size}px`;
+                    confetti.style.height = `${size}px`;
+                    confetti.style.opacity = '1';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    
+                    // Animation
+                    const animationDuration = Math.random() * 3 + 2; // 2-5 giây
+                    const animationDelay = Math.random() * 2; // 0-2 giây
+                    
+                    confetti.style.animation = `
+                        fall ${animationDuration}s linear ${animationDelay}s forwards,
+                        fade ${animationDuration}s linear ${animationDelay}s forwards
+                    `;
+                    
+                    // Keyframes (được thêm động)
+                    const style = document.createElement('style');
+                    style.textContent = `
+                        @keyframes fall {
+                            0% { top: -10px; transform: rotate(0deg); }
+                            100% { top: 100vh; transform: rotate(${Math.random() * 360}deg); }
+                        }
+                        
+                        @keyframes fade {
+                            0% { opacity: 1; }
+                            100% { opacity: 0; }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+                
+                // Xóa confetti sau khi animation kết thúc
+                setTimeout(() => {
+                    confettiContainer.innerHTML = '';
+                }, 5000);
+            }
+            
+            // Tải điểm cao
+            function loadHighScores() {
+                // Trong thực tế, đây sẽ là code để tải điểm cao từ localStorage hoặc server
+                highScores = [
+                    { name: 'Người chơi 1', score: 450 },
+                    { name: 'Người chơi 2', score: 320 },
+                    { name: 'Người chơi 3', score: 280 },
+                    { name: 'Người chơi 4', score: 210 },
+                    { name: 'Người chơi 5', score: 150 }
+                ];
+                
+                updateHighScoresList();
+            }
+            
+            // Cập nhật điểm cao
+            function updateHighScores(newScore) {
+                // Kiểm tra nếu điểm mới cao hơn điểm trong danh sách
+                const minHighScore = highScores.length > 0 ? Math.min(...highScores.map(item => item.score)) : 0;
+                
+                if (newScore > minHighScore || highScores.length < 5) {
+                    // Thêm điểm mới vào danh sách
+                    highScores.push({ name: 'Người chơi', score: newScore });
+                    
+                    // Sắp xếp danh sách giảm dần
+                    highScores.sort((a, b) => b.score - a.score);
+                    
+                    // Giữ chỉ 5 điểm cao nhất
+                    if (highScores.length > 5) {
+                        highScores = highScores.slice(0, 5);
+                    }
+                    
+                    // Cập nhật danh sách hiển thị
+                    updateHighScoresList();
+                    
+                    // Trong thực tế, đây sẽ là code để lưu điểm cao vào localStorage hoặc server
+                }
+            }
+            
+            // Cập nhật danh sách điểm cao
+            function updateHighScoresList() {
+                const highscoresList = document.getElementById('highscores-list');
+                highscoresList.innerHTML = '';
+                
+                highScores.forEach((item, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<span>${index + 1}. ${item.name}</span> <span>${item.score}</span>`;
+                    
+                    if (index === 0) {
+                        li.style.background = '#fff9e6';
+                        li.style.fontWeight = 'bold';
+                    }
+                    
+                    highscoresList.appendChild(li);
+                });
+            }
+            
+            // Hàm tiện ích: Xáo trộn mảng
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+                return array;
+            }
+            
+            // Khởi tạo trò chơi
+            initGame();
         });
     </script>
 </body>
