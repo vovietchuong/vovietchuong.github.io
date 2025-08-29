@@ -35,7 +35,7 @@
     #pauseOverlay.show{display:flex}
 
     /* BALLOON */
-    .balloon{position:absolute; bottom:-120px; width:90px; height:110px; display:flex; align-items:center; justify-content:center; padding:8px; cursor:pointer; filter:drop-shadow(0 6px 12px rgba(0,0,0,.15)); user-select:none; transition:transform 0.2s}
+    .balloon{position:absolute; top:100%; width:90px; height:110px; display:flex; align-items:center; justify-content:center; padding:8px; cursor:pointer; filter:drop-shadow(0 6px 12px rgba(0,0,0,.15)); user-select:none; transition:transform 0.2s}
     .balloon.paused{animation-play-state:paused}
     .balloon .txt{font-size:18px; font-weight:900; color:#fff; text-shadow:0 1px 2px rgba(0,0,0,.5)}
     .pop{animation:pop .45s both}
@@ -155,8 +155,13 @@
         </div>
         <div class="row">
           <label>Tốc độ bóng</label>
-          <input class="range" id="speed" type="range" min="1" max="3" step="0.5" value="1.2" />
-          <span id="speedLabel" class="kbd">1.2x</span>
+          <input class="range" id="speed" type="range" min="0.3" max="1.5" step="0.1" value="0.7" />
+          <span id="speedLabel" class="kbd">0.7x</span>
+        </div>
+        <div class="row">
+          <label>Tần suất xuất hiện</label>
+          <input class="range" id="spawnRate" type="range" min="800" max="3000" step="100" value="2000" />
+          <span id="spawnRateLabel" class="kbd">2000ms</span>
         </div>
         <div class="row">
           <label>Thời gian mỗi ván</label>
@@ -190,12 +195,13 @@
       btnResumeFromOverlay: $('#btnResumeFromOverlay'),
       maxN: $('#maxN'), maxNLabel: $('#maxNLabel'), speed: $('#speed'), speedLabel: $('#speedLabel'),
       duration: $('#duration'), durationLabel: $('#durationLabel'), bonus: $('#bonus'), bonusLabel: $('#bonusLabel'),
+      spawnRate: $('#spawnRate'), spawnRateLabel: $('#spawnRateLabel')
     };
 
     const state = {
       running: false, paused: false, timeLeft: 60, lives: 3,
       score: 0, correct: 0, wrong: 0, combo: 0, best: +localStorage.getItem('bb_best')||0,
-      diff: 'easy', ops: ['+','-'], maxN: 20, speed: 1.2, spawnEvery: 1400, bonus: 1, muted: false,
+      diff: 'easy', ops: ['+','-'], maxN: 20, speed: 0.7, spawnEvery: 2000, bonus: 1, muted: false,
       balloons: [],
       lastSpawn: 0, lastFrame: 0,
       animationFrameId: null
@@ -235,7 +241,9 @@
       el.style.backgroundImage = svgBalloon(color);
       el.innerHTML = `<div class="txt">${disp}</div>`;
       ui.area.appendChild(el);
-      state.balloons.push({el, y:-110, v: (Math.random()*0.6 + state.speed), ans: res});
+      
+      // Tốc độ bóng chậm hơn cho dễ chơi
+      state.balloons.push({el, top: 100, v: (Math.random()*0.2 + state.speed*0.5), ans: res});
     }
 
     function removeBalloon(i, pop=true){
@@ -372,11 +380,11 @@
       if(Number.isNaN(+val)) return;
       
       // tìm bóng có đáp án đúng gần đáy nhất
-      let idx=-1, maxY=-1; 
+      let idx=-1, minTop=-1000; 
       for(let i=0;i<state.balloons.length;i++){ 
         const b=state.balloons[i]; 
-        if(b.ans===+val && b.y>maxY){ 
-          idx=i; maxY=b.y; 
+        if(b.ans===+val && b.top>minTop){ 
+          idx=i; minTop=b.top; 
         }
       }
       
@@ -418,18 +426,19 @@
       
       // spawn rate adapts by difficulty + performance
       state.lastSpawn += dt; 
-      const target = Math.max(600, state.spawnEvery - state.correct*6);
-      if(state.lastSpawn >= target){ 
+      if(state.lastSpawn >= state.spawnEvery){ 
         spawnBalloon(); 
         state.lastSpawn = 0; 
       }
       
-      // move balloons
+      // move balloons - Tốc độ chậm hơn
       for(let i=state.balloons.length-1;i>=0;i--){ 
         const b = state.balloons[i]; 
-        b.y += b.v * (dt/16); 
-        b.el.style.bottom = b.y + 'px'; 
-        if(b.y > ui.area.clientHeight){ 
+        b.top -= b.v * (dt/20);  // Giảm tốc độ di chuyển (thay đổi từ 16 thành 20)
+        b.el.style.top = b.top + '%'; 
+        
+        // Kiểm tra nếu bóng bay ra khỏi màn hình
+        if(b.top < -20){ 
           removeBalloon(i,false); 
           loseLife(); 
         }
@@ -494,20 +503,24 @@
       btn.classList.add('active'); 
       state.diff = btn.dataset.diff; 
       const d = {
-        easy:{speed:1, maxN:20}, 
-        medium:{speed:1.4, maxN:40}, 
-        hard:{speed:1.8, maxN:80}
+        easy:{speed:0.7, maxN:20, spawnEvery:2000}, 
+        medium:{speed:0.9, maxN:40, spawnEvery:1700}, 
+        hard:{speed:1.2, maxN:80, spawnEvery:1400}
       }[state.diff]; 
       ui.speed.value = d.speed; 
       ui.speedLabel.textContent=d.speed+'x'; 
       ui.maxN.value=d.maxN; 
       ui.maxNLabel.textContent=d.maxN; 
+      ui.spawnRate.value = d.spawnEvery;
+      ui.spawnRateLabel.textContent = d.spawnEvery + 'ms';
       state.speed=+ui.speed.value; 
       state.maxN=+ui.maxN.value; 
+      state.spawnEvery = +ui.spawnRate.value;
     }));
 
     ui.maxN.addEventListener('input', ()=>{ ui.maxNLabel.textContent = ui.maxN.value; state.maxN = +ui.maxN.value;});
     ui.speed.addEventListener('input', ()=>{ ui.speedLabel.textContent = ui.speed.value+'x'; state.speed = +ui.speed.value;});
+    ui.spawnRate.addEventListener('input', ()=>{ ui.spawnRateLabel.textContent = ui.spawnRate.value+'ms'; state.spawnEvery = +ui.spawnRate.value;});
     ui.duration.addEventListener('input', ()=>{ ui.durationLabel.textContent = ui.duration.value+'s';});
     ui.bonus.addEventListener('input', ()=>{ ui.bonusLabel.textContent = `+${ui.bonus.value}s`; state.bonus = +ui.bonus.value;});
 
@@ -519,7 +532,8 @@
       ui.ans.setAttribute('pattern','[0-9]*'); 
       ui.duration.value=60; ui.durationLabel.textContent='60s'; 
       ui.maxN.value=20; ui.maxNLabel.textContent='20'; 
-      ui.speed.value=1.2; ui.speedLabel.textContent='1.2x'; 
+      ui.speed.value=0.7; ui.speedLabel.textContent='0.7x'; 
+      ui.spawnRate.value=2000; ui.spawnRateLabel.textContent='2000ms';
       ui.bonus.value=1; ui.bonusLabel.textContent='+1s'; 
       $$('.diff')[0].classList.add('active'); 
       
