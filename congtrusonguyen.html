@@ -15,6 +15,9 @@
             --warning: #f6c23e;
             --light: #f8f9fc;
             --dark: #5a5c69;
+            --bronze: #cd7f32;
+            --silver: #c0c0c0;
+            --gold: #ffd700;
         }
 
         * {
@@ -40,7 +43,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             padding: 25px;
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -108,6 +111,7 @@
             min-width: 120px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             flex: 1;
+            position: relative;
         }
 
         .info-label {
@@ -119,6 +123,67 @@
         .info-value {
             font-size: 1.5rem;
             font-weight: bold;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .badge.bronze {
+            background: var(--bronze);
+            color: white;
+        }
+
+        .badge.silver {
+            background: var(--silver);
+            color: #333;
+        }
+
+        .badge.gold {
+            background: var(--gold);
+            color: #333;
+        }
+
+        .difficulty-selector {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .difficulty-btn {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 2px solid var(--accent);
+            background: white;
+            color: var(--accent);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .difficulty-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
         .number-line-container {
@@ -357,6 +422,20 @@
             border-radius: 10px;
         }
 
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #f00;
+            opacity: 0.8;
+            border-radius: 0;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
         /* Animation for number line */
         @keyframes movePoint {
             0% { transform: translateX(var(--start-pos)) translateY(0); }
@@ -386,7 +465,6 @@
             animation: movePointPart2 0.8s ease-in-out forwards;
         }
 
-
         /* Animation for new question */
         @keyframes popIn {
             0% { transform: scale(0.9); opacity: 0; }
@@ -404,6 +482,78 @@
 
         .celebrate {
             animation: celebrate 0.4s ease-in-out 2;
+        }
+
+        /* Modal styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .modal p {
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn.primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: #e3e6f0;
+            color: #333;
         }
 
         /* Responsive design */
@@ -485,6 +635,10 @@
                 font-size: 0.7rem;
                 bottom: -22px;
             }
+
+            .difficulty-selector {
+                flex-wrap: wrap;
+            }
         }
 
         /* Performance optimizations */
@@ -516,6 +670,12 @@
             <p class="subtitle">Toán Lớp 6 - Luyện tập cộng trừ số nguyên âm và dương</p>
         </div>
 
+        <div class="difficulty-selector">
+            <button class="difficulty-btn active" data-difficulty="easy">Dễ</button>
+            <button class="difficulty-btn" data-difficulty="medium">Trung bình</button>
+            <button class="difficulty-btn" data-difficulty="hard">Khó</button>
+        </div>
+
         <div class="game-info">
             <div class="info-box">
                 <div class="info-label">Điểm số</div>
@@ -529,6 +689,12 @@
                 <div class="info-label">Cấp độ</div>
                 <div class="info-value" id="level">1</div>
             </div>
+        </div>
+
+        <div class="badge-container">
+            <div class="badge bronze" id="bronze-badge" title="Hoàn thành 10 câu hỏi"><i class="fas fa-medal"></i></div>
+            <div class="badge silver" id="silver-badge" title="Hoàn thành 25 câu hỏi"><i class="fas fa-medal"></i></div>
+            <div class="badge gold" id="gold-badge" title="Hoàn thành 50 câu hỏi"><i class="fas fa-medal"></i></div>
         </div>
 
         <div class="progress-container">
@@ -568,6 +734,30 @@
             <button class="control-btn" id="hint-btn">
                 <i class="fas fa-question-circle"></i> Gợi ý
             </button>
+            <button class="control-btn" id="sound-btn">
+                <i class="fas fa-volume-up"></i> Âm thanh
+            </button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="level-up-modal">
+        <div class="modal">
+            <h2>Chúc mừng! 🎉</h2>
+            <p>Bạn đã lên cấp độ <span id="modal-level">2</span>!</p>
+            <p>Độ khó sẽ tăng lên với các số lớn hơn và phép tính phức tạp hơn.</p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="closeModal('level-up-modal')">Bắt đầu</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="achievement-modal">
+        <div class="modal">
+            <h2>Thành tích mới! 🏆</h2>
+            <p>Bạn đã đạt được thành tích: <span id="achievement-name">Hoàn thành 10 câu hỏi</span></p>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="closeModal('achievement-modal')">Tuyệt vời!</button>
+            </div>
         </div>
     </div>
 
@@ -579,7 +769,14 @@
             level: 1,
             currentQuestion: {},
             isWaiting: false,
-            questionsAnswered: 0
+            questionsAnswered: 0,
+            difficulty: 'easy',
+            soundEnabled: true,
+            achievements: {
+                bronze: false,
+                silver: false,
+                gold: false
+            }
         };
 
         // DOM Elements
@@ -591,23 +788,75 @@
             answerOptions: document.getElementById('answer-options'),
             nextBtn: document.getElementById('next-btn'),
             hintBtn: document.getElementById('hint-btn'),
+            soundBtn: document.getElementById('sound-btn'),
             feedback: document.getElementById('feedback'),
             progressBar: document.getElementById('progress-bar'),
             explanation: document.getElementById('explanation'),
             explanationText: document.getElementById('explanation-text'),
-            numberPoint: document.getElementById('number-point')
+            numberPoint: document.getElementById('number-point'),
+            bronzeBadge: document.getElementById('bronze-badge'),
+            silverBadge: document.getElementById('silver-badge'),
+            goldBadge: document.getElementById('gold-badge'),
+            levelUpModal: document.getElementById('level-up-modal'),
+            achievementModal: document.getElementById('achievement-modal')
         };
         
-        // Sound effects
-        const soundCorrect = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-        const soundIncorrect = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3');
+        // Sound effects - using free sound effects
+        const soundCorrect = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+        const soundIncorrect = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3');
+        const soundLevelUp = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
+        const soundAchievement = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+
+        // Preload sounds
+        [soundCorrect, soundIncorrect, soundLevelUp, soundAchievement].forEach(sound => {
+            sound.volume = 0.6;
+            sound.load();
+        });
 
         // Initialize game
         function initGame() {
+            loadGameState();
             generateQuestion();
             setupEventListeners();
             updateScoreDisplay();
             setupNumberLine();
+            updateSoundButton();
+        }
+
+        // Load game state from localStorage
+        function loadGameState() {
+            const savedState = localStorage.getItem('integerGameState');
+            if (savedState) {
+                const parsedState = JSON.parse(savedState);
+                gameState.score = parsedState.score || 0;
+                gameState.correctAnswers = parsedState.correctAnswers || 0;
+                gameState.level = parsedState.level || 1;
+                gameState.questionsAnswered = parsedState.questionsAnswered || 0;
+                gameState.difficulty = parsedState.difficulty || 'easy';
+                gameState.soundEnabled = parsedState.soundEnabled !== undefined ? parsedState.soundEnabled : true;
+                gameState.achievements = parsedState.achievements || {
+                    bronze: false,
+                    silver: false,
+                    gold: false
+                };
+                
+                // Update difficulty buttons
+                document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                    if (btn.dataset.difficulty === gameState.difficulty) {
+                        btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
+                    }
+                });
+                
+                // Update achievements
+                updateAchievementsDisplay();
+            }
+        }
+
+        // Save game state to localStorage
+        function saveGameState() {
+            localStorage.setItem('integerGameState', JSON.stringify(gameState));
         }
 
         // Set up number line with marks
@@ -616,11 +865,16 @@
             const existingMarks = document.querySelectorAll('.number-mark');
             existingMarks.forEach(mark => mark.remove());
 
-            for (let i = -10; i <= 10; i += 2) {
+            const range = gameState.difficulty === 'easy' ? 10 : 
+                         gameState.difficulty === 'medium' ? 20 : 30;
+            const step = gameState.difficulty === 'easy' ? 2 : 
+                        gameState.difficulty === 'medium' ? 5 : 5;
+
+            for (let i = -range; i <= range; i += step) {
                 const mark = document.createElement('div');
                 mark.className = 'number-mark';
                 mark.textContent = i;
-                mark.style.left = `${((i + 10) / 20) * 90}%`;
+                mark.style.left = `${((i + range) / (range * 2)) * 90}%`;
                 numberLine.appendChild(mark);
             }
             
@@ -632,9 +886,12 @@
         function animateNumberLine(start, change) {
             const point = elements.numberPoint;
             
-            const startPos = ((start + 10) / 20) * 90;
-            const midPos = ((start + 10) / 20) * 90;
-            const endPos = ((start + change + 10) / 20) * 90;
+            const range = gameState.difficulty === 'easy' ? 10 : 
+                         gameState.difficulty === 'medium' ? 20 : 30;
+            
+            const startPos = ((start + range) / (range * 2)) * 90;
+            const midPos = ((start + range) / (range * 2)) * 90;
+            const endPos = ((start + change + range) / (range * 2)) * 90;
             
             point.style.left = `${midPos}%`;
             point.textContent = start;
@@ -661,12 +918,28 @@
             }, 800);
         }
 
-        // Generate a new math question
+        // Generate a new math question based on difficulty
         function generateQuestion() {
             let a, b, op, expression, result;
             let explanation = "";
 
-            const maxValue = gameState.level * 10;
+            let maxValue;
+            switch(gameState.difficulty) {
+                case 'easy':
+                    maxValue = 10;
+                    break;
+                case 'medium':
+                    maxValue = 20;
+                    break;
+                case 'hard':
+                    maxValue = 30;
+                    break;
+                default:
+                    maxValue = 10;
+            }
+
+            // Add some complexity at higher levels
+            maxValue += Math.min(gameState.level * 2, 20);
 
             if (Math.random() > 0.5) {
                 op = "+";
@@ -736,6 +1009,7 @@
             elements.question.classList.add('pop-in');
 
             updateProgress();
+            checkAchievements();
         }
 
         function generateAnswerOptionsWithCommonMistakes(correctAnswer, a, b, operation) {
@@ -760,165 +1034,265 @@
                 }
             }
 
-            answers.sort(() => Math.random() - 0.5);
+            answers = shuffleArray(answers);
 
             answers.forEach(answer => {
                 const button = document.createElement('button');
-                button.className = 'answer-btn will-change';
+                button.className = 'answer-btn';
                 button.textContent = answer;
-
-                button.addEventListener('click', function() {
-                    if (gameState.isWaiting) return;
-                    checkAnswer(answer, button);
-                });
-
+                button.addEventListener('click', () => checkAnswer(answer, correctAnswer));
                 elements.answerOptions.appendChild(button);
             });
         }
 
         function generateCommonMistakes(a, b, operation) {
             let mistakes = [];
-
-            if (operation === '+') {
-                mistakes.push(Math.abs(a) + Math.abs(b));
-
-                if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
-                    mistakes.push(Math.abs(a) - Math.abs(b));
-                    mistakes.push(Math.abs(b) - Math.abs(a));
-                }
-
-                mistakes.push(-(a + b));
-
+            
+            if (operation === "+") {
+                // Common mistake: adding absolute values when both are negative
                 if (a < 0 && b < 0) {
-                    mistakes.push(Math.abs(a) + Math.abs(b));
+                    mistakes.push(-(Math.abs(a) + Math.abs(b)));
                 }
+                // Common mistake: wrong sign when adding positive and negative
+                if ((a < 0 && b > 0) || (a > 0 && b < 0)) {
+                    const absResult = Math.abs(Math.abs(a) - Math.abs(b));
+                    mistakes.push(-absResult);
+                    mistakes.push(absResult);
+                }
+                // Common mistake: subtract instead of add
+                mistakes.push(a - b);
             } else {
+                // Common mistake: subtract absolute values
                 mistakes.push(Math.abs(a) - Math.abs(b));
-                mistakes.push(Math.abs(b) - Math.abs(a));
-                mistakes.push(a + b);
-                mistakes.push(-(a - b));
-
+                // Common mistake: wrong sign when subtracting negatives
                 if (b < 0) {
-                    mistakes.push(a + Math.abs(b));
-                } else {
-                    mistakes.push(a - Math.abs(b));
+                    mistakes.push(a + b);
                 }
+                // Common mistake: add instead of subtract
+                mistakes.push(a + b);
             }
-
-            return [...new Set(mistakes)]
-                .filter(value => !isNaN(value) && value !== (operation === '+' ? a + b : a - b))
-                .slice(0, 3);
+            
+            return mistakes;
         }
 
-        // Check the answer
-        function checkAnswer(selectedAnswer, buttonElement) {
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function checkAnswer(selected, correct) {
+            if (gameState.isWaiting) return;
+            
             gameState.isWaiting = true;
-            gameState.questionsAnswered++;
-
-            const allButtons = document.querySelectorAll('.answer-btn');
-            allButtons.forEach(btn => {
-                btn.disabled = true;
-                btn.classList.remove('will-change');
+            elements.nextBtn.disabled = false;
+            
+            const buttons = elements.answerOptions.querySelectorAll('.answer-btn');
+            buttons.forEach(button => {
+                button.disabled = true;
+                if (parseInt(button.textContent) === correct) {
+                    button.classList.add('correct');
+                }
+                if (parseInt(button.textContent) === selected && selected !== correct) {
+                    button.classList.add('incorrect');
+                }
             });
-
-            if (selectedAnswer === gameState.currentQuestion.result) {
-                // Correct answer
-                buttonElement.classList.add('correct');
-                gameState.score += 10 * gameState.level;
+            
+            if (selected === correct) {
+                gameState.score += 10;
                 gameState.correctAnswers++;
-                soundCorrect.play();
-                updateScoreDisplay();
-                showFeedback('Chính xác! 👏', true);
+                elements.feedback.textContent = 'Chính xác! +10 điểm';
+                elements.feedback.className = 'feedback show correct';
+                if (gameState.soundEnabled) soundCorrect.play();
                 
                 // Animate number line
                 animateNumberLine(gameState.currentQuestion.a, 
-                                 gameState.currentQuestion.op === '+' ? 
-                                 gameState.currentQuestion.b : -gameState.currentQuestion.b);
-
-                if (gameState.correctAnswers > 0 && gameState.correctAnswers % 5 === 0) {
-                    gameState.level++;
-                    elements.level.textContent = gameState.level;
-                    showFeedback(`Chúc mừng! Lên cấp ${gameState.level} 🎉`, true);
-                }
+                                gameState.currentQuestion.op === '+' ? 
+                                gameState.currentQuestion.b : -gameState.currentQuestion.b);
             } else {
-                // Incorrect answer
-                buttonElement.classList.add('incorrect');
-                soundIncorrect.play();
-
-                allButtons.forEach(btn => {
-                    if (parseInt(btn.textContent) === gameState.currentQuestion.result) {
-                        btn.classList.add('correct');
-                    }
-                });
-
-                showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.result}`, false);
-
+                elements.feedback.textContent = `Sai rồi! Đáp án đúng là: ${correct}`;
+                elements.feedback.className = 'feedback show incorrect';
+                if (gameState.soundEnabled) soundIncorrect.play();
+            }
+            
+            gameState.questionsAnswered++;
+            updateScoreDisplay();
+            saveGameState();
+            
+            // Show explanation after a short delay
+            setTimeout(() => {
                 elements.explanationText.innerHTML = gameState.currentQuestion.explanation;
                 elements.explanation.style.display = 'block';
-            }
-
-            elements.nextBtn.disabled = false;
-        }
-
-        // Show feedback
-        function showFeedback(message, isCorrect) {
-            elements.feedback.textContent = message;
-            elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
-
-            if (isCorrect) {
-                elements.feedback.classList.add('celebrate');
+            }, 1000);
+            
+            // Check if level should increase
+            if (gameState.correctAnswers >= gameState.level * 5) {
+                levelUp();
             }
         }
 
-        // Update score display
         function updateScoreDisplay() {
             elements.score.textContent = gameState.score;
             elements.correct.textContent = gameState.correctAnswers;
+            elements.level.textContent = gameState.level;
         }
 
-        // Update progress bar
         function updateProgress() {
-            const progressPercent = (gameState.correctAnswers % 5) * 20;
-            elements.progressBar.style.width = `${progressPercent}%`;
+            const progress = (gameState.correctAnswers % 5) * 20;
+            elements.progressBar.style.width = `${progress}%`;
         }
 
-        // Go to next question
-        function nextQuestion() {
-            gameState.isWaiting = false;
-            generateQuestion();
+        function levelUp() {
+            gameState.level++;
+            if (gameState.soundEnabled) soundLevelUp.play();
+            
+            document.getElementById('modal-level').textContent = gameState.level;
+            showModal('level-up-modal');
+            
+            updateScoreDisplay();
+            saveGameState();
         }
 
-        // Show hint
-        function showHint() {
-            if (gameState.isWaiting) return;
-
-            elements.explanationText.innerHTML = gameState.currentQuestion.explanation;
-            elements.explanation.style.display = 'block';
+        function checkAchievements() {
+            if (gameState.questionsAnswered >= 10 && !gameState.achievements.bronze) {
+                gameState.achievements.bronze = true;
+                showAchievement('bronze', 'Hoàn thành 10 câu hỏi');
+            }
+            
+            if (gameState.questionsAnswered >= 25 && !gameState.achievements.silver) {
+                gameState.achievements.silver = true;
+                showAchievement('silver', 'Hoàn thành 25 câu hỏi');
+            }
+            
+            if (gameState.questionsAnswered >= 50 && !gameState.achievements.gold) {
+                gameState.achievements.gold = true;
+                showAchievement('gold', 'Hoàn thành 50 câu hỏi');
+            }
+            
+            updateAchievementsDisplay();
+            saveGameState();
         }
 
-        // Go home
+        function updateAchievementsDisplay() {
+            if (gameState.achievements.bronze) {
+                elements.bronzeBadge.style.opacity = '1';
+                elements.bronzeBadge.style.transform = 'scale(1.1)';
+            }
+            
+            if (gameState.achievements.silver) {
+                elements.silverBadge.style.opacity = '1';
+                elements.silverBadge.style.transform = 'scale(1.1)';
+            }
+            
+            if (gameState.achievements.gold) {
+                elements.goldBadge.style.opacity = '1';
+                elements.goldBadge.style.transform = 'scale(1.1)';
+            }
+        }
+
+        function showAchievement(type, name) {
+            document.getElementById('achievement-name').textContent = name;
+            showModal('achievement-modal');
+            if (gameState.soundEnabled) soundAchievement.play();
+            
+            // Add some confetti for celebration
+            createConfetti();
+        }
+
+        function createConfetti() {
+            const confettiCount = 100;
+            const container = document.querySelector('.container');
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                
+                const colors = ['#f94144', '#f3722c', '#f8961e', '#f9c74f', '#90be6d', '#43aa8b', '#577590'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.backgroundColor = color;
+                
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.top = '0';
+                
+                const size = Math.floor(Math.random() * 10) + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                
+                const rotation = Math.random() * 360;
+                confetti.style.transform = `rotate(${rotation}deg)`;
+                
+                container.appendChild(confetti);
+                
+                const animationDuration = Math.random() * 3 + 2;
+                confetti.style.animation = `confettiFall ${animationDuration}s linear forwards`;
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+        }
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+        }
+
         function goHome() {
-            window.location.href = "index.html";
+            if (confirm('Bạn có muốn quay về trang chủ? Tiến trình hiện tại sẽ được lưu.')) {
+                window.location.href = '/';
+            }
         }
 
-        // Setup event listeners
-        function setupEventListeners() {
-            elements.nextBtn.addEventListener('click', nextQuestion);
-            elements.hintBtn.addEventListener('click', showHint);
+        function updateSoundButton() {
+            if (gameState.soundEnabled) {
+                elements.soundBtn.innerHTML = '<i class="fas fa-volume-up"></i> Âm thanh';
+            } else {
+                elements.soundBtn.innerHTML = '<i class="fas fa-volume-mute"></i> Âm thanh';
+            }
+        }
 
-            // Keyboard support
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'Enter' && !elements.nextBtn.disabled) {
-                    nextQuestion();
-                }
-                if (event.key === 'h' || event.key === 'H') {
-                    showHint();
-                }
+        function setupEventListeners() {
+            elements.nextBtn.addEventListener('click', () => {
+                elements.nextBtn.disabled = true;
+                gameState.isWaiting = false;
+                generateQuestion();
+            });
+            
+            elements.hintBtn.addEventListener('click', () => {
+                elements.explanationText.innerHTML = gameState.currentQuestion.explanation;
+                elements.explanation.style.display = 'block';
+            });
+            
+            elements.soundBtn.addEventListener('click', () => {
+                gameState.soundEnabled = !gameState.soundEnabled;
+                updateSoundButton();
+                saveGameState();
+            });
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.difficulty-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    btn.classList.add('active');
+                    
+                    gameState.difficulty = btn.dataset.difficulty;
+                    setupNumberLine();
+                    generateQuestion();
+                    saveGameState();
+                });
             });
         }
 
-        // Initialize the game when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initGame);
+        // Initialize the game when the page loads
+        window.addEventListener('load', initGame);
     </script>
 </body>
 </html>
