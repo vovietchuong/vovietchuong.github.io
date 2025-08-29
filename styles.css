@@ -306,7 +306,7 @@ body {
     background: white;
     border-radius: 15px;
     width: 90%;
-    max-width: 400px;
+    max-width: 500px;
     padding: 30px;
     position: relative;
     max-height: 90vh;
@@ -441,6 +441,104 @@ body {
     border-radius: 4px;
 }
 
+/* New styles for score system */
+.progress-filters {
+    margin-bottom: 15px;
+}
+
+.progress-filters select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    width: 100%;
+}
+
+.progress-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    margin-bottom: 8px;
+}
+
+.progress-info {
+    flex-grow: 1;
+}
+
+.progress-game {
+    font-weight: 600;
+    color: #2e59d9;
+    margin-bottom: 4px;
+}
+
+.progress-date {
+    font-size: 0.85rem;
+    color: #777;
+}
+
+.progress-score {
+    font-weight: bold;
+    color: #1cc88a;
+    font-size: 1.1rem;
+}
+
+.progress-level {
+    margin-top: 4px;
+    font-size: 0.85rem;
+    color: #f6c23e;
+}
+
+.progress-item.high-score {
+    background-color: #e8f5e9;
+    border-left: 4px solid #1cc88a;
+}
+
+.stats-summary {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.stat-item {
+    text-align: center;
+    flex: 1;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #777;
+    margin-bottom: 5px;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2e59d9;
+}
+
+.score-chart-container {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.score-chart-title {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #2e59d9;
+    font-weight: 600;
+}
+
 @media (max-width: 768px) {
     .container {
         grid-template-columns: 1fr;
@@ -459,5 +557,10 @@ body {
     .user-info {
         flex-wrap: wrap;
         justify-content: center;
+    }
+    
+    .stats-summary {
+        flex-direction: column;
+        gap: 15px;
     }
 }

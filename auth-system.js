@@ -205,6 +205,49 @@ class AuthSystem {
             this.toast.classList.remove('show');
         }, 3000);
     }
+
+    // Phương thức lưu điểm
+    saveGameScore(gameId, gameName, score, level = null) {
+        const user = this.auth.currentUser;
+        if (!user) return Promise.reject(new Error('User not authenticated'));
+        
+        const scoreData = {
+            userId: user.uid,
+            gameId,
+            gameName,
+            score,
+            level,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        return this.firestore.collection('scores').add(scoreData)
+            .then(() => {
+                this.analytics.logEvent('game_score_saved', {
+                    game_id: gameId,
+                    score: score
+                });
+                return scoreData;
+            });
+    }
+
+    // Phương thức lấy điểm theo user
+    getUserScores() {
+        const user = this.auth.currentUser;
+        if (!user) return Promise.resolve([]);
+        
+        return this.firestore.collection('scores')
+            .where('userId', '==', user.uid)
+            .orderBy('timestamp', 'desc')
+            .limit(10)
+            .get()
+            .then(querySnapshot => {
+                const scores = [];
+                querySnapshot.forEach(doc => {
+                    scores.push({ id: doc.id, ...doc.data() });
+                });
+                return scores;
+            });
+    }
 }
 
 // Khởi tạo hệ thống xác thực khi DOM đã sẵn sàng
