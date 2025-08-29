@@ -88,18 +88,29 @@
   </div>
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
 <script>
 const fruits=['🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍒','🍑'];
 const state={mode:'addition',score:0,streak:0,ans:'',question:{},time:60,running:false,infinite:false};
 const ui={q:document.getElementById('question'),illus:document.getElementById('illustration'),ans:document.getElementById('answer-display'),score:document.getElementById('score'),stars:document.querySelectorAll('.star'),fb:document.getElementById('feedback'),time:document.getElementById('time'),leader:document.getElementById('leader-list'),chkInf:document.getElementById('infinite-mode')};
 
-let leaderboard = JSON.parse(localStorage.getItem('leaderboard')||'[]');
+// --- Firestore setup ---
+const firebaseConfig = {
+  apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
+  authDomain: "mathhubvn.firebaseapp.com",
+  projectId: "mathhubvn",
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
 function init(){
   genButtons();
   bindMode();
   newGame();
-  renderLeaderboard();
+  loadLeaderboardFromFirestore();
   document.getElementById('home').onclick=()=>{window.location.href='index.html';};
   document.addEventListener('keydown',handleKey);
   ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};
@@ -114,8 +125,9 @@ function submit(){if(!state.ans) return; const val=+state.ans; if(val===state.qu
 function feedback(msg,ok){ui.fb.textContent=msg; ui.fb.className='feedback show '+(ok?'correct':'incorrect'); setTimeout(()=>ui.fb.className='feedback',1500);}
 function update(){ui.score.textContent=state.score; ui.stars.forEach((s,i)=>s.classList.toggle('filled',i<state.streak)); ui.time.textContent= state.infinite? '∞': state.time;}
 function startTimer(){state.running=true; clearInterval(state.tid); state.tid=setInterval(()=>{if(!state.running) return; state.time--; if(state.time<=0){end();} update();},1000);}
-function end(){state.running=false; feedback(`⏰ Hết giờ! Điểm: ${state.score}`,false); clearInterval(state.tid); updateLeaderboard();}
+function end(){state.running=false; feedback(`⏰ Hết giờ! Điểm: ${state.score}`,false); clearInterval(state.tid); saveScoreToFirestore();}
 
+// Nút
 document.getElementById('clear-btn').onclick=()=>{state.ans=''; renderAns();};
 document.getElementById('submit-btn').onclick=submit;
 
@@ -125,24 +137,44 @@ function playSound(ok){const ctx=new (window.AudioContext||window.webkitAudioCon
 // Confetti
 function launchConfetti(){const canvas=document.getElementById('confetti');const ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;let pieces=[];for(let i=0;i<150;i++){pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,color:`hsl(${Math.random()*360},100%,50%)`,ys:Math.random()*3+2,size:Math.random()*5+2});}function updateC(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.y+=p.ys;if(p.y>canvas.height)p.y=-10;ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}); if(state.streak===3) requestAnimationFrame(updateC);}updateC();}
 
-// ✅ Leaderboard nâng cấp: lưu cả tên + điểm
-function updateLeaderboard(){
+// --- Firestore: lưu & tải leaderboard ---
+async function saveScoreToFirestore() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
   const playerName = currentUser.name || "Khách";
+  const uid = currentUser.uid || "guest";
 
-  leaderboard.push({user: playerName, score: state.score});
-  leaderboard.sort((a,b)=> b.score - a.score);
-  leaderboard = leaderboard.slice(0,5);
-  localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-  renderLeaderboard();
+  try {
+    await db.collection("leaderboard").add({
+      userId: uid,
+      name: playerName,
+      score: state.score,
+      game: "congtru10",
+      timestamp: new Date()
+    });
+    loadLeaderboardFromFirestore();
+  } catch (err) {
+    console.error("Lỗi lưu điểm:", err);
+  }
 }
-function renderLeaderboard(){
-  ui.leader.innerHTML='';
-  leaderboard.forEach((entry,i)=>{
-    const li=document.createElement('li');
-    li.textContent=`${entry.user}: ${entry.score} điểm`;
-    ui.leader.appendChild(li);
-  });
+
+async function loadLeaderboardFromFirestore() {
+  try {
+    const snapshot = await db.collection("leaderboard")
+      .where("game", "==", "congtru10")
+      .orderBy("score", "desc")
+      .limit(5)
+      .get();
+
+    ui.leader.innerHTML = "";
+    snapshot.forEach((doc) => {
+      const data = doc.data();
+      const li = document.createElement("li");
+      li.textContent = `${data.name}: ${data.score} điểm`;
+      ui.leader.appendChild(li);
+    });
+  } catch (err) {
+    console.error("Lỗi tải bảng xếp hạng:", err);
+  }
 }
 
 // Keyboard input
