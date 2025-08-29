@@ -90,6 +90,8 @@
 
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 
 <script>
@@ -97,13 +99,20 @@ const fruits=['🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍒','�
 const state={mode:'addition',score:0,streak:0,ans:'',question:{},time:60,running:false,infinite:false};
 const ui={q:document.getElementById('question'),illus:document.getElementById('illustration'),ans:document.getElementById('answer-display'),score:document.getElementById('score'),stars:document.querySelectorAll('.star'),fb:document.getElementById('feedback'),time:document.getElementById('time'),leader:document.getElementById('leader-list'),chkInf:document.getElementById('infinite-mode')};
 
-// --- Firestore setup ---
+// --- Firebase setup ---
 const firebaseConfig = {
   apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
   authDomain: "mathhubvn.firebaseapp.com",
   projectId: "mathhubvn",
+  storageBucket: "mathhubvn.firebasestorage.app",
+  messagingSenderId: "1001364433767",
+  appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
+  measurementId: "G-2YNQZ48JVK"
 };
+
+// Khởi tạo Firebase
 firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 const db = firebase.firestore();
 
 function init(){
@@ -111,39 +120,200 @@ function init(){
   bindMode();
   newGame();
   loadLeaderboardFromFirestore();
-  document.getElementById('home').onclick=()=>{window.location.href='index.html';};
+  document.getElementById('home').onclick=()=>{
+    saveScoreToFirestore();
+    window.location.href='index.html';
+  };
   document.addEventListener('keydown',handleKey);
   ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};
 }
-function genButtons(){const box=document.getElementById('answer-buttons'); for(let i=0;i<=9;i++){const b=document.createElement('button'); b.textContent=i; b.className='number-btn'; b.onclick=()=>{if(state.ans.length<2){state.ans+=i; renderAns();}}; box.appendChild(b);}}
-function bindMode(){document.querySelectorAll('.mode-btn').forEach(btn=>btn.onclick=()=>{document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active')); btn.classList.add('active'); state.mode=btn.dataset.mode; reset();});}
-function reset(){state.score=0; state.streak=0; state.ans=''; state.time= state.infinite?Infinity:60; update(); newQ(); if(!state.infinite) startTimer(); else state.running=true;}
-function newGame(){reset();}
-function newQ(){const isAdd= state.mode==='addition' || (state.mode==='both'&&Math.random()>.5); let a,b,op,ans; if(isAdd){a=Math.floor(Math.random()*10); b=Math.floor(Math.random()*(10-a)); ans=a+b; op='+';} else {a=Math.floor(Math.random()*10)+1; b=Math.floor(Math.random()*a); ans=a-b; op='-';} state.question={a,b,op,ans}; ui.q.textContent=`${a} ${op} ${b} = ?`; ui.illus.textContent=fruits[a%fruits.length].repeat(a)+(op==='+'?' + ':' − ')+fruits[b%fruits.length].repeat(b); state.ans=''; renderAns();}
-function renderAns(){ui.ans.textContent=state.ans||'?';}
-function submit(){if(!state.ans) return; const val=+state.ans; if(val===state.question.ans){state.score+=10; state.streak=Math.min(3,state.streak+1); feedback('Đúng 👏',true); playSound(true); if(state.streak===3) launchConfetti();} else {feedback(`Sai 😢. Đúng: ${state.question.ans}`,false); state.streak=0; playSound(false);} update(); newQ();}
-function feedback(msg,ok){ui.fb.textContent=msg; ui.fb.className='feedback show '+(ok?'correct':'incorrect'); setTimeout(()=>ui.fb.className='feedback',1500);}
-function update(){ui.score.textContent=state.score; ui.stars.forEach((s,i)=>s.classList.toggle('filled',i<state.streak)); ui.time.textContent= state.infinite? '∞': state.time;}
-function startTimer(){state.running=true; clearInterval(state.tid); state.tid=setInterval(()=>{if(!state.running) return; state.time--; if(state.time<=0){end();} update();},1000);}
-function end(){state.running=false; feedback(`⏰ Hết giờ! Điểm: ${state.score}`,false); clearInterval(state.tid); saveScoreToFirestore();}
+
+function genButtons(){
+  const box=document.getElementById('answer-buttons'); 
+  for(let i=0;i<=9;i++){
+    const b=document.createElement('button'); 
+    b.textContent=i; 
+    b.className='number-btn'; 
+    b.onclick=()=>{
+      if(state.ans.length<2){
+        state.ans+=i; 
+        renderAns();
+      }
+    }; 
+    box.appendChild(b);
+  }
+}
+
+function bindMode(){
+  document.querySelectorAll('.mode-btn').forEach(btn=>btn.onclick=()=>{
+    document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active')); 
+    btn.classList.add('active'); 
+    state.mode=btn.dataset.mode; 
+    reset();
+  });
+}
+
+function reset(){
+  state.score=0; 
+  state.streak=0; 
+  state.ans=''; 
+  state.time= state.infinite?Infinity:60; 
+  update(); 
+  newQ(); 
+  if(!state.infinite) startTimer(); 
+  else state.running=true;
+}
+
+function newGame(){
+  reset();
+}
+
+function newQ(){
+  const isAdd= state.mode==='addition' || (state.mode==='both'&&Math.random()>.5); 
+  let a,b,op,ans; 
+  if(isAdd){
+    a=Math.floor(Math.random()*10); 
+    b=Math.floor(Math.random()*(10-a)); 
+    ans=a+b; 
+    op='+';
+  } else { 
+    a=Math.floor(Math.random()*10)+1; 
+    b=Math.floor(Math.random()*a); 
+    ans=a-b; 
+    op='-'; 
+  } 
+  state.question={a,b,op,ans}; 
+  ui.q.textContent=`${a} ${op} ${b} = ?`; 
+  ui.illus.textContent=fruits[a%fruits.length].repeat(a)+(op==='+'?' + ':' − ')+fruits[b%fruits.length].repeat(b); 
+  state.ans=''; 
+  renderAns();
+}
+
+function renderAns(){
+  ui.ans.textContent=state.ans||'?';
+}
+
+function submit(){
+  if(!state.ans) return; 
+  const val=+state.ans; 
+  if(val===state.question.ans){
+    state.score+=10; 
+    state.streak=Math.min(3,state.streak+1); 
+    feedback('Đúng 👏',true); 
+    playSound(true); 
+    if(state.streak===3) launchConfetti();
+  } else {
+    feedback(`Sai 😢. Đúng: ${state.question.ans}`,false); 
+    state.streak=0; 
+    playSound(false);
+  } 
+  update(); 
+  newQ();
+}
+
+function feedback(msg,ok){
+  ui.fb.textContent=msg; 
+  ui.fb.className='feedback show '+(ok?'correct':'incorrect'); 
+  setTimeout(()=>ui.fb.className='feedback',1500);
+}
+
+function update(){
+  ui.score.textContent=state.score; 
+  ui.stars.forEach((s,i)=>s.classList.toggle('filled',i<state.streak)); 
+  ui.time.textContent= state.infinite? '∞': state.time;
+}
+
+function startTimer(){
+  state.running=true; 
+  clearInterval(state.tid); 
+  state.tid=setInterval(()=>{
+    if(!state.running) return; 
+    state.time--; 
+    if(state.time<=0){
+      end();
+    } 
+    update();
+  },1000);
+}
+
+function end(){
+  state.running=false; 
+  feedback(`⏰ Hết giờ! Điểm: ${state.score}`,false); 
+  clearInterval(state.tid); 
+  saveScoreToFirestore();
+}
 
 // Nút
 document.getElementById('clear-btn').onclick=()=>{state.ans=''; renderAns();};
 document.getElementById('submit-btn').onclick=submit;
 
 // Âm thanh
-function playSound(ok){const ctx=new (window.AudioContext||window.webkitAudioContext)();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.type='sine';o.frequency.value= ok?660:220;g.gain.value=0.1;o.start();o.stop(ctx.currentTime+0.25);}
+function playSound(ok){
+  const ctx=new (window.AudioContext||window.webkitAudioContext)();
+  const o=ctx.createOscillator();
+  const g=ctx.createGain();
+  o.connect(g);
+  g.connect(ctx.destination);
+  o.type='sine';
+  o.frequency.value= ok?660:220;
+  g.gain.value=0.1;
+  o.start();
+  o.stop(ctx.currentTime+0.25);
+}
 
 // Confetti
-function launchConfetti(){const canvas=document.getElementById('confetti');const ctx=canvas.getContext('2d');canvas.width=window.innerWidth;canvas.height=window.innerHeight;let pieces=[];for(let i=0;i<150;i++){pieces.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,color:`hsl(${Math.random()*360},100%,50%)`,ys:Math.random()*3+2,size:Math.random()*5+2});}function updateC(){ctx.clearRect(0,0,canvas.width,canvas.height);pieces.forEach(p=>{p.y+=p.ys;if(p.y>canvas.height)p.y=-10;ctx.fillStyle=p.color;ctx.fillRect(p.x,p.y,p.size,p.size);}); if(state.streak===3) requestAnimationFrame(updateC);}updateC();}
+function launchConfetti(){
+  const canvas=document.getElementById('confetti');
+  const ctx=canvas.getContext('2d');
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
+  let pieces=[];
+  for(let i=0;i<150;i++){
+    pieces.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      color:`hsl(${Math.random()*360},100%,50%)`,
+      ys:Math.random()*3+2,
+      size:Math.random()*5+2
+    });
+  }
+  function updateC(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    pieces.forEach(p=>{
+      p.y+=p.ys;
+      if(p.y>canvas.height)p.y=-10;
+      ctx.fillStyle=p.color;
+      ctx.fillRect(p.x,p.y,p.size,p.size);
+    }); 
+    if(state.streak===3) requestAnimationFrame(updateC);
+  }
+  updateC();
+}
 
-// --- Firestore: lưu & tải leaderboard ---
+// --- Lưu điểm vào Firestore ---
 async function saveScoreToFirestore() {
   const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
+  
+  // Kiểm tra xem người dùng đã đăng nhập chưa
+  if (!currentUser.uid) {
+    console.log("Người dùng chưa đăng nhập, không lưu điểm");
+    return;
+  }
+  
   const playerName = currentUser.name || "Khách";
-  const uid = currentUser.uid || "guest";
+  const uid = currentUser.uid;
 
   try {
+    // Lưu điểm vào collection scores (theo cấu trúc mới)
+    await db.collection("scores").add({
+      userId: uid,
+      gameId: "congtrutrongphamvi10",
+      gameName: "Cộng trừ trong phạm vi 10",
+      score: state.score,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    
+    // Cũng lưu vào leaderboard để hiển thị bảng xếp hạng
     await db.collection("leaderboard").add({
       userId: uid,
       name: playerName,
@@ -151,6 +321,7 @@ async function saveScoreToFirestore() {
       game: "congtru10",
       timestamp: new Date()
     });
+    
     loadLeaderboardFromFirestore();
   } catch (err) {
     console.error("Lỗi lưu điểm:", err);
@@ -178,7 +349,27 @@ async function loadLeaderboardFromFirestore() {
 }
 
 // Keyboard input
-function handleKey(e){if(!state.running)return; if(e.key>='0'&&e.key<='9'){if(state.ans.length<2){state.ans+=e.key; renderAns();}} else if(e.key==='Backspace'){state.ans=''; renderAns();} else if(e.key==='Enter'){submit();}}
+function handleKey(e){
+  if(!state.running)return; 
+  if(e.key>='0'&&e.key<='9'){
+    if(state.ans.length<2){
+      state.ans+=e.key; 
+      renderAns();
+    }
+  } else if(e.key==='Backspace'){
+    state.ans=''; 
+    renderAns();
+  } else if(e.key==='Enter'){
+    submit();
+  }
+}
+
+// Lưu điểm khi người dùng rời trang
+window.addEventListener('beforeunload', function() {
+  if (state.score > 0) {
+    saveScoreToFirestore();
+  }
+});
 
 init();
 </script>
