@@ -144,6 +144,8 @@ class AuthSystem {
             .then(() => {
                 this.showToast('Đã đăng xuất!', 'success');
                 this.analytics.logEvent('logout');
+                // ❌ Khi logout thì xoá user khỏi localStorage
+                localStorage.removeItem("currentUser");
             })
             .catch((error) => {
                 this.showToast(error.message, 'error');
@@ -172,6 +174,14 @@ class AuthSystem {
                 this.userInfo.style.display = 'flex';
                 this.loginBtn.style.display = 'none';
                 
+                // ✅ Lưu thông tin user vào localStorage để game đọc được
+                const currentUser = {
+                    name: user.displayName || user.email,
+                    email: user.email,
+                    uid: user.uid
+                };
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
                 // Khởi tạo hệ thống người dùng khi đã đăng nhập
                 if (!window.userSystem && typeof UserSystem !== 'undefined') {
                     window.userSystem = new UserSystem(this);
@@ -179,6 +189,8 @@ class AuthSystem {
             } else {
                 this.userInfo.style.display = 'none';
                 this.loginBtn.style.display = 'block';
+                // ❌ Nếu chưa đăng nhập thì xoá currentUser
+                localStorage.removeItem("currentUser");
             }
         });
     }
