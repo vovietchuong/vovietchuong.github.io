@@ -41,6 +41,7 @@ class AuthSystem {
         this.registerForm = document.getElementById('register-form');
         this.toast = document.getElementById('toast');
         this.profileBtn = document.getElementById('profile-btn');
+        this.rankingBtn = document.getElementById('ranking-btn');
 
         // Event listeners
         if (this.loginBtn) this.loginBtn.addEventListener('click', () => this.openLoginModal());
@@ -51,6 +52,7 @@ class AuthSystem {
         if (this.registerForm) this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
         if (this.logoutBtn) this.logoutBtn.addEventListener('click', () => this.handleLogout());
         if (this.profileBtn) this.profileBtn.addEventListener('click', () => this.openProfileModal());
+        if (this.rankingBtn) this.rankingBtn.addEventListener('click', () => this.openRankingModal());
         
         const forgotPassword = document.getElementById('forgot-password');
         if (forgotPassword) forgotPassword.addEventListener('click', (e) => this.handleForgotPassword(e));
@@ -72,6 +74,14 @@ class AuthSystem {
         if (window.userSystem) {
             window.userSystem.loadProfileData();
         }
+    }
+
+    openRankingModal() {
+        const rankingModal = document.getElementById('ranking-modal');
+        if (rankingModal) rankingModal.style.display = 'flex';
+        
+        // Tải dữ liệu xếp hạng
+        this.loadRankings('all');
     }
 
     switchToLogin() {
@@ -213,6 +223,7 @@ class AuthSystem {
         
         const scoreData = {
             userId: user.uid,
+            userName: user.displayName || 'Người dùng ẩn danh',
             gameId,
             gameName,
             score,
@@ -231,14 +242,19 @@ class AuthSystem {
     }
 
     // Phương thức lấy điểm theo user
-    getUserScores() {
+    getUserScores(limit = 50, gameFilter = 'all') {
         const user = this.auth.currentUser;
         if (!user) return Promise.resolve([]);
         
-        return this.firestore.collection('scores')
-            .where('userId', '==', user.uid)
-            .orderBy('timestamp', 'desc')
-            .limit(10)
+        let query = this.firestore.collection('scores')
+            .where('userId', '==', user.uid);
+            
+        if (gameFilter !== 'all') {
+            query = query.where('gameId', '==', gameFilter);
+        }
+            
+        return query.orderBy('timestamp', 'desc')
+            .limit(limit)
             .get()
             .then(querySnapshot => {
                 const scores = [];
@@ -247,6 +263,105 @@ class AuthSystem {
                 });
                 return scores;
             });
+    }
+
+    // Phương thức lấy tất cả điểm (cho xếp hạng)
+    getAllScores(limit = 100, gameFilter = 'all') {
+        let query = this.firestore.collection('scores');
+        
+        if (gameFilter !== 'all') {
+            query = query.where('gameId', '==', gameFilter);
+        }
+        
+        return query.orderBy('score', 'desc')
+            .limit(limit)
+            .get()
+            .then(querySnapshot => {
+                const scores = [];
+                querySnapshot.forEach(doc => {
+                    scores.push({ id: doc.id, ...doc.data() });
+                });
+                return scores;
+            });
+    }
+
+    // Phương thức lấy dữ liệu xếp hạng
+    loadRankings(filter) {
+        const rankingList = document.getElementById('ranking-list');
+        rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
+        
+        this.getAllScores(100, filter)
+            .then(scores => {
+                // Nhóm điểm theo user và lấy điểm cao nhất
+                const userScores = {};
+                
+                scores.forEach(score => {
+                    const userId = score.userId;
+                    
+                    if (!userScores[userId] || score.score > userScores[userId].score) {
+                        userScores[userId] = {
+                            userId: userId,
+                            score: score.score,
+                            gameName: score.gameName,
+                            userName: score.userName || 'Người dùng ẩn danh'
+                        };
+                    }
+                });
+                
+                // Chuyển đổi thành mảng và sắp xếp
+                const rankings = Object.values(userScores).sort((a, b) => b.score - a.score);
+                
+                // Hiển thị kết quả
+                this.displayRankings(rankings);
+            })
+            .catch(error => {
+                console.error('Lỗi khi tải xếp hạng:', error);
+                rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
+            });
+    }
+
+    // Hiển thị bảng xếp hạng
+    displayRankings(rankings) {
+        const rankingList = document.getElementById('ranking-list');
+        
+        if (rankings.length === 0) {
+            rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng.</li>';
+            return;
+        }
+        
+        let html = '';
+        const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+        
+        rankings.forEach((item, index) => {
+            const isCurrentUser = currentUser.uid === item.userId;
+            const positionClass = index < 3 ? `ranking-position-${index + 1}` : '';
+            
+            html += `
+                <li class="ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}">
+                    <div class="ranking-position ${positionClass}">${index + 1}</div>
+                    <div class="ranking-user">
+                        <div class="ranking-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="ranking-name">${item.userName}</div>
+                    </div>
+                    <div class="ranking-score">${item.score} điểm</div>
+                </li>
+            `;
+        });
+        
+        rankingList.innerHTML = html;
+        
+        // Thiết lập sự kiện cho bộ lọc xếp hạng
+        const rankingFilters = document.querySelectorAll('.ranking-filter');
+        rankingFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                rankingFilters.forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+                const filterValue = filter.dataset.filter;
+                this.loadRankings(filterValue);
+            });
+        });
     }
 }
 
@@ -274,6 +389,14 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeProfileModal) {
         closeProfileModal.addEventListener('click', () => {
             document.getElementById('profile-modal').style.display = 'none';
+        });
+    }
+    
+    // Đóng modal ranking
+    const closeRankingModal = document.getElementById('close-ranking-modal');
+    if (closeRankingModal) {
+        closeRankingModal.addEventListener('click', () => {
+            document.getElementById('ranking-modal').style.display = 'none';
         });
     }
 });

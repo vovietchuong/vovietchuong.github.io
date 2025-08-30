@@ -322,7 +322,7 @@
             background: white;
             border-radius: 15px;
             width: 90%;
-            max-width: 500px;
+            max-width: 600px;
             padding: 30px;
             position: relative;
             max-height: 90vh;
@@ -460,14 +460,16 @@
         /* New styles for score system */
         .progress-filters {
             margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
         }
 
-        .progress-filters select {
+        .progress-filters select, .progress-filters input {
             padding: 8px 12px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: white;
-            width: 100%;
+            flex: 1;
         }
 
         .progress-item {
@@ -555,6 +557,32 @@
             font-weight: 600;
         }
 
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination-btn {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .pagination-btn.active {
+            background: #4e73df;
+            color: white;
+        }
+
+        .pagination-btn:hover:not(.active) {
+            background: #ddd;
+        }
+
         /* Styles mới cho bảng xếp hạng */
         .ranking-container {
             background: white;
@@ -569,6 +597,27 @@
             text-align: center;
             margin-bottom: 20px;
             color: #2e59d9;
+        }
+        
+        .ranking-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .ranking-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #777;
+            transition: all 0.3s;
+        }
+        
+        .ranking-tab.active {
+            color: #4e73df;
+            border-bottom: 3px solid #4e73df;
         }
         
         .ranking-filters {
@@ -674,6 +723,123 @@
             border-left: 4px solid #4e73df;
         }
 
+        /* Social features */
+        .social-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .social-btn {
+            padding: 5px 10px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: background 0.3s;
+        }
+        
+        .social-btn:hover {
+            background: #ddd;
+        }
+        
+        .social-btn.challenge {
+            background: #ffeeba;
+        }
+        
+        .social-btn.challenge:hover {
+            background: #ffdf7e;
+        }
+        
+        .social-btn.share {
+            background: #d1ecf1;
+        }
+        
+        .social-btn.share:hover {
+            background: #abdde5;
+        }
+        
+        .social-btn.friend {
+            background: #d4edda;
+        }
+        
+        .social-btn.friend:hover {
+            background: #a8e0b5;
+        }
+
+        /* Friends system */
+        .friends-list {
+            margin-top: 20px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .friend-item:last-child {
+            border-bottom: none;
+        }
+        
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .friend-info {
+            flex-grow: 1;
+        }
+        
+        .friend-name {
+            font-weight: 500;
+        }
+        
+        .friend-score {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        /* Challenge modal */
+        .challenge-modal {
+            text-align: center;
+        }
+        
+        .challenge-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .challenge-option {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .challenge-option:hover {
+            background: #e9ecef;
+        }
+        
+        .challenge-option.selected {
+            background: #4e73df;
+            color: white;
+        }
+
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -702,6 +868,14 @@
             .ranking-filters {
                 flex-direction: column;
                 align-items: center;
+            }
+            
+            .progress-filters {
+                flex-direction: column;
+            }
+            
+            .challenge-options {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -793,7 +967,7 @@
                 <h3>Thống kê điểm số</h3>
                 
                 <div class="progress-filters">
-                    <select id="progress-filter">
+                    <select id="progress-game-filter">
                         <option value="all">Tất cả trò chơi</option>
                         <option value="congtrutrongphamvi10">Cộng trừ trong phạm vi 10</option>
                         <option value="banbongsotoan2">Bắn Bóng Số</option>
@@ -802,6 +976,13 @@
                         <option value="congtrusonguyen">Cộng trừ số nguyên lớp 6</option>
                         <option value="nhanchianangcao">Nhân chia nâng cao lớp 3-4</option>
                         <option value="duongduapheptinh">Đường đua phép tính</option>
+                    </select>
+                    
+                    <select id="progress-sort">
+                        <option value="newest">Mới nhất</option>
+                        <option value="oldest">Cũ nhất</option>
+                        <option value="highest">Điểm cao nhất</option>
+                        <option value="lowest">Điểm thấp nhất</option>
                     </select>
                 </div>
                 
@@ -825,6 +1006,10 @@
                         Chưa có dữ liệu tiến trình. Hãy chơi các trò chơi để xem tiến trình tại đây!
                     </p>
                 </div>
+                
+                <div class="pagination" id="progress-pagination">
+                    <!-- Pagination will be generated here -->
+                </div>
             </div>
         </div>
     </div>
@@ -835,774 +1020,893 @@
             <span class="close-modal" id="close-ranking-modal">&times;</span>
             <h2 style="text-align: center; margin-bottom: 20px;">Bảng xếp hạng</h2>
             
-            <div class="ranking-filters">
-                <button class="ranking-filter active" data-filter="all">Tất cả</button>
-                <button class="ranking-filter" data-filter="congtrutrongphamvi10">Cộng trừ phạm vi 10</button>
-                <button class="ranking-filter" data-filter="banbongsotoan2">Bắn Bóng Số</button>
-                <button class="ranking-filter" data-filter="bangcuuchuong">Bảng cửu chương</button>
-                <button class="ranking-filter" data-filter="congtruconhotoan2">Cộng trừ có nhớ</button>
-                <button class="ranking-filter" data-filter="congtrusonguyen">Cộng trừ số nguyên</button>
-                <button class="ranking-filter" data-filter="nhanchianangcao">Nhân chia nâng cao</button>
-                <button class="ranking-filter" data-filter="duongduapheptinh">Đường đua phép tính</button>
+            <div class="ranking-tabs">
+                <div class="ranking-tab active" data-tab="highscores">Điểm cao nhất</div>
+                <div class="ranking-tab" data-tab="history">Lịch sử điểm</div>
+                <div class="ranking-tab" data-tab="friends">Bạn bè</div>
             </div>
             
-            <div class="ranking-container">
-                <ul class="ranking-list" id="ranking-list">
-                    <li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>
-                </ul>
+            <div class="ranking-tab-content" id="highscores-tab">
+                <div class="ranking-filters">
+                    <button class="ranking-filter active" data-filter="all">Tất cả</button>
+                    <button class="ranking-filter" data-filter="congtrutrongphamvi10">Cộng trừ phạm vi 10</button>
+                    <button class="ranking-filter" data-filter="banbongsotoan2">Bắn Bóng Số</button>
+                    <button class="ranking-filter" data-filter="bangcuuchuong">Bảng cửu chương</button>
+                    <button class="ranking-filter" data-filter="congtruconhotoan2">Cộng trừ có nhớ</button>
+                    <button class="ranking-filter" data-filter="congtrusonguyen">Cộng trừ số nguyên</button>
+                    <button class="ranking-filter" data-filter="nhanchianangcao">Nhân chia nâng cao</button>
+                    <button class="ranking-filter" data-filter="duongduapheptinh">Đường đua phép tính</button>
+                </div>
+                
+                <div class="ranking-container">
+                    <ul class="ranking-list" id="ranking-list">
+                        <li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="ranking-tab-content" id="history-tab" style="display: none;">
+                <div class="ranking-filters">
+                    <select id="history-user-filter">
+                        <option value="all">Tất cả người dùng</option>
+                        <!-- Users will be populated here -->
+                    </select>
+                    <select id="history-game-filter">
+                        <option value="all">Tất cả trò chơi</option>
+                        <option value="congtrutrongphamvi10">Cộng trừ phạm vi 10</option>
+                        <option value="banbongsotoan2">Bắn Bóng Số</option>
+                        <option value="bangcuuchuong">Bảng cửu chương</option>
+                        <option value="congtruconhotoan2">Cộng trừ có nhớ</option>
+                        <option value="congtrusonguyen">Cộng trừ số nguyên</option>
+                        <option value="nhanchianangcao">Nhân chia nâng cao</option>
+                        <option value="duongduapheptinh">Đường đua phép tính</option>
+                    </select>
+                </div>
+                
+                <div class="ranking-container">
+                    <ul class="ranking-list" id="history-list">
+                        <li class="ranking-loading">Đang tải lịch sử điểm...</li>
+                    </ul>
+                </div>
+                
+                <div class="pagination" id="history-pagination">
+                    <!-- Pagination will be generated here -->
+                </div>
+            </div>
+            
+            <div class="ranking-tab-content" id="friends-tab" style="display: none;">
+                <div class="friends-list" id="friends-list">
+                    <p class="ranking-loading">Đang tải danh sách bạn bè...</p>
+                </div>
+                
+                <div style="margin-top: 20px; text-align: center;">
+                    <button class="modal-btn" id="add-friend-btn">Thêm bạn bè</button>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Challenge Modal -->
+    <div class="modal" id="challenge-modal">
+        <div class="modal-content challenge-modal">
+            <span class="close-modal" id="close-challenge-modal">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 20px;">Thách đấu bạn bè</h2>
+            
+            <div class="form-group">
+                <label for="challenge-friend">Chọn bạn bè</label>
+                <select id="challenge-friend" class="form-input">
+                    <!-- Friends will be populated here -->
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="challenge-game">Chọn trò chơi</label>
+                <select id="challenge-game" class="form-input">
+                    <option value="congtrutrongphamvi10">Cộng trừ phạm vi 10</option>
+                    <option value="banbongsotoan2">Bắn Bóng Số</option>
+                    <option value="bangcuuchuong">Bảng cửu chương</option>
+                    <option value="congtruconhotoan2">Cộng trừ có nhớ</option>
+                    <option value="congtrusonguyen">Cộng trừ số nguyên</option>
+                    <option value="nhanchianangcao">Nhân chia nâng cao</option>
+                    <option value="duongduapheptinh">Đường đua phép tính</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Thời gian thách đấu</label>
+                <div class="challenge-options">
+                    <div class="challenge-option" data-time="5">5 phút</div>
+                    <div class="challenge-option" data-time="10">10 phút</div>
+                    <div class="challenge-option" data-time="15">15 phút</div>
+                    <div class="challenge-option" data-time="30">30 phút</div>
+                </div>
+            </div>
+            
+            <button class="modal-btn" id="send-challenge-btn">Gửi thách đấu</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Main Content -->
     <div class="header">
-        <h1><i class="fas fa-calculator"></i> MathHub</h1>
-        <p>Trang web giáo dục toán học - vừa CHƠI vừa HỌC - HỌC qua TRÒ CHƠI</p>
+        <h1>MathHub</h1>
+        <p>Học Toán vui vẻ - Nâng cao kỹ năng tính toán</p>
         
-        <div class="user-controls" id="user-controls">
+        <div class="user-controls">
             <div class="user-info" id="user-info" style="display: none;">
-                <div class="user-avatar">
+                <div class="user-avatar" id="user-avatar">
                     <i class="fas fa-user"></i>
                 </div>
                 <span id="user-name">Người dùng</span>
                 <button class="auth-btn" id="profile-btn">Hồ sơ</button>
-                <button class="auth-btn" id="ranking-btn">Bảng xếp hạng</button>
+                <button class="auth-btn" id="ranking-btn">Xếp hạng</button>
                 <button class="auth-btn" id="logout-btn">Đăng xuất</button>
             </div>
-            <button class="auth-btn" id="login-btn" style="display: block;">Đăng nhập / Đăng ký</button>
+            
+            <div class="user-info" id="guest-info">
+                <button class="auth-btn" id="login-btn">Đăng nhập</button>
+                <button class="auth-btn" id="register-btn">Đăng ký</button>
+            </div>
         </div>
     </div>
-    
-    <h2 class="section-title">Trò chơi hiện có</h2>
+
+    <h2 class="section-title">Trò chơi Toán học</h2>
     <div class="section-divider"></div>
     
     <div class="container">
-        <!-- Game Toán lớp 1 - Nổi bật -->
         <div class="game-card featured">
-            <div class="featured-badge">Nổi bật</div>
-            <div class="game-card-img" style="background-color: #ff6b6b;">
-                <i class="fas fa-child"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ trong phạm vi 10</h3>
-                <p>Game toán học dành cho học sinh lớp 1. Luyện tập các phép tính cộng trừ cơ bản với giao diện thân thiện và vui nhộn.</p>
-                <a href="congtrutrongphamvi10.html" class="game-card-btn featured">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Game Bắn Bóng Số - Mới -->
-        <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #ff6b6b, #e55656);">
+            <span class="featured-badge">Nổi bật</span>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b 0%, #e55656 100%);">
                 <i class="fas fa-bullseye"></i>
             </div>
             <div class="game-card-content">
                 <h3>Bắn Bóng Số</h3>
-                <p>Game toán lớp 2 thú vị. Bắn các bóng bay chứa phép tính bằng cách nhập kết quả chính xác.</p>
-                <a href="banbongsotoan2.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Rèn luyện khả năng tính nhẩm nhanh bằng cách bắn bóng chứa kết quả đúng. Trò chơi thú vị với nhiều cấp độ từ dễ đến khó.</p>
+                <a class="game-card-btn featured" href="banbongsotoan2.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Game Bảng cửu chương -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #8e2de2, #4a00e0);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Cộng trừ trong phạm vi 10</h3>
+                <p>Làm quen với phép cộng và trừ cơ bản dành cho học sinh lớp 1. Giao diện thân thiện với trẻ em và hệ thống khen thưởng hấp dẫn.</p>
+                <a class="game-card-btn" href="congtrutrongphamvi10.html">Chơi ngay</a>
+            </div>
+        </div>
+        
+        <div class="game-card">
+            <span class="new-badge">Mới</span>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc 0%, #2a9eb0 100%);">
                 <i class="fas fa-times-circle"></i>
             </div>
             <div class="game-card-content">
                 <h3>Bảng cửu chương</h3>
-                <p>Học thuộc bảng cửu chương từ 2 đến 10 một cách dễ dàng và thú vị. Chế độ tổng hợp giúp ôn tập hiệu quả.</p>
-                <a href="bangcuuchuong.html" class="game-card-btn">Chơi ngay</a>
+                <p>Học thuộc bảng cửu chương từ 2 đến 9 thông qua các trò chơi vui nhộn. Phương pháp học nhanh và nhớ lâu.</p>
+                <a class="game-card-btn new" href="bangcuuchuong.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Game Toán lớp 2 - Phổ biến -->
         <div class="game-card">
-            <div class="popular-badge">Phổ biến</div>
-            <div class="game-card-img" style="background-color: #4e73df;">
-                <i class="fas fa-plus-circle"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);">
+                <i class="fas fa-calculator"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ có nhớ lớp 2</h3>
-                <p>Game toán học dành cho học sinh lớp 2. Rèn luyện kỹ năng cộng trừ có nhớ với nhiều cấp độ từ dễ đến khó.</p>
-                <a href="congtruconhotoan2.html" class="game-card-btn popular">Chơi ngay</a>
+                <p>Nâng cao kỹ năng tính toán với phép cộng trừ có nhớ dành cho học sinh lớp 2. Bài tập được phân loại theo mức độ khó.</p>
+                <a class="game-card-btn" href="congtruconhotoan2.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Cộng trừ số nguyên lớp 6 -->
         <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
+            <span class="popular-badge">Phổ biến</span>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e 0%, #e6b02a 100%);">
                 <i class="fas fa-infinity"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ số nguyên lớp 6</h3>
-                <p>Làm chủ phép cộng trừ số nguyên âm và dương. Game dành cho học sinh lớp 6 với nhiều thử thách thú vị.</p>
-                <a href="congtrusonguyen.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Làm chủ các phép tính với số nguyên âm và dương. Hiểu rõ bản chất của phép toán thông qua minh họa trực quan.</p>
+                <a class="game-card-btn popular" href="congtrusonguyen.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Nhân chia nâng cao lớp 3-4 -->
         <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #6f42c1, #4e2a8e);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b 0%, #d52a1a 100%);">
                 <i class="fas fa-divide"></i>
             </div>
             <div class="game-card-content">
                 <h3>Nhân chia nâng cao lớp 3-4</h3>
-                <p>Rèn luyện kỹ năng nhân chia với các số lớn hơn. Nhiều cấp độ từ cơ bản đến nâng cao cho học sinh lớp 3-4.</p>
-                <a href="nhanchianangcao.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Thử thách với các bài toán nhân chia nhiều chữ số. Rèn luyện tư duy logic và kỹ năng tính toán chính xác.</p>
+                <a class="game-card-btn" href="nhanchianangcao.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Đường đua phép tính -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
-                <i class="fas fa-flag-checkered"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #5a5c69 0%, #4a4c58 100%);">
+                <i class="fas fa-road"></i>
             </div>
             <div class="game-card-content">
                 <h3>Đường đua phép tính</h3>
-                <p>Giải các phép tính toán học để đưa xe về đích. Rèn luyện kỹ năng tính toán nhanh và chính xác.</p>
-                <a href="duongduapheptinh.html" class="game-card-btn">Chơi ngay</a>
-            </div>
-        </div>
-    </div>
-    
-    <h2 class="section-title">Trò chơi sắp ra mắt</h2>
-    <div class="section-divider"></div>
-    
-    <div class="container">
-        <!-- Toán đố vui -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #f6c23e;">
-                <i class="fas fa-puzzle-piece"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Toán đố vui</h3>
-                <p>Giải các bài toán đố thú vị và rèn luyện tư duy logic. Phù hợp với mọi lứa tuổi.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <p>Đua xe cùng các phép tính toán. Chọn đáp án đúng để tăng tốc và vượt qua đối thủ. Trò chơi kết hợp tốc độ và tư duy.</p>
+                <a class="game-card-btn" href="duongduapheptinh.html">Chơi ngay</a>
             </div>
         </div>
         
-        <!-- Cờ toán học -->
         <div class="game-card">
-            <div class="game-card-img" style="background-color: #e74a3b;">
-                <i class="fas fa-chess-board"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #858796 0%, #6c6e7e 100%);">
+                <i class="fas fa-question-circle"></i>
             </div>
             <div class="game-card-content">
-                <h3>Cờ toán học</h3>
-                <p>Kết hợp giữa cờ vua và toán học. Chiến thắng bằng cách giải các phép tính.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-        
-        <!-- Đấu trường toán học -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #36b9cc;">
-                <i class="fas fa-trophy"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Đấu trường toán học</h3>
-                <p>Thi đấu với bạn bè và người chơi khác để trở thành nhà vô địch toán học.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-
-        <!-- Hình học vui nhộn -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #8e2de2;">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Hình học vui nhộn</h3>
-                <p>Khám phá thế giới hình học qua các trò chơi thú vị. Nhận diện hình khối và tính chu vi, diện tích.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <h3>Trò chơi mới sắp ra mắt</h3>
+                <p>Chúng tôi đang phát triển những trò chơi toán học mới với nhiều tính năng hấp dẫn. Hãy quay lại sau để khám phá!</p>
+                <a class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
     </div>
     
     <div class="footer">
-        <p>© 2025 MathHub - Website của thầy Võ Viết Chương - THPT Lê Quảng Chí</p>
-        <p>Liên hệ: gnouhcteiv@gmail.com</p>
+        <p>© 2023 MathHub - Nền tảng trò chơi toán học cho học sinh tiểu học và trung học cơ sở</p>
     </div>
 
-    <!-- Toast notification -->
-    <div class="toast" id="toast"></div>
-
-    <!-- Font Awesome for icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    
-    <!-- Auth System -->
     <script>
-        // auth-system.js
-        class AuthSystem {
-            constructor() {
-                this.initFirebase();
-                this.setupEventListeners();
-                this.checkAuthState();
-            }
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyKeyDummyKeyDummyKeyDummyKey",
+            authDomain: "mathhub-dummy.firebaseapp.com",
+            projectId: "mathhub-dummy",
+            storageBucket: "mathhub-dummy.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:dummyappid",
+            measurementId: "G-DUMMYID"
+        };
 
-            initFirebase() {
-                // Firebase configuration
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
-                    authDomain: "mathhubvn.firebaseapp.com",
-                    projectId: "mathhubvn",
-                    storageBucket: "mathhubvn.firebasestorage.app",
-                    messagingSenderId: "1001364433767",
-                    appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
-                    measurementId: "G-2YNQZ48JVK"
-                };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const storage = firebase.storage();
 
-                // Initialize Firebase với nhiều services
-                firebase.initializeApp(firebaseConfig);
-                this.analytics = firebase.analytics();
-                this.auth = firebase.auth();
-                // Khởi tạo Firestore và Storage
-                this.firestore = firebase.firestore();
-                this.storage = firebase.storage();
-            }
+        // DOM Elements
+        const loginModal = document.getElementById('login-modal');
+        const profileModal = document.getElementById('profile-modal');
+        const rankingModal = document.getElementById('ranking-modal');
+        const challengeModal = document.getElementById('challenge-modal');
+        const toast = document.getElementById('toast');
+        
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const profileBtn = document.getElementById('profile-btn');
+        const rankingBtn = document.getElementById('ranking-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        
+        const userInfo = document.getElementById('user-info');
+        const guestInfo = document.getElementById('guest-info');
+        const userName = document.getElementById('user-name');
+        const userAvatar = document.getElementById('user-avatar');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const profileName = document.getElementById('profile-name');
+        const profileEmail = document.getElementById('profile-email');
+        
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const profileForm = document.getElementById('profile-form');
+        
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        
+        // Mock data for demonstration
+        const mockUsers = [
+            { id: 'user1', name: 'Nguyễn Văn An', email: 'an.nguyen@example.com', avatar: '', scores: [
+                { game: 'congtrutrongphamvi10', score: 95, date: '2023-10-15' },
+                { game: 'banbongsotoan2', score: 87, date: '2023-10-14' },
+                { game: 'bangcuuchuong', score: 92, date: '2023-10-13' }
+            ]},
+            { id: 'user2', name: 'Trần Thị Bình', email: 'binh.tran@example.com', avatar: '', scores: [
+                { game: 'congtrutrongphamvi10', score: 88, date: '2023-10-15' },
+                { game: 'banbongsotoan2', score: 94, date: '2023-10-14' },
+                { game: 'bangcuuchuong', score: 85, date: '2023-10-13' }
+            ]},
+            { id: 'user3', name: 'Lê Minh Châu', email: 'chau.le@example.com', avatar: '', scores: [
+                { game: 'congtrutrongphamvi10', score: 92, date: '2023-10-15' },
+                { game: 'banbongsotoan2', score: 89, date: '2023-10-14' },
+                { game: 'bangcuuchuong', score: 96, date: '2023-10-13' }
+            ]}
+        ];
 
-            setupEventListeners() {
-                // DOM Elements
-                this.loginBtn = document.getElementById('login-btn');
-                this.logoutBtn = document.getElementById('logout-btn');
-                this.userInfo = document.getElementById('user-info');
-                this.userName = document.getElementById('user-name');
-                this.loginModal = document.getElementById('login-modal');
-                this.closeModal = document.getElementById('close-modal');
-                this.loginTab = document.getElementById('login-tab');
-                this.registerTab = document.getElementById('register-tab');
-                this.loginForm = document.getElementById('login-form');
-                this.registerForm = document.getElementById('register-form');
-                this.toast = document.getElementById('toast');
-                this.profileBtn = document.getElementById('profile-btn');
-                this.rankingBtn = document.getElementById('ranking-btn');
+        const mockScores = [
+            { userId: 'user1', game: 'congtrutrongphamvi10', score: 95, date: '2023-10-15T10:30:00' },
+            { userId: 'user1', game: 'banbongsotoan2', score: 87, date: '2023-10-14T15:45:00' },
+            { userId: 'user1', game: 'bangcuuchuong', score: 92, date: '2023-10-13T09:15:00' },
+            { userId: 'user2', game: 'congtrutrongphamvi10', score: 88, date: '2023-10-15T11:20:00' },
+            { userId: 'user2', game: 'banbongsotoan2', score: 94, date: '2023-10-14T14:30:00' },
+            { userId: 'user2', game: 'bangcuuchuong', score: 85, date: '2023-10-13T16:45:00' },
+            { userId: 'user3', game: 'congtrutrongphamvi10', score: 92, date: '2023-10-15T13:15:00' },
+            { userId: 'user3', game: 'banbongsotoan2', score: 89, date: '2023-10-14T10:30:00' },
+            { userId: 'user3', game: 'bangcuuchuong', score: 96, date: '2023-10-13T15:20:00' }
+        ];
 
-                // Event listeners
-                if (this.loginBtn) this.loginBtn.addEventListener('click', () => this.openLoginModal());
-                if (this.closeModal) this.closeModal.addEventListener('click', () => this.closeLoginModal());
-                if (this.loginTab) this.loginTab.addEventListener('click', () => this.switchToLogin());
-                if (this.registerTab) this.registerTab.addEventListener('click', () => this.switchToRegister());
-                if (this.loginForm) this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-                if (this.registerForm) this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
-                if (this.logoutBtn) this.logoutBtn.addEventListener('click', () => this.handleLogout());
-                if (this.profileBtn) this.profileBtn.addEventListener('click', () => this.openProfileModal());
-                if (this.rankingBtn) this.rankingBtn.addEventListener('click', () => this.openRankingModal());
+        // Current user state
+        let currentUser = null;
+        let userScores = [];
+
+        // Event Listeners
+        loginBtn.addEventListener('click', () => showModal(loginModal));
+        registerBtn.addEventListener('click', () => {
+            showModal(loginModal);
+            registerTab.click();
+        });
+        profileBtn.addEventListener('click', () => showModal(profileModal));
+        rankingBtn.addEventListener('click', () => showModal(rankingModal));
+        logoutBtn.addEventListener('click', handleLogout);
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                profileModal.style.display = 'none';
+                rankingModal.style.display = 'none';
+                challengeModal.style.display = 'none';
+            });
+        });
+        
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+        
+        loginForm.addEventListener('submit', handleLogin);
+        registerForm.addEventListener('submit', handleRegister);
+        profileForm.addEventListener('submit', handleProfileUpdate);
+        
+        // Ranking tabs
+        document.querySelectorAll('.ranking-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.ranking-tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
                 
-                const forgotPassword = document.getElementById('forgot-password');
-                if (forgotPassword) forgotPassword.addEventListener('click', (e) => this.handleForgotPassword(e));
-            }
-
-            openLoginModal() {
-                if (this.loginModal) this.loginModal.style.display = 'flex';
-            }
-
-            closeLoginModal() {
-                if (this.loginModal) this.loginModal.style.display = 'none';
-            }
-
-            openProfileModal() {
-                const profileModal = document.getElementById('profile-modal');
-                if (profileModal) profileModal.style.display = 'flex';
+                // Hide all tab content
+                document.querySelectorAll('.ranking-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
                 
-                // Tải dữ liệu hồ sơ nếu hệ thống người dùng đã khởi tạo
-                if (window.userSystem) {
-                    window.userSystem.loadProfileData();
+                // Show the selected tab content
+                const tabId = tab.getAttribute('data-tab') + '-tab';
+                document.getElementById(tabId).style.display = 'block';
+                
+                // Load data for the selected tab
+                if (tab.getAttribute('data-tab') === 'highscores') {
+                    loadRankings();
+                } else if (tab.getAttribute('data-tab') === 'history') {
+                    loadScoreHistory();
+                } else if (tab.getAttribute('data-tab') === 'friends') {
+                    loadFriendsList();
                 }
+            });
+        });
+        
+        // Ranking filters
+        document.querySelectorAll('.ranking-filter').forEach(filter => {
+            filter.addEventListener('click', () => {
+                document.querySelectorAll('.ranking-filter').forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+                loadRankings();
+            });
+        });
+        
+        // Initialize
+        checkAuthState();
+        initProgressFilters();
+        
+        // Functions
+        function showModal(modal) {
+            modal.style.display = 'flex';
+        }
+        
+        function showToast(message, type = 'success') {
+            toast.textContent = message;
+            toast.className = 'toast ' + type;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function checkAuthState() {
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUser = user;
+                    userInfo.style.display = 'flex';
+                    guestInfo.style.display = 'none';
+                    userName.textContent = user.displayName || user.email;
+                    
+                    // Load user data
+                    loadUserData();
+                    loadUserScores();
+                } else {
+                    currentUser = null;
+                    userInfo.style.display = 'none';
+                    guestInfo.style.display = 'flex';
+                }
+            });
+        }
+        
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    showToast('Đăng nhập thành công!');
+                    loginModal.style.display = 'none';
+                })
+                .catch(error => {
+                    showToast('Đăng nhập thất bại: ' + error.message, 'error');
+                });
+        }
+        
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            
+            if (password !== confirm) {
+                showToast('Mật khẩu xác nhận không khớp!', 'error');
+                return;
             }
-
-            openRankingModal() {
-                const rankingModal = document.getElementById('ranking-modal');
-                if (rankingModal) rankingModal.style.display = 'flex';
-                
-                // Tải dữ liệu xếp hạng
-                this.loadRankings('all');
-            }
-
-            switchToLogin() {
-                this.loginTab.classList.add('active');
-                this.registerTab.classList.remove('active');
-                this.loginForm.classList.add('active');
-                this.registerForm.classList.remove('active');
-            }
-
-            switchToRegister() {
-                this.registerTab.classList.add('active');
-                this.loginTab.classList.remove('active');
-                this.registerForm.classList.add('active');
-                this.loginForm.classList.remove('active');
-            }
-
-            handleLogin(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                this.auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        this.showToast('Đăng nhập thành công!', 'success');
-                        this.analytics.logEvent('login', { method: 'email' });
-                        this.closeLoginModal();
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then(userCredential => {
+                    // Update profile with display name
+                    return userCredential.user.updateProfile({
+                        displayName: name
                     });
+                })
+                .then(() => {
+                    showToast('Đăng ký thành công!');
+                    loginModal.style.display = 'none';
+                })
+                .catch(error => {
+                    showToast('Đăng ký thất bại: ' + error.message, 'error');
+                });
+        }
+        
+        function handleLogout() {
+            auth.signOut()
+                .then(() => {
+                    showToast('Đã đăng xuất');
+                })
+                .catch(error => {
+                    showToast('Đăng xuất thất bại: ' + error.message, 'error');
+                });
+        }
+        
+        function handleProfileUpdate(e) {
+            e.preventDefault();
+            const name = document.getElementById('profile-name').value;
+            
+            currentUser.updateProfile({
+                displayName: name
+            })
+            .then(() => {
+                showToast('Cập nhật hồ sơ thành công!');
+                userName.textContent = name;
+                profileModal.style.display = 'none';
+            })
+            .catch(error => {
+                showToast('Cập nhật thất bại: ' + error.message, 'error');
+            });
+        }
+        
+        function loadUserData() {
+            if (!currentUser) return;
+            
+            profileName.value = currentUser.displayName || '';
+            profileEmail.value = currentUser.email;
+            
+            // Load user avatar if exists
+            if (currentUser.photoURL) {
+                userAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
+                profileAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
+            } else {
+                userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
             }
-
-            handleRegister(e) {
-                e.preventDefault();
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirm = document.getElementById('register-confirm').value;
+        }
+        
+        function loadUserScores() {
+            if (!currentUser) return;
+            
+            // In a real app, this would come from Firestore
+            // For demo, we'll use mock data
+            userScores = mockScores.filter(score => score.userId === 'user1');
+            
+            updateProgressList();
+            updateProgressStats();
+        }
+        
+        function initProgressFilters() {
+            const gameFilter = document.getElementById('progress-game-filter');
+            const sortFilter = document.getElementById('progress-sort');
+            
+            gameFilter.addEventListener('change', updateProgressList);
+            sortFilter.addEventListener('change', updateProgressList);
+        }
+        
+        function updateProgressList() {
+            const progressList = document.getElementById('progress-list');
+            const gameFilter = document.getElementById('progress-game-filter').value;
+            const sortFilter = document.getElementById('progress-sort').value;
+            
+            // Filter scores
+            let filteredScores = [...userScores];
+            if (gameFilter !== 'all') {
+                filteredScores = filteredScores.filter(score => score.game === gameFilter);
+            }
+            
+            // Sort scores
+            switch(sortFilter) {
+                case 'newest':
+                    filteredScores.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    break;
+                case 'oldest':
+                    filteredScores.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    break;
+                case 'highest':
+                    filteredScores.sort((a, b) => b.score - a.score);
+                    break;
+                case 'lowest':
+                    filteredScores.sort((a, b) => a.score - b.score);
+                    break;
+            }
+            
+            // Display scores
+            if (filteredScores.length === 0) {
+                progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Không có kết quả phù hợp</p>';
+                return;
+            }
+            
+            let html = '';
+            filteredScores.forEach(score => {
+                const gameName = getGameName(score.game);
+                const date = new Date(score.date).toLocaleDateString('vi-VN');
                 
-                if (password !== confirm) {
-                    this.showToast('Mật khẩu xác nhận không khớp!', 'error');
-                    return;
-                }
+                html += `
+                <div class="progress-item">
+                    <div class="progress-info">
+                        <div class="progress-game">${gameName}</div>
+                        <div class="progress-date">${date}</div>
+                    </div>
+                    <div class="progress-score">${score.score} điểm</div>
+                </div>
+                `;
+            });
+            
+            progressList.innerHTML = html;
+        }
+        
+        function updateProgressStats() {
+            const totalGames = document.getElementById('total-games');
+            const highScore = document.getElementById('high-score');
+            const averageScore = document.getElementById('average-score');
+            
+            totalGames.textContent = userScores.length;
+            
+            if (userScores.length > 0) {
+                const highest = Math.max(...userScores.map(score => score.score));
+                const average = userScores.reduce((sum, score) => sum + score.score, 0) / userScores.length;
                 
-                this.auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        return user.updateProfile({
-                            displayName: name
+                highScore.textContent = highest;
+                averageScore.textContent = average.toFixed(1);
+            } else {
+                highScore.textContent = '0';
+                averageScore.textContent = '0.0';
+            }
+        }
+        
+        function getGameName(gameId) {
+            const games = {
+                'congtrutrongphamvi10': 'Cộng trừ trong phạm vi 10',
+                'banbongsotoan2': 'Bắn Bóng Số',
+                'bangcuuchuong': 'Bảng cửu chương',
+                'congtruconhotoan2': 'Cộng trừ có nhớ lớp 2',
+                'congtrusonguyen': 'Cộng trừ số nguyên lớp 6',
+                'nhanchianangcao': 'Nhân chia nâng cao lớp 3-4',
+                'duongduapheptinh': 'Đường đua phép tính'
+            };
+            
+            return games[gameId] || gameId;
+        }
+        
+        function loadRankings() {
+            const rankingList = document.getElementById('ranking-list');
+            const gameFilter = document.querySelector('.ranking-filter.active').getAttribute('data-filter');
+            
+            rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
+            
+            // In a real app, this would come from Firestore
+            // For demo, we'll use mock data
+            setTimeout(() => {
+                let rankings = [];
+                
+                // Calculate high scores for each user
+                mockUsers.forEach(user => {
+                    let userScores = mockScores.filter(score => score.userId === user.id);
+                    
+                    if (gameFilter !== 'all') {
+                        userScores = userScores.filter(score => score.game === gameFilter);
+                    }
+                    
+                    if (userScores.length > 0) {
+                        const highScore = Math.max(...userScores.map(score => score.score));
+                        rankings.push({
+                            userId: user.id,
+                            name: user.name,
+                            avatar: user.avatar,
+                            score: highScore
                         });
-                    })
-                    .then(() => {
-                        this.showToast('Đăng ký thành công!', 'success');
-                        this.analytics.logEvent('sign_up', { method: 'email' });
-                        this.switchToLogin();
-                        
-                        // Clear registration form
-                        document.getElementById('register-name').value = '';
-                        document.getElementById('register-email').value = '';
-                        document.getElementById('register-password').value = '';
-                        document.getElementById('register-confirm').value = '';
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
-                    });
-            }
-
-            handleLogout() {
-                this.auth.signOut()
-                    .then(() => {
-                        this.showToast('Đã đăng xuất!', 'success');
-                        this.analytics.logEvent('logout');
-                        // ❌ Khi logout thì xoá user khỏi localStorage
-                        localStorage.removeItem("currentUser");
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
-                    });
-            }
-
-            handleForgotPassword(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value || prompt('Vui lòng nhập email của bạn:');
-                
-                if (email) {
-                    this.auth.sendPasswordResetEmail(email)
-                        .then(() => {
-                            this.showToast('Email đặt lại mật khẩu đã được gửi!', 'success');
-                        })
-                        .catch((error) => {
-                            this.showToast(error.message, 'error');
-                        });
-                }
-            }
-
-            checkAuthState() {
-                this.auth.onAuthStateChanged((user) => {
-                    if (user) {
-                        this.userName.textContent = user.displayName || user.email;
-                        this.userInfo.style.display = 'flex';
-                        this.loginBtn.style.display = 'none';
-                        
-                        // ✅ Lưu thông tin user vào localStorage để game đọc được
-                        const currentUser = {
-                            name: user.displayName || user.email,
-                            email: user.email,
-                            uid: user.uid
-                        };
-                        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-                        // Khởi tạo hệ thống người dùng khi đã đăng nhập
-                        if (!window.userSystem && typeof UserSystem !== 'undefined') {
-                            window.userSystem = new UserSystem(this);
-                        }
-                    } else {
-                        this.userInfo.style.display = 'none';
-                        this.loginBtn.style.display = 'block';
-                        // ❌ Nếu chưa đăng nhập thì xoá currentUser
-                        localStorage.removeItem("currentUser");
                     }
                 });
-            }
-
-            showToast(message, type = '') {
-                this.toast.textContent = message;
-                this.toast.className = 'toast';
-                if (type) this.toast.classList.add(type);
-                this.toast.classList.add('show');
                 
-                setTimeout(() => {
-                    this.toast.classList.remove('show');
-                }, 3000);
-            }
-
-            // Phương thức lưu điểm
-            saveGameScore(gameId, gameName, score, level = null) {
-                const user = this.auth.currentUser;
-                if (!user) return Promise.reject(new Error('User not authenticated'));
+                // Sort by score descending
+                rankings.sort((a, b) => b.score - a.score);
                 
-                const scoreData = {
-                    userId: user.uid,
-                    userName: user.displayName || 'Người dùng ẩn danh',
-                    gameId,
-                    gameName,
-                    score,
-                    level,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                };
-                
-                return this.firestore.collection('scores').add(scoreData)
-                    .then(() => {
-                        this.analytics.logEvent('game_score_saved', {
-                            game_id: gameId,
-                            score: score
-                        });
-                        return scoreData;
-                    });
-            }
-
-            // Phương thức lấy điểm theo user
-            getUserScores() {
-                const user = this.auth.currentUser;
-                if (!user) return Promise.resolve([]);
-                
-                return this.firestore.collection('scores')
-                    .where('userId', '==', user.uid)
-                    .orderBy('timestamp', 'desc')
-                    .limit(10)
-                    .get()
-                    .then(querySnapshot => {
-                        const scores = [];
-                        querySnapshot.forEach(doc => {
-                            scores.push({ id: doc.id, ...doc.data() });
-                        });
-                        return scores;
-                    });
-            }
-
-            // Phương thức lấy dữ liệu xếp hạng
-            loadRankings(filter) {
-                const rankingList = document.getElementById('ranking-list');
-                rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
-                
-                let query = this.firestore.collection('scores');
-                
-                if (filter !== 'all') {
-                    query = query.where('gameId', '==', filter);
-                }
-                
-                query.orderBy('score', 'desc')
-                    .limit(100)
-                    .get()
-                    .then(querySnapshot => {
-                        // Nhóm điểm theo user và lấy điểm cao nhất
-                        const userScores = {};
-                        
-                        querySnapshot.forEach(doc => {
-                            const data = doc.data();
-                            const userId = data.userId;
-                            
-                            if (!userScores[userId] || data.score > userScores[userId].score) {
-                                userScores[userId] = {
-                                    userId: userId,
-                                    score: data.score,
-                                    gameName: data.gameName,
-                                    userName: data.userName || 'Người dùng ẩn danh'
-                                };
-                            }
-                        });
-                        
-                        // Chuyển đổi thành mảng và sắp xếp
-                        const rankings = Object.values(userScores).sort((a, b) => b.score - a.score);
-                        
-                        // Hiển thị kết quả
-                        this.displayRankings(rankings);
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi tải xếp hạng:', error);
-                        rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
-                    });
-            }
-
-            // Hiển thị bảng xếp hạng
-            displayRankings(rankings) {
-                const rankingList = document.getElementById('ranking-list');
-                
+                // Display rankings
                 if (rankings.length === 0) {
-                    rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng.</li>';
+                    rankingList.innerHTML = '<li class="ranking-loading">Không có dữ liệu xếp hạng</li>';
                     return;
                 }
                 
                 let html = '';
-                const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                
-                rankings.forEach((item, index) => {
-                    const isCurrentUser = currentUser.uid === item.userId;
-                    const positionClass = index < 3 ? `ranking-position-${index + 1}` : '';
+                rankings.forEach((user, index) => {
+                    const positionClass = index < 3 ? `ranking-position-${index+1}` : '';
                     
                     html += `
-                        <li class="ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}">
-                            <div class="ranking-position ${positionClass}">${index + 1}</div>
-                            <div class="ranking-user">
-                                <div class="ranking-avatar">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="ranking-name">${item.userName}</div>
+                    <li class="ranking-item ${user.userId === 'user1' ? 'current-user-highlight' : ''}">
+                        <div class="ranking-position ${positionClass}">${index + 1}</div>
+                        <div class="ranking-user">
+                            <div class="ranking-avatar">
+                                ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}">` : '<i class="fas fa-user"></i>'}
                             </div>
-                            <div class="ranking-score">${item.score} điểm</div>
-                        </li>
+                            <div class="ranking-name">${user.name}</div>
+                        </div>
+                        <div class="ranking-score">${user.score} điểm</div>
+                        <div class="social-actions">
+                            <button class="social-btn challenge" data-userid="${user.userId}">
+                                <i class="fas fa-trophy"></i> Thách đấu
+                            </button>
+                            <button class="social-btn share" data-userid="${user.userId}">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                            <button class="social-btn friend" data-userid="${user.userId}">
+                                <i class="fas fa-user-plus"></i>
+                            </button>
+                        </div>
+                    </li>
                     `;
                 });
                 
                 rankingList.innerHTML = html;
                 
-                // Thiết lập sự kiện cho bộ lọc xếp hạng
-                const rankingFilters = document.querySelectorAll('.ranking-filter');
-                rankingFilters.forEach(filter => {
-                    filter.addEventListener('click', () => {
-                        rankingFilters.forEach(f => f.classList.remove('active'));
-                        filter.classList.add('active');
-                        const filterValue = filter.dataset.filter;
-                        this.loadRankings(filterValue);
+                // Add event listeners to social buttons
+                document.querySelectorAll('.social-btn.challenge').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const userId = btn.getAttribute('data-userid');
+                        openChallengeModal(userId);
                     });
                 });
-            }
+                
+                document.querySelectorAll('.social-btn.share').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const userId = btn.getAttribute('data-userid');
+                        shareUserAchievement(userId);
+                    });
+                });
+                
+                document.querySelectorAll('.social-btn.friend').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const userId = btn.getAttribute('data-userid');
+                        sendFriendRequest(userId);
+                    });
+                });
+                
+            }, 1000);
         }
-    </script>
-    
-    <!-- User System -->
-    <script>
-        // user-system.js
-        class UserSystem {
-            constructor(authSystem) {
-                this.authSystem = authSystem;
-                this.setupEventListeners();
-            }
-
-            setupEventListeners() {
-                const filterElement = document.getElementById('progress-filter');
-                if (filterElement) {
-                    filterElement.addEventListener('change', () => {
-                        this.loadScores();
-                    });
+        
+        function loadScoreHistory() {
+            const historyList = document.getElementById('history-list');
+            const userFilter = document.getElementById('history-user-filter').value;
+            const gameFilter = document.getElementById('history-game-filter').value;
+            
+            historyList.innerHTML = '<li class="ranking-loading">Đang tải lịch sử điểm...</li>';
+            
+            // In a real app, this would come from Firestore
+            // For demo, we'll use mock data
+            setTimeout(() => {
+                let scores = [...mockScores];
+                
+                // Filter by user
+                if (userFilter !== 'all') {
+                    scores = scores.filter(score => score.userId === userFilter);
                 }
-            }
-
-            loadProfileData() {
-                this.loadScores();
-                this.loadUserInfo();
-                this.updateAvatarDisplay();
-            }
-
-            loadUserInfo() {
-                const user = this.authSystem.auth.currentUser;
-                if (user) {
-                    document.getElementById('profile-name').value = user.displayName || '';
-                    document.getElementById('profile-email').value = user.email || '';
+                
+                // Filter by game
+                if (gameFilter !== 'all') {
+                    scores = scores.filter(score => score.game === gameFilter);
                 }
-            }
-
-            loadScores() {
-                this.authSystem.getUserScores().then(scores => {
-                    const progressList = document.getElementById('progress-list');
-                    const filter = document.getElementById('progress-filter').value;
-                    
-                    // Lọc scores nếu cần
-                    let filteredScores = scores;
-                    if (filter !== 'all') {
-                        filteredScores = scores.filter(score => score.gameId === filter);
-                    }
-                    
-                    // Cập nhật thống kê
-                    const stats = this.calculateStats(filteredScores);
-                    this.updateStatsDisplay(stats);
-                    
-                    if (filteredScores.length === 0) {
-                        progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Chưa có dữ liệu tiến trình. Hãy chơi các trò chơi để xem tiến trình tại đây!</p>';
-                        return;
-                    }
-                    
-                    let html = '';
-                    filteredScores.forEach(scoreData => {
-                        const date = scoreData.timestamp ? scoreData.timestamp.toDate().toLocaleDateString('vi-VN') : 'Chưa xác định';
-                        const isHighScore = scoreData.score === stats.highScore;
-                        
-                        html += `
-                            <div class="progress-item ${isHighScore ? 'high-score' : ''}">
-                                <div class="progress-info">
-                                    <div class="progress-game">${scoreData.gameName}</div>
-                                    <div class="progress-date">${date}</div>
-                                    ${scoreData.level ? `<div class="progress-level">Cấp độ: ${scoreData.level}</div>` : ''}
-                                </div>
-                                <div class="progress-score">Điểm: ${scoreData.score}</div>
-                            </div>
-                        `;
-                    });
-                    
-                    progressList.innerHTML = html;
-                }).catch(error => {
-                    console.error('Lỗi khi tải điểm:', error);
-                });
-            }
-
-            calculateStats(scores) {
+                
+                // Sort by date descending
+                scores.sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Display scores
                 if (scores.length === 0) {
-                    return {
-                        total: 0,
-                        highScore: 0,
-                        average: 0
-                    };
+                    historyList.innerHTML = '<li class="ranking-loading">Không có dữ liệu lịch sử</li>';
+                    return;
                 }
                 
-                let total = scores.length;
-                let highScore = Math.max(...scores.map(s => s.score));
-                let average = scores.reduce((sum, score) => sum + score.score, 0) / total;
-                
-                return {
-                    total,
-                    highScore,
-                    average: Math.round(average)
-                };
-            }
-
-            updateStatsDisplay(stats) {
-                document.getElementById('total-games').textContent = stats.total;
-                document.getElementById('high-score').textContent = stats.highScore;
-                document.getElementById('average-score').textContent = stats.average;
-            }
-
-            updateProfile(displayName) {
-                const user = this.authSystem.auth.currentUser;
-                
-                user.updateProfile({
-                    displayName: displayName
-                }).then(() => {
-                    this.authSystem.showToast('Cập nhật hồ sơ thành công!', 'success');
-                    document.getElementById('user-name').textContent = displayName;
+                let html = '';
+                scores.forEach(score => {
+                    const user = mockUsers.find(u => u.id === score.userId);
+                    const gameName = getGameName(score.game);
+                    const date = new Date(score.date).toLocaleDateString('vi-VN');
                     
-                    // Cập nhật thông tin trong localStorage
-                    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-                    currentUser.name = displayName;
-                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                }).catch(error => {
-                    this.authSystem.showToast(error.message, 'error');
+                    html += `
+                    <li class="ranking-item">
+                        <div class="ranking-user">
+                            <div class="ranking-avatar">
+                                ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}">` : '<i class="fas fa-user"></i>'}
+                            </div>
+                            <div class="ranking-name">${user.name}</div>
+                        </div>
+                        <div class="ranking-score">${score.score} điểm</div>
+                        <div style="margin-left: 10px; color: #777; font-size: 0.9rem;">
+                            ${gameName} - ${date}
+                        </div>
+                    </li>
+                    `;
                 });
-            }
-
-            uploadAvatar(file) {
-                const user = this.authSystem.auth.currentUser;
-                const storageRef = this.authSystem.storage.ref();
-                const avatarRef = storageRef.child(`avatars/${user.uid}`);
                 
-                avatarRef.put(file).then(snapshot => {
-                    return snapshot.ref.getDownloadURL();
-                }).then(downloadURL => {
-                    return user.updateProfile({
-                        photoURL: downloadURL
-                    });
-                }).then(() => {
-                    this.authSystem.showToast('Cập nhật ảnh đại diện thành công!', 'success');
-                    this.updateAvatarDisplay();
-                }).catch(error => {
-                    this.authSystem.showToast(error.message, 'error');
-                });
-            }
-
-            updateAvatarDisplay() {
-                const user = this.authSystem.auth.currentUser;
-                const avatarElement = document.getElementById('profile-avatar');
+                historyList.innerHTML = html;
                 
-                if (user.photoURL) {
-                    avatarElement.innerHTML = `<img src="${user.photoURL}" alt="Avatar">`;
-                } else {
-                    avatarElement.innerHTML = '<i class="fas fa-user"></i>';
-                }
-                
-                // Cập nhật avatar ở header nếu có
-                const headerAvatar = document.querySelector('.user-avatar:not(.large)');
-                if (headerAvatar) {
-                    if (user.photoURL) {
-                        headerAvatar.innerHTML = `<img src="${user.photoURL}" alt="Avatar">`;
-                    } else {
-                        headerAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    }
-                }
-            }
+            }, 1000);
         }
-    </script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Khởi tạo hệ thống xác thực
-            window.authSystem = new AuthSystem();
+        
+        function loadFriendsList() {
+            const friendsList = document.getElementById('friends-list');
             
-            // Track page view
-            if (window.authSystem.analytics) {
-                window.authSystem.analytics.logEvent('home_page_view');
+            friendsList.innerHTML = '<p class="ranking-loading">Đang tải danh sách bạn bè...</p>';
+            
+            // In a real app, this would come from Firestore
+            // For demo, we'll use mock data
+            setTimeout(() => {
+                // For demo, show all users except current user as friends
+                const friends = mockUsers.filter(user => user.id !== 'user1');
+                
+                if (friends.length === 0) {
+                    friendsList.innerHTML = '<p class="ranking-loading">Bạn chưa có bạn bè nào. Hãy thêm bạn bè để thách đấu!</p>';
+                    return;
+                }
+                
+                let html = '';
+                friends.forEach(friend => {
+                    // Calculate high score for this friend
+                    const friendScores = mockScores.filter(score => score.userId === friend.id);
+                    const highScore = friendScores.length > 0 ? Math.max(...friendScores.map(score => score.score)) : 0;
+                    
+                    html += `
+                    <div class="friend-item">
+                        <div class="friend-avatar">
+                            ${friend.avatar ? `<img src="${friend.avatar}" alt="${friend.name}">` : '<i class="fas fa-user"></i>'}
+                        </div>
+                        <div class="friend-info">
+                            <div class="friend-name">${friend.name}</div>
+                            <div class="friend-score">Điểm cao nhất: ${highScore}</div>
+                        </div>
+                        <button class="social-btn challenge" data-userid="${friend.id}">
+                            <i class="fas fa-trophy"></i> Thách đấu
+                        </button>
+                    </div>
+                    `;
+                });
+                
+                friendsList.innerHTML = html;
+                
+                // Add event listeners to challenge buttons
+                document.querySelectorAll('.social-btn.challenge').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const userId = btn.getAttribute('data-userid');
+                        openChallengeModal(userId);
+                    });
+                });
+                
+            }, 1000);
+        }
+        
+        function openChallengeModal(userId) {
+            showModal(challengeModal);
+            
+            // In a real app, we would pre-fill the friend selection
+            const user = mockUsers.find(u => u.id === userId);
+            if (user) {
+                document.getElementById('challenge-friend').innerHTML = `
+                    <option value="${user.id}" selected>${user.name}</option>
+                `;
             }
             
-            // Thiết lập sự kiện cho nút hồ sơ
-            document.getElementById('profile-btn').addEventListener('click', function() {
-                document.getElementById('profile-modal').style.display = 'flex';
-                // Tải dữ liệu hồ sơ nếu cần
-                if (window.userSystem) {
-                    window.userSystem.loadProfileData();
-                }
-            });
-            
-            document.getElementById('close-profile-modal').addEventListener('click', function() {
-                document.getElementById('profile-modal').style.display = 'none';
-            });
-            
-            // Xử lý đổi avatar
-            document.getElementById('change-avatar-btn').addEventListener('click', function() {
-                document.getElementById('avatar-upload').click();
-            });
-            
-            document.getElementById('avatar-upload').addEventListener('change', function(e) {
-                if (window.userSystem && e.target.files.length > 0) {
-                    window.userSystem.uploadAvatar(e.target.files[0]);
-                }
-            });
-            
-            // Xử lý form cập nhật hồ sơ
-            document.getElementById('profile-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const displayName = document.getElementById('profile-name').value;
-                
-                if (window.userSystem) {
-                    window.userSystem.updateProfile(displayName);
-                }
-            });
-            
-            // Đóng modal ranking
-            document.getElementById('close-ranking-modal').addEventListener('click', function() {
-                document.getElementById('ranking-modal').style.display = 'none';
-            });
-            
-            // Đóng modal khi click bên ngoài
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
+            // Add event listeners to challenge options
+            document.querySelectorAll('.challenge-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.challenge-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
                 });
             });
+            
+            // Send challenge button
+            document.getElementById('send-challenge-btn').addEventListener('click', sendChallenge);
+        }
+        
+        function sendChallenge() {
+            const friendId = document.getElementById('challenge-friend').value;
+            const gameId = document.getElementById('challenge-game').value;
+            const timeOption = document.querySelector('.challenge-option.selected');
+            
+            if (!timeOption) {
+                showToast('Vui lòng chọn thời gian thách đấu', 'error');
+                return;
+            }
+            
+            const time = timeOption.getAttribute('data-time');
+            showToast(`Đã gửi thách đấu ${time} phút với ${gameId} đến người chơi`, 'success');
+            challengeModal.style.display = 'none';
+        }
+        
+        function shareUserAchievement(userId) {
+            // In a real app, this would use the Web Share API
+            showToast('Chức năng chia sẻ thành tích đã được kích hoạt');
+        }
+        
+        function sendFriendRequest(userId) {
+            // In a real app, this would send a friend request
+            showToast('Đã gửi lời mời kết bạn');
+        }
+        
+        // Initialize rankings when modal is opened
+        rankingBtn.addEventListener('click', () => {
+            loadRankings();
+            
+            // Populate user filter for history tab
+            const userFilter = document.getElementById('history-user-filter');
+            userFilter.innerHTML = '<option value="all">Tất cả người dùng</option>';
+            
+            mockUsers.forEach(user => {
+                userFilter.innerHTML += `<option value="${user.id}">${user.name}</option>`;
+            });
+        });
+        
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === loginModal) loginModal.style.display = 'none';
+            if (e.target === profileModal) profileModal.style.display = 'none';
+            if (e.target === rankingModal) rankingModal.style.display = 'none';
+            if (e.target === challengeModal) challengeModal.style.display = 'none';
         });
     </script>
 </body>
