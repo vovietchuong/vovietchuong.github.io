@@ -286,38 +286,39 @@ class AuthSystem {
     }
 
     // Phương thức lấy dữ liệu xếp hạng
-    loadRankings(filter) {
+    async loadRankings(filter) {
         const rankingList = document.getElementById('ranking-list');
         rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
         
-        this.getAllScores(100, filter)
-            .then(scores => {
-                // Nhóm điểm theo user và lấy điểm cao nhất
-                const userScores = {};
+        try {
+            // Lấy tất cả điểm số từ Firestore
+            const scores = await this.getAllScores(100, filter);
+            
+            // Nhóm điểm theo user và lấy điểm cao nhất
+            const userScores = {};
+            
+            scores.forEach(score => {
+                const userId = score.userId;
                 
-                scores.forEach(score => {
-                    const userId = score.userId;
-                    
-                    if (!userScores[userId] || score.score > userScores[userId].score) {
-                        userScores[userId] = {
-                            userId: userId,
-                            score: score.score,
-                            gameName: score.gameName,
-                            userName: score.userName || 'Người dùng ẩn danh'
-                        };
-                    }
-                });
-                
-                // Chuyển đổi thành mảng và sắp xếp
-                const rankings = Object.values(userScores).sort((a, b) => b.score - a.score);
-                
-                // Hiển thị kết quả
-                this.displayRankings(rankings);
-            })
-            .catch(error => {
-                console.error('Lỗi khi tải xếp hạng:', error);
-                rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
+                if (!userScores[userId] || score.score > userScores[userId].score) {
+                    userScores[userId] = {
+                        userId: userId,
+                        score: score.score,
+                        gameName: score.gameName,
+                        userName: score.userName || 'Người dùng ẩn danh'
+                    };
+                }
             });
+            
+            // Chuyển đổi thành mảng và sắp xếp
+            const rankings = Object.values(userScores).sort((a, b) => b.score - a.score);
+            
+            // Hiển thị kết quả
+            this.displayRankings(rankings);
+        } catch (error) {
+            console.error('Lỗi khi tải xếp hạng:', error);
+            rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
+        }
     }
 
     // Hiển thị bảng xếp hạng
