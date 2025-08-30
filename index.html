@@ -6,6 +6,7 @@
     <title>MathHub - Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -13,6 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     
     <style>
+        /* CSS styles giữ nguyên như trước */
         * {
             margin: 0;
             padding: 0;
@@ -799,6 +801,8 @@
         
         .friend-info {
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
         }
         
         .friend-name {
@@ -880,6 +884,7 @@
     </style>
 </head>
 <body>
+    <!-- Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-modal">&times;</span>
@@ -933,6 +938,7 @@
         </div>
     </div>
 
+    <!-- Profile Modal -->
     <div class="modal" id="profile-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-profile-modal">&times;</span>
@@ -1005,11 +1011,13 @@
                 </div>
                 
                 <div class="pagination" id="progress-pagination">
-                    </div>
+                    <!-- Pagination will be generated here -->
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Ranking Modal -->
     <div class="modal" id="ranking-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-ranking-modal">&times;</span>
@@ -1044,7 +1052,8 @@
                 <div class="ranking-filters">
                     <select id="history-user-filter">
                         <option value="all">Tất cả người dùng</option>
-                        </select>
+                        <!-- Users will be populated here -->
+                    </select>
                     <select id="history-game-filter">
                         <option value="all">Tất cả trò chơi</option>
                         <option value="congtrutrongphamvi10">Cộng trừ phạm vi 10</option>
@@ -1064,7 +1073,8 @@
                 </div>
                 
                 <div class="pagination" id="history-pagination">
-                    </div>
+                    <!-- Pagination will be generated here -->
+                </div>
             </div>
             
             <div class="ranking-tab-content" id="friends-tab" style="display: none;">
@@ -1079,6 +1089,7 @@
         </div>
     </div>
 
+    <!-- Challenge Modal -->
     <div class="modal" id="challenge-modal">
         <div class="modal-content challenge-modal">
             <span class="close-modal" id="close-challenge-modal">&times;</span>
@@ -1087,7 +1098,8 @@
             <div class="form-group">
                 <label for="challenge-friend">Chọn bạn bè</label>
                 <select id="challenge-friend" class="form-input">
-                    </select>
+                    <!-- Friends will be populated here -->
+                </select>
             </div>
             
             <div class="form-group">
@@ -1117,11 +1129,13 @@
         </div>
     </div>
 
+    <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
+    <!-- Header -->
     <div class="header">
-        <h1>MathHub</h1>
-        <p>Học Toán vui vẻ - Nâng cao kỹ năng tính toán</p>
+        <h1><i class="fas fa-calculator"></i> MathHub</h1>
+        <p>Trang web giáo dục toán học tương tác dành cho học sinh tiểu học và THCS</p>
         
         <div class="user-controls">
             <div class="user-info" id="user-info" style="display: none;">
@@ -1133,117 +1147,128 @@
                 <button class="auth-btn" id="ranking-btn">Xếp hạng</button>
                 <button class="auth-btn" id="logout-btn">Đăng xuất</button>
             </div>
-            
-            <div class="user-info" id="guest-info">
-                <button class="auth-btn" id="login-btn">Đăng nhập</button>
-                <button class="auth-btn" id="register-btn">Đăng ký</button>
-            </div>
+            <button class="auth-btn" id="login-btn" style="display: block;">Đăng nhập / Đăng ký</button>
         </div>
     </div>
 
-    <h2 class="section-title">Trò chơi Toán học</h2>
+    <!-- Featured Games Section -->
+    <h2 class="section-title">Trò chơi nổi bật</h2>
     <div class="section-divider"></div>
     
     <div class="container">
         <div class="game-card featured">
-            <span class="featured-badge">Nổi bật</span>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b 0%, #e55656 100%);">
+            <div class="featured-badge">Nổi bật</div>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);">
                 <i class="fas fa-bullseye"></i>
             </div>
             <div class="game-card-content">
                 <h3>Bắn Bóng Số</h3>
-                <p>Rèn luyện khả năng tính nhẩm nhanh bằng cách bắn bóng chứa kết quả đúng. Trò chơi thú vị với nhiều cấp độ từ dễ đến khó.</p>
-                <a class="game-card-btn featured" href="banbongsotoan2.html">Chơi ngay</a>
+                <p>Rèn luyện kỹ năng tính nhẩm nhanh bằng cách bắn bóng chứa số để tạo thành phép tính đúng.</p>
+                <a href="banbongsotoan2.html" class="game-card-btn featured">Chơi ngay</a>
+            </div>
+        </div>
+        
+        <div class="game-card">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc 0%, #2a9eb0 100%);">
+                <i class="fas fa-road"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Đường Đua Phép Tính</h3>
+                <p>Giải các bài toán cộng, trừ, nhân, chia để vượt qua chướng ngại vật và về đích nhanh nhất.</p>
+                <a href="duongduapheptinh.html" class="game-card-btn">Chơi ngay</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Addition and Subtraction Games Section -->
+    <h2 class="section-title">Trò chơi Cộng - Trừ</h2>
+    <div class="section-divider"></div>
+    
+    <div class="container">
+        <div class="game-card">
+            <div class="new-badge">Mới</div>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Cộng trừ trong phạm vi 10</h3>
+                <p>Làm quen với phép cộng và trừ cơ bản dành cho học sinh lớp 1 với các số trong phạm vi 10.</p>
+                <a href="congtrutrongphamvi10.html" class="game-card-btn new">Chơi ngay</a>
+            </div>
+        </div>
+        
+        <div class="game-card">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e 0%, #e6b02a 100%);">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Cộng trừ có nhớ lớp 2</h3>
+                <p>Thực hành phép cộng và trừ có nhớ với các bài toán từ đơn giản đến phức tạp dành cho học sinh lớp 2.</p>
+                <a href="congtruconhotoan2.html" class="game-card-btn">Chơi ngay</a>
             </div>
         </div>
         
         <div class="game-card">
             <div class="game-card-img" style="background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);">
-                <i class="fas fa-plus-circle"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ trong phạm vi 10</h3>
-                <p>Làm quen với phép cộng và trừ cơ bản dành cho học sinh lớp 1. Giao diện thân thiện với trẻ em và hệ thống khen thưởng hấp dẫn.</p>
-                <a class="game-card-btn" href="congtrutrongphamvi10.html">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <div class="game-card">
-            <span class="new-badge">Mới</span>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc 0%, #2a9eb0 100%);">
-                <i class="fas fa-times-circle"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Bảng cửu chương</h3>
-                <p>Học thuộc bảng cửu chương từ 2 đến 9 thông qua các trò chơi vui nhộn. Phương pháp học nhanh và nhớ lâu.</p>
-                <a class="game-card-btn new" href="bangcuuchuong.html">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);">
-                <i class="fas fa-calculator"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ có nhớ lớp 2</h3>
-                <p>Nâng cao kỹ năng tính toán với phép cộng trừ có nhớ dành cho học sinh lớp 2. Bài tập được phân loại theo mức độ khó.</p>
-                <a class="game-card-btn" href="congtruconhotoan2.html">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <div class="game-card">
-            <span class="popular-badge">Phổ biến</span>
-            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e 0%, #e6b02a 100%);">
                 <i class="fas fa-infinity"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ số nguyên lớp 6</h3>
-                <p>Làm chủ các phép tính với số nguyên âm và dương. Hiểu rõ bản chất của phép toán thông qua minh họa trực quan.</p>
-                <a class="game-card-btn popular" href="congtrusonguyen.html">Chơi ngay</a>
+                <p>Làm chủ các phép tính với số nguyên âm và dương, hiểu về trục số và giá trị tuyệt đối.</p>
+                <a href="congtrusonguyen.html" class="game-card-btn">Chơi ngay</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Multiplication and Division Games Section -->
+    <h2 class="section-title">Trò chơi Nhân - Chia</h2>
+    <div class="section-divider"></div>
+    
+    <div class="container">
+        <div class="game-card">
+            <div class="popular-badge">Phổ biến</div>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b 0%, #d52a1a 100%);">
+                <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Bảng cửu chương</h3>
+                <p>Học thuộc và luyện tập bảng cửu chương từ 2 đến 9 với các trò chơi tương tác thú vị.</p>
+                <a href="bangcuuchuong.html" class="game-card-btn popular">Chơi ngay</a>
             </div>
         </div>
         
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b 0%, #d52a1a 100%);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #858796 0%, #6c757d 100%);">
                 <i class="fas fa-divide"></i>
             </div>
             <div class="game-card-content">
                 <h3>Nhân chia nâng cao lớp 3-4</h3>
-                <p>Thử thách với các bài toán nhân chia nhiều chữ số. Rèn luyện tư duy logic và kỹ năng tính toán chính xác.</p>
-                <a class="game-card-btn" href="nhanchianangcao.html">Chơi ngay</a>
+                <p>Thực hành phép nhân và chia với số có hai, ba chữ số, các bài toán có lời giải và tính giá trị biểu thức.</p>
+                <a href="nhanchianangcao.html" class="game-card-btn">Chơi ngay</a>
             </div>
         </div>
         
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #5a5c69 0%, #4a4c58 100%);">
-                <i class="fas fa-road"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Đường đua phép tính</h3>
-                <p>Đua xe cùng các phép tính toán. Chọn đáp án đúng để tăng tốc và vượt qua đối thủ. Trò chơi kết hợp tốc độ và tư duy.</p>
-                <a class="game-card-btn" href="duongduapheptinh.html">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #858796 0%, #6c6e7e 100%);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #5a5c69 0%, #4a4c59 100%);">
                 <i class="fas fa-question-circle"></i>
             </div>
             <div class="game-card-content">
                 <h3>Trò chơi mới sắp ra mắt</h3>
-                <p>Chúng tôi đang phát triển những trò chơi toán học mới với nhiều tính năng hấp dẫn. Hãy quay lại sau để khám phá!</p>
-                <a class="game-card-btn coming-soon">Sắp ra mắt</a>
+                <p>Chúng tôi đang phát triển thêm nhiều trò chơi toán học thú vị khác. Hãy quay lại sau nhé!</p>
+                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
             </div>
         </div>
     </div>
-    
+
+    <!-- Footer -->
     <div class="footer">
-        <p>© 2023 MathHub - Nền tảng trò chơi toán học cho học sinh tiểu học và trung học cơ sở</p>
+        <p>© 2023 MathHub - Nền tảng học toán tương tác dành cho học sinh tiểu học và THCS</p>
+        <p>Liên hệ: info@mathhub.edu.vn | Điện thoại: 0123.456.789</p>
     </div>
 
     <script>
-        // Firebase configuration
-       const firebaseConfig = {
+        // Firebase configuration - Thay thế bằng cấu hình Firebase của bạn
+        const firebaseConfig = {
   apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
   authDomain: "mathhubvn.firebaseapp.com",
   projectId: "mathhubvn",
@@ -1253,59 +1278,96 @@
   measurementId: "G-2YNQZ48JVK"
 };
 
+
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
+        firebase.analytics();
+
+        // Initialize Firestore
         const db = firebase.firestore();
+        
+        // Initialize Firebase Authentication
+        const auth = firebase.auth();
+        
+        // Initialize Firebase Storage
         const storage = firebase.storage();
 
         // DOM Elements
-        const loginModal = document.getElementById('login-modal');
-        const profileModal = document.getElementById('profile-modal');
-        const rankingModal = document.getElementById('ranking-modal');
-        const challengeModal = document.getElementById('challenge-modal');
-        const toast = document.getElementById('toast');
-        
         const loginBtn = document.getElementById('login-btn');
-        const registerBtn = document.getElementById('register-btn');
+        const logoutBtn = document.getElementById('logout-btn');
         const profileBtn = document.getElementById('profile-btn');
         const rankingBtn = document.getElementById('ranking-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const closeModalBtns = document.querySelectorAll('.close-modal');
-        
         const userInfo = document.getElementById('user-info');
-        const guestInfo = document.getElementById('guest-info');
         const userName = document.getElementById('user-name');
         const userAvatar = document.getElementById('user-avatar');
         const profileAvatar = document.getElementById('profile-avatar');
         const profileName = document.getElementById('profile-name');
         const profileEmail = document.getElementById('profile-email');
-        const changeAvatarBtn = document.getElementById('change-avatar-btn');
-        const avatarUpload = document.getElementById('avatar-upload');
-        
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const profileForm = document.getElementById('profile-form');
-        
+        const loginModal = document.getElementById('login-modal');
+        const profileModal = document.getElementById('profile-modal');
+        const rankingModal = document.getElementById('ranking-modal');
+        const challengeModal = document.getElementById('challenge-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
         const loginTab = document.getElementById('login-tab');
         const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const toast = document.getElementById('toast');
+        const progressList = document.getElementById('progress-list');
+        const rankingList = document.getElementById('ranking-list');
+        const historyList = document.getElementById('history-list');
+        const friendsList = document.getElementById('friends-list');
+        const progressGameFilter = document.getElementById('progress-game-filter');
+        const progressSort = document.getElementById('progress-sort');
+        const totalGamesEl = document.getElementById('total-games');
+        const highScoreEl = document.getElementById('high-score');
+        const averageScoreEl = document.getElementById('average-score');
+        const changeAvatarBtn = document.getElementById('change-avatar-btn');
+        const avatarUpload = document.getElementById('avatar-upload');
+        const profileForm = document.getElementById('profile-form');
+        const rankingTabs = document.querySelectorAll('.ranking-tab');
+        const rankingFilters = document.querySelectorAll('.ranking-filter');
+        const historyGameFilter = document.getElementById('history-game-filter');
+        const historyUserFilter = document.getElementById('history-user-filter');
+        const addFriendBtn = document.getElementById('add-friend-btn');
+        const challengeFriend = document.getElementById('challenge-friend');
+        const challengeGame = document.getElementById('challenge-game');
+        const challengeOptions = document.querySelectorAll('.challenge-option');
+        const sendChallengeBtn = document.getElementById('send-challenge-btn');
+        const closeChallengeModal = document.getElementById('close-challenge-modal');
 
-        // Current user state
+        // Global variables
         let currentUser = null;
-        let userProfile = null; // Store user profile data
         let userScores = [];
+        let allScores = [];
+        let allUsers = [];
+        let userFriends = [];
+        let selectedChallengeTime = 5;
+
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                userInfo.style.display = 'flex';
+                loginBtn.style.display = 'none';
+                
+                // Load user data from Firestore
+                loadUserData(user.uid);
+                
+                // Load user scores
+                loadUserScores(user.uid);
+            } else {
+                currentUser = null;
+                userInfo.style.display = 'none';
+                loginBtn.style.display = 'block';
+            }
+        });
 
         // Event Listeners
-        loginBtn.addEventListener('click', () => showModal(loginModal));
-        registerBtn.addEventListener('click', () => {
-            showModal(loginModal);
-            registerTab.click();
-        });
-        profileBtn.addEventListener('click', () => showModal(profileModal));
-        rankingBtn.addEventListener('click', () => showModal(rankingModal));
-        logoutBtn.addEventListener('click', handleLogout);
-        changeAvatarBtn.addEventListener('click', () => avatarUpload.click());
-        avatarUpload.addEventListener('change', handleAvatarUpload);
+        loginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
+        logoutBtn.addEventListener('click', () => auth.signOut().then(() => showToast('Đã đăng xuất', 'success')));
+        profileBtn.addEventListener('click', openProfileModal);
+        rankingBtn.addEventListener('click', openRankingModal);
         
         closeModalBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1330,104 +1392,22 @@
             loginForm.classList.remove('active');
         });
         
-        loginForm.addEventListener('submit', handleLogin);
-        registerForm.addEventListener('submit', handleRegister);
-        profileForm.addEventListener('submit', handleProfileUpdate);
-        
-        // Ranking tabs
-        document.querySelectorAll('.ranking-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.ranking-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                
-                document.querySelectorAll('.ranking-tab-content').forEach(content => {
-                    content.style.display = 'none';
-                });
-                
-                const tabId = tab.getAttribute('data-tab') + '-tab';
-                document.getElementById(tabId).style.display = 'block';
-                
-                if (tab.getAttribute('data-tab') === 'highscores') {
-                    loadRankings();
-                } else if (tab.getAttribute('data-tab') === 'history') {
-                    loadScoreHistory();
-                } else if (tab.getAttribute('data-tab') === 'friends') {
-                    loadFriendsList();
-                }
-            });
-        });
-        
-        // Ranking filters
-        document.querySelectorAll('.ranking-filter').forEach(filter => {
-            filter.addEventListener('click', () => {
-                document.querySelectorAll('.ranking-filter').forEach(f => f.classList.remove('active'));
-                filter.classList.add('active');
-                loadRankings();
-            });
-        });
-
-        // Initialize
-        checkAuthState();
-        initProgressFilters();
-        
-        // Functions
-        function showModal(modal) {
-            modal.style.display = 'flex';
-        }
-        
-        function showToast(message, type = 'success') {
-            toast.textContent = message;
-            toast.className = 'toast ' + type;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-        
-        function checkAuthState() {
-            auth.onAuthStateChanged(user => {
-                if (user) {
-                    currentUser = user;
-                    userInfo.style.display = 'flex';
-                    guestInfo.style.display = 'none';
-                    
-                    // Load user profile data
-                    loadUserData(user.uid);
-                    loadUserScores(user.uid);
-                } else {
-                    currentUser = null;
-                    userProfile = null;
-                    userScores = [];
-                    userInfo.style.display = 'none';
-                    guestInfo.style.display = 'flex';
-                    // Reset profile page
-                    profileName.value = '';
-                    profileEmail.value = '';
-                    userAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    updateProgressList();
-                    updateProgressStats();
-                }
-            });
-        }
-        
-        function handleLogin(e) {
+        loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             
             auth.signInWithEmailAndPassword(email, password)
                 .then(() => {
-                    showToast('Đăng nhập thành công!');
                     loginModal.style.display = 'none';
+                    showToast('Đăng nhập thành công', 'success');
                 })
                 .catch(error => {
-                    showToast('Đăng nhập thất bại: ' + error.message, 'error');
+                    showToast(error.message, 'error');
                 });
-        }
+        });
         
-        async function handleRegister(e) {
+        registerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -1435,158 +1415,188 @@
             const confirm = document.getElementById('register-confirm').value;
             
             if (password !== confirm) {
-                showToast('Mật khẩu xác nhận không khớp!', 'error');
+                showToast('Mật khẩu xác nhận không khớp', 'error');
                 return;
             }
             
-            try {
-                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-                
-                // Create a document for the new user in the `users` collection
-                await db.collection('users').doc(user.uid).set({
-                    name: name,
-                    email: email,
-                    photoURL: null,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                });
-                
-                // Update the user's display name in Firebase Auth
-                await user.updateProfile({ displayName: name });
-                
-                showToast('Đăng ký thành công!');
-                loginModal.style.display = 'none';
-            } catch(error) {
-                showToast('Đăng ký thất bại: ' + error.message, 'error');
-            }
-        }
-        
-        function handleLogout() {
-            auth.signOut()
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Save user data to Firestore
+                    return db.collection('users').doc(userCredential.user.uid).set({
+                        name: name,
+                        email: email,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
                 .then(() => {
-                    showToast('Đã đăng xuất');
+                    loginModal.style.display = 'none';
+                    showToast('Đăng ký thành công', 'success');
                 })
                 .catch(error => {
-                    showToast('Đăng xuất thất bại: ' + error.message, 'error');
+                    showToast(error.message, 'error');
+                });
+        });
+        
+        progressGameFilter.addEventListener('change', () => filterProgress());
+        progressSort.addEventListener('change', () => filterProgress());
+        
+        changeAvatarBtn.addEventListener('click', () => avatarUpload.click());
+        
+        avatarUpload.addEventListener('change', (e) => {
+            if (e.target.files[0]) {
+                uploadAvatar(e.target.files[0]);
+            }
+        });
+        
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            updateProfile();
+        });
+        
+        rankingTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.getAttribute('data-tab');
+                
+                // Remove active class from all tabs
+                rankingTabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab contents
+                document.querySelectorAll('.ranking-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                // Show selected tab content
+                document.getElementById(`${tabName}-tab`).style.display = 'block';
+                
+                // Load data for the selected tab
+                if (tabName === 'highscores') {
+                    loadHighScores();
+                } else if (tabName === 'history') {
+                    loadScoreHistory();
+                } else if (tabName === 'friends') {
+                    loadFriends();
+                }
+            });
+        });
+        
+        rankingFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                const game = filter.getAttribute('data-filter');
+                
+                // Remove active class from all filters
+                rankingFilters.forEach(f => f.classList.remove('active'));
+                // Add active class to clicked filter
+                filter.classList.add('active');
+                
+                // Filter scores
+                filterHighScores(game);
+            });
+        });
+        
+        historyGameFilter.addEventListener('change', () => filterScoreHistory());
+        historyUserFilter.addEventListener('change', () => filterScoreHistory());
+        
+        addFriendBtn.addEventListener('click', () => {
+            const friendEmail = prompt('Nhập email của người bạn muốn thêm:');
+            if (friendEmail && friendEmail.trim() !== '') {
+                addFriend(friendEmail.trim());
+            }
+        });
+        
+        challengeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                // Remove selected class from all options
+                challengeOptions.forEach(o => o.classList.remove('selected'));
+                // Add selected class to clicked option
+                option.classList.add('selected');
+                
+                selectedChallengeTime = parseInt(option.getAttribute('data-time'));
+            });
+        });
+        
+        sendChallengeBtn.addEventListener('click', sendChallenge);
+        closeChallengeModal.addEventListener('click', () => challengeModal.style.display = 'none');
+
+        // Functions
+        function showToast(message, type = '') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type) {
+                toast.classList.add(type);
+            }
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function loadUserData(uid) {
+            db.collection('users').doc(uid).get()
+                .then(doc => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userName.textContent = userData.name;
+                        
+                        // Update profile modal
+                        profileName.value = userData.name;
+                        profileEmail.value = userData.email;
+                        
+                        // Load avatar if exists
+                        if (userData.avatar) {
+                            userAvatar.innerHTML = `<img src="${userData.avatar}" alt="${userData.name}">`;
+                            profileAvatar.innerHTML = `<img src="${userData.avatar}" alt="${userData.name}">`;
+                        } else {
+                            // Use first letter of name as avatar
+                            const initial = userData.name.charAt(0).toUpperCase();
+                            userAvatar.innerHTML = initial;
+                            profileAvatar.innerHTML = initial;
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading user data:', error);
                 });
         }
         
-        async function handleProfileUpdate(e) {
-            e.preventDefault();
-            const newName = document.getElementById('profile-name').value;
-            
-            if (!currentUser) return;
-            
-            try {
-                await currentUser.updateProfile({ displayName: newName });
-                await db.collection('users').doc(currentUser.uid).update({ name: newName });
-                
-                showToast('Cập nhật hồ sơ thành công!');
-                userName.textContent = newName;
-                profileModal.style.display = 'none';
-            } catch(error) {
-                showToast('Cập nhật thất bại: ' + error.message, 'error');
-            }
-        }
-        
-        async function handleAvatarUpload(e) {
-            const file = e.target.files[0];
-            if (!file || !currentUser) return;
-            
-            const storageRef = storage.ref(`avatars/${currentUser.uid}/${file.name}`);
-            const task = storageRef.put(file);
-            
-            task.on('state_changed', 
-                (snapshot) => {
-                    // You can add progress bar here
-                    showToast('Đang tải ảnh lên...', 'info');
-                },
-                (error) => {
-                    showToast('Tải ảnh thất bại: ' + error.message, 'error');
-                },
-                () => {
-                    task.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
-                        await currentUser.updateProfile({ photoURL: downloadURL });
-                        await db.collection('users').doc(currentUser.uid).update({ photoURL: downloadURL });
-                        loadUserData(currentUser.uid); // Reload to show new avatar
-                        showToast('Cập nhật ảnh đại diện thành công!');
+        function loadUserScores(uid) {
+            db.collection('scores')
+                .where('userId', '==', uid)
+                .orderBy('timestamp', 'desc')
+                .get()
+                .then(querySnapshot => {
+                    userScores = [];
+                    querySnapshot.forEach(doc => {
+                        userScores.push({ id: doc.id, ...doc.data() });
                     });
-                }
-            );
-        }
-        
-        async function loadUserData(uid) {
-            try {
-                const doc = await db.collection('users').doc(uid).get();
-                if (doc.exists) {
-                    userProfile = doc.data();
-                    userName.textContent = userProfile.name || 'Người dùng';
                     
-                    // Update avatar
-                    if (userProfile.photoURL) {
-                        userAvatar.innerHTML = `<img src="${userProfile.photoURL}" alt="Avatar">`;
-                        profileAvatar.innerHTML = `<img src="${userProfile.photoURL}" alt="Avatar">`;
-                    } else {
-                        userAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                        profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    }
-                    
-                    profileName.value = userProfile.name || '';
-                    profileEmail.value = userProfile.email;
-                } else {
-                    // Fallback to Firebase Auth data if `users` doc doesn't exist
-                    userName.textContent = currentUser.displayName || 'Người dùng';
-                    profileName.value = currentUser.displayName || '';
-                    profileEmail.value = currentUser.email;
-                    if (currentUser.photoURL) {
-                        userAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
-                        profileAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
-                    }
-                }
-            } catch (error) {
-                console.error("Error loading user data: ", error);
-            }
+                    filterProgress();
+                })
+                .catch(error => {
+                    console.error('Error loading user scores:', error);
+                });
         }
         
-        async function loadUserScores(uid) {
-            if (!uid) return;
-            
-            try {
-                const scoresRef = db.collection('scores').where('userId', '==', uid).orderBy('date', 'desc');
-                const snapshot = await scoresRef.get();
-                userScores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                
-                updateProgressList();
-                updateProgressStats();
-            } catch (error) {
-                console.error("Error loading user scores: ", error);
-            }
-        }
-        
-        function initProgressFilters() {
-            const gameFilter = document.getElementById('progress-game-filter');
-            const sortFilter = document.getElementById('progress-sort');
-            
-            gameFilter.addEventListener('change', updateProgressList);
-            sortFilter.addEventListener('change', updateProgressList);
-        }
-        
-        function updateProgressList() {
-            const progressList = document.getElementById('progress-list');
-            const gameFilter = document.getElementById('progress-game-filter').value;
-            const sortFilter = document.getElementById('progress-sort').value;
+        function filterProgress() {
+            const gameFilter = progressGameFilter.value;
+            const sortBy = progressSort.value;
             
             let filteredScores = [...userScores];
+            
+            // Filter by game
             if (gameFilter !== 'all') {
                 filteredScores = filteredScores.filter(score => score.game === gameFilter);
             }
             
-            switch(sortFilter) {
+            // Sort scores
+            switch(sortBy) {
                 case 'newest':
-                    filteredScores.sort((a, b) => b.date.toDate() - a.date.toDate());
+                    filteredScores.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate());
                     break;
                 case 'oldest':
-                    filteredScores.sort((a, b) => a.date.toDate() - b.date.toDate());
+                    filteredScores.sort((a, b) => a.timestamp.toDate() - b.timestamp.toDate());
                     break;
                 case 'highest':
                     filteredScores.sort((a, b) => b.score - a.score);
@@ -1596,51 +1606,479 @@
                     break;
             }
             
-            if (filteredScores.length === 0) {
-                progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Không có kết quả phù hợp</p>';
+            displayProgress(filteredScores);
+            updateStats(filteredScores);
+        }
+        
+        function displayProgress(scores) {
+            if (scores.length === 0) {
+                progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Chưa có dữ liệu tiến trình. Hãy chơi các trò chơi để xem tiến trình tại đây!</p>';
                 return;
             }
             
             let html = '';
-            filteredScores.forEach(score => {
-                const gameName = getGameName(score.game);
-                const date = score.date.toDate().toLocaleDateString('vi-VN');
+            
+            scores.forEach(score => {
+                const date = score.timestamp.toDate();
+                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
                 
                 html += `
-                <div class="progress-item">
-                    <div class="progress-info">
-                        <div class="progress-game">${gameName}</div>
-                        <div class="progress-date">${date}</div>
+                    <div class="progress-item ${score.score >= 80 ? 'high-score' : ''}">
+                        <div class="progress-info">
+                            <div class="progress-game">${getGameName(score.game)}</div>
+                            <div class="progress-date">${formattedDate}</div>
+                            <div class="progress-level">Cấp độ: ${score.level || 'Không xác định'}</div>
+                        </div>
+                        <div class="progress-score">${score.score} điểm</div>
                     </div>
-                    <div class="progress-score">${score.score} điểm</div>
-                </div>
                 `;
             });
             
             progressList.innerHTML = html;
         }
         
-        function updateProgressStats() {
-            const totalGames = document.getElementById('total-games');
-            const highScore = document.getElementById('high-score');
-            const averageScore = document.getElementById('average-score');
+        function updateStats(scores) {
+            totalGamesEl.textContent = scores.length;
             
-            totalGames.textContent = userScores.length;
-            
-            if (userScores.length > 0) {
-                const highest = Math.max(...userScores.map(score => score.score));
-                const average = userScores.reduce((sum, score) => sum + score.score, 0) / userScores.length;
+            if (scores.length > 0) {
+                const highest = Math.max(...scores.map(s => s.score));
+                const average = scores.reduce((sum, score) => sum + score.score, 0) / scores.length;
                 
-                highScore.textContent = highest;
-                averageScore.textContent = average.toFixed(1);
+                highScoreEl.textContent = highest;
+                averageScoreEl.textContent = average.toFixed(1);
             } else {
-                highScore.textContent = '0';
-                averageScore.textContent = '0.0';
+                highScoreEl.textContent = '0';
+                averageScoreEl.textContent = '0';
             }
         }
         
-        function getGameName(gameId) {
-            const games = {
+        function openProfileModal() {
+            profileModal.style.display = 'flex';
+            loadUserScores(currentUser.uid);
+        }
+        
+        function openRankingModal() {
+            rankingModal.style.display = 'flex';
+            loadHighScores();
+        }
+        
+        function uploadAvatar(file) {
+            const storageRef = storage.ref(`avatars/${currentUser.uid}`);
+            const uploadTask = storageRef.put(file);
+            
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // Progress monitoring can be added here
+                }, 
+                (error) => {
+                    showToast('Lỗi khi tải lên ảnh đại diện', 'error');
+                }, 
+                () => {
+                    // Get download URL
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        // Update user document with avatar URL
+                        db.collection('users').doc(currentUser.uid).update({
+                            avatar: downloadURL
+                        }).then(() => {
+                            // Update UI
+                            userAvatar.innerHTML = `<img src="${downloadURL}" alt="${userName.textContent}">`;
+                            profileAvatar.innerHTML = `<img src="${downloadURL}" alt="${userName.textContent}">`;
+                            showToast('Cập nhật ảnh đại diện thành công', 'success');
+                        });
+                    });
+                }
+            );
+        }
+        
+        function updateProfile() {
+            const newName = profileName.value.trim();
+            
+            if (newName === '') {
+                showToast('Tên không được để trống', 'error');
+                return;
+            }
+            
+            db.collection('users').doc(currentUser.uid).update({
+                name: newName
+            }).then(() => {
+                userName.textContent = newName;
+                showToast('Cập nhật hồ sơ thành công', 'success');
+            }).catch(error => {
+                showToast('Lỗi khi cập nhật hồ sơ', 'error');
+            });
+        }
+        
+        function loadHighScores() {
+            rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
+            
+            // Load all scores ordered by score descending
+            db.collection('scores')
+                .orderBy('score', 'desc')
+                .limit(100)
+                .get()
+                .then(querySnapshot => {
+                    allScores = [];
+                    querySnapshot.forEach(doc => {
+                        allScores.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // Load user data for these scores
+                    return loadUsersForScores(allScores);
+                })
+                .then(scoresWithUsers => {
+                    filterHighScores('all');
+                })
+                .catch(error => {
+                    console.error('Error loading high scores:', error);
+                    rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu</li>';
+                });
+        }
+        
+        function loadUsersForScores(scores) {
+            const userIds = [...new Set(scores.map(score => score.userId))];
+            const userPromises = userIds.map(userId => 
+                db.collection('users').doc(userId).get().then(doc => ({
+                    id: userId,
+                    data: doc.exists ? doc.data() : { name: 'Người dùng ẩn danh' }
+                }))
+            );
+            
+            return Promise.all(userPromises).then(users => {
+                // Map user data to scores
+                const userMap = {};
+                users.forEach(user => {
+                    userMap[user.id] = user.data;
+                });
+                
+                return scores.map(score => ({
+                    ...score,
+                    user: userMap[score.userId] || { name: 'Người dùng ẩn danh' }
+                }));
+            });
+        }
+        
+        function filterHighScores(gameFilter) {
+            let filteredScores = [...allScores];
+            
+            // Filter by game
+            if (gameFilter !== 'all') {
+                filteredScores = filteredScores.filter(score => score.game === gameFilter);
+            }
+            
+            // Group by user and get highest score per user
+            const userHighScores = {};
+            filteredScores.forEach(score => {
+                if (!userHighScores[score.userId] || score.score > userHighScores[score.userId].score) {
+                    userHighScores[score.userId] = score;
+                }
+            });
+            
+            // Convert to array and sort by score
+            const sortedScores = Object.values(userHighScores).sort((a, b) => b.score - a.score);
+            
+            displayHighScores(sortedScores.slice(0, 20)); // Show top 20
+        }
+        
+        function displayHighScores(scores) {
+            if (scores.length === 0) {
+                rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng</li>';
+                return;
+            }
+            
+            let html = '';
+            
+            scores.forEach((score, index) => {
+                const isCurrentUser = currentUser && score.userId === currentUser.uid;
+                const positionClass = index < 3 ? `ranking-position-${index + 1}` : '';
+                
+                html += `
+                    <li class="ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}">
+                        <div class="ranking-position ${positionClass}">${index + 1}</div>
+                        <div class="ranking-user">
+                            <div class="ranking-avatar">
+                                ${score.user.avatar ? 
+                                    `<img src="${score.user.avatar}" alt="${score.user.name}">` : 
+                                    score.user.name.charAt(0).toUpperCase()
+                                }
+                            </div>
+                            <div class="ranking-name">${score.user.name}</div>
+                        </div>
+                        <div class="ranking-score">${score.score} điểm</div>
+                    </li>
+                `;
+            });
+            
+            rankingList.innerHTML = html;
+        }
+        
+        function loadScoreHistory() {
+            historyList.innerHTML = '<li class="ranking-loading">Đang tải lịch sử điểm...</li>';
+            
+            // Load all scores ordered by timestamp descending
+            db.collection('scores')
+                .orderBy('timestamp', 'desc')
+                .limit(50)
+                .get()
+                .then(querySnapshot => {
+                    const scores = [];
+                    querySnapshot.forEach(doc => {
+                        scores.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    return loadUsersForScores(scores);
+                })
+                .then(scoresWithUsers => {
+                    allScores = scoresWithUsers;
+                    filterScoreHistory();
+                    
+                    // Populate user filter
+                    const userIds = [...new Set(scoresWithUsers.map(score => score.userId))];
+                    return Promise.all(
+                        userIds.map(userId => 
+                            db.collection('users').doc(userId).get().then(doc => ({
+                                id: userId,
+                                data: doc.exists ? doc.data() : { name: 'Người dùng ẩn danh' }
+                            }))
+                        )
+                    );
+                })
+                .then(users => {
+                    // Update user filter dropdown
+                    let options = '<option value="all">Tất cả người dùng</option>';
+                    users.forEach(user => {
+                        options += `<option value="${user.id}">${user.data.name}</option>`;
+                    });
+                    historyUserFilter.innerHTML = options;
+                })
+                .catch(error => {
+                    console.error('Error loading score history:', error);
+                    historyList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu</li>';
+                });
+        }
+        
+        function filterScoreHistory() {
+            const gameFilter = historyGameFilter.value;
+            const userFilter = historyUserFilter.value;
+            
+            let filteredScores = [...allScores];
+            
+            // Filter by game
+            if (gameFilter !== 'all') {
+                filteredScores = filteredScores.filter(score => score.game === gameFilter);
+            }
+            
+            // Filter by user
+            if (userFilter !== 'all') {
+                filteredScores = filteredScores.filter(score => score.userId === userFilter);
+            }
+            
+            displayScoreHistory(filteredScores);
+        }
+        
+        function displayScoreHistory(scores) {
+            if (scores.length === 0) {
+                historyList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu lịch sử</li>';
+                return;
+            }
+            
+            let html = '';
+            
+            scores.forEach(score => {
+                const date = score.timestamp.toDate();
+                const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes().toString().padStart(2, '0')}`;
+                const isCurrentUser = currentUser && score.userId === currentUser.uid;
+                
+                html += `
+                    <li class="ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}">
+                        <div class="ranking-user">
+                            <div class="ranking-avatar">
+                                ${score.user.avatar ? 
+                                    `<img src="${score.user.avatar}" alt="${score.user.name}">` : 
+                                    score.user.name.charAt(0).toUpperCase()
+                                }
+                            </div>
+                            <div>
+                                <div class="ranking-name">${score.user.name}</div>
+                                <div style="font-size: 0.8rem; color: #777;">${formattedDate}</div>
+                            </div>
+                        </div>
+                        <div class="ranking-score">${score.score} điểm</div>
+                    </li>
+                `;
+            });
+            
+            historyList.innerHTML = html;
+        }
+        
+        function loadFriends() {
+            if (!currentUser) return;
+            
+            friendsList.innerHTML = '<p class="ranking-loading">Đang tải danh sách bạn bè...</p>';
+            
+            db.collection('friends')
+                .where('userId', '==', currentUser.uid)
+                .get()
+                .then(querySnapshot => {
+                    userFriends = [];
+                    const friendIds = [];
+                    
+                    querySnapshot.forEach(doc => {
+                        userFriends.push(doc.data());
+                        friendIds.push(doc.data().friendId);
+                    });
+                    
+                    if (friendIds.length === 0) {
+                        friendsList.innerHTML = '<p class="ranking-loading">Bạn chưa có bạn bè nào. Hãy thêm bạn bè để thách đấu!</p>';
+                        return;
+                    }
+                    
+                    // Load friend user data
+                    return Promise.all(
+                        friendIds.map(friendId => 
+                            db.collection('users').doc(friendId).get().then(doc => ({
+                                id: friendId,
+                                data: doc.exists ? doc.data() : { name: 'Người dùng ẩn danh' }
+                            }))
+                        )
+                    );
+                })
+                .then(friends => {
+                    let html = '';
+                    
+                    friends.forEach(friend => {
+                        html += `
+                            <div class="friend-item">
+                                <div class="friend-avatar">
+                                    ${friend.data.avatar ? 
+                                        `<img src="${friend.data.avatar}" alt="${friend.data.name}">` : 
+                                        friend.data.name.charAt(0).toUpperCase()
+                                    }
+                                </div>
+                                <div class="friend-info">
+                                    <div class="friend-name">${friend.data.name}</div>
+                                    <div class="friend-score">${friend.data.email}</div>
+                                </div>
+                                <button class="social-btn challenge" data-friend-id="${friend.id}">
+                                    <i class="fas fa-trophy"></i> Thách đấu
+                                </button>
+                            </div>
+                        `;
+                    });
+                    
+                    friendsList.innerHTML = html;
+                    
+                    // Add event listeners to challenge buttons
+                    document.querySelectorAll('.social-btn.challenge').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const friendId = e.currentTarget.getAttribute('data-friend-id');
+                            openChallengeModal(friendId);
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading friends:', error);
+                    friendsList.innerHTML = '<p class="ranking-loading">Có lỗi xảy ra khi tải danh sách bạn bè</p>';
+                });
+        }
+        
+        function addFriend(friendEmail) {
+            if (!currentUser) return;
+            
+            // Find user by email
+            db.collection('users')
+                .where('email', '==', friendEmail)
+                .get()
+                .then(querySnapshot => {
+                    if (querySnapshot.empty) {
+                        showToast('Không tìm thấy người dùng với email này', 'error');
+                        return;
+                    }
+                    
+                    const friendDoc = querySnapshot.docs[0];
+                    const friendId = friendDoc.id;
+                    
+                    if (friendId === currentUser.uid) {
+                        showToast('Bạn không thể thêm chính mình làm bạn bè', 'error');
+                        return;
+                    }
+                    
+                    // Check if already friends
+                    return db.collection('friends')
+                        .where('userId', '==', currentUser.uid)
+                        .where('friendId', '==', friendId)
+                        .get();
+                })
+                .then(querySnapshot => {
+                    if (!querySnapshot || querySnapshot.size > 0) {
+                        showToast('Người dùng này đã có trong danh sách bạn bè', 'error');
+                        return;
+                    }
+                    
+                    // Add friend relationship
+                    return db.collection('friends').add({
+                        userId: currentUser.uid,
+                        friendId: friendId,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                })
+                .then(() => {
+                    showToast('Đã thêm bạn bè thành công', 'success');
+                    loadFriends(); // Reload friends list
+                })
+                .catch(error => {
+                    console.error('Error adding friend:', error);
+                    showToast('Có lỗi xảy ra khi thêm bạn bè', 'error');
+                });
+        }
+        
+        function openChallengeModal(friendId) {
+            // Populate friend dropdown
+            challengeFriend.innerHTML = '';
+            
+            userFriends.forEach(friend => {
+                if (friend.friendId === friendId) {
+                    // We need to get the friend's name
+                    db.collection('users').doc(friendId).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                const friendData = doc.data();
+                                challengeFriend.innerHTML = `<option value="${friendId}">${friendData.name}</option>`;
+                                challengeModal.style.display = 'flex';
+                            }
+                        });
+                }
+            });
+        }
+        
+        function sendChallenge() {
+            const friendId = challengeFriend.value;
+            const game = challengeGame.value;
+            const timeLimit = selectedChallengeTime;
+            
+            if (!friendId) {
+                showToast('Vui lòng chọn một người bạn', 'error');
+                return;
+            }
+            
+            // Create challenge document
+            db.collection('challenges').add({
+                fromUserId: currentUser.uid,
+                toUserId: friendId,
+                game: game,
+                timeLimit: timeLimit,
+                status: 'pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                showToast('Đã gửi thách đấu thành công', 'success');
+                challengeModal.style.display = 'none';
+            }).catch(error => {
+                console.error('Error sending challenge:', error);
+                showToast('Có lỗi xảy ra khi gửi thách đấu', 'error');
+            });
+        }
+        
+        function getGameName(gameCode) {
+            const gameNames = {
                 'congtrutrongphamvi10': 'Cộng trừ trong phạm vi 10',
                 'banbongsotoan2': 'Bắn Bóng Số',
                 'bangcuuchuong': 'Bảng cửu chương',
@@ -1650,301 +2088,15 @@
                 'duongduapheptinh': 'Đường đua phép tính'
             };
             
-            return games[gameId] || gameId;
+            return gameNames[gameCode] || gameCode;
         }
-        
-        async function loadRankings() {
-            const rankingList = document.getElementById('ranking-list');
-            const gameFilter = document.querySelector('.ranking-filter.active').getAttribute('data-filter');
-            
-            rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
-            
-            try {
-                const scoresRef = db.collection('scores');
-                let query = scoresRef;
-                
-                if (gameFilter !== 'all') {
-                    query = query.where('game', '==', gameFilter);
-                }
-                
-                const snapshot = await query.get();
-                const allScores = snapshot.docs.map(doc => doc.data());
-                
-                // Process data to find high scores for each user
-                const userHighScores = {};
-                const userIds = new Set(allScores.map(score => score.userId));
-                const usersRef = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', Array.from(userIds)).get();
-                const usersData = {};
-                usersRef.forEach(doc => usersData[doc.id] = doc.data());
-                
-                allScores.forEach(score => {
-                    if (!userHighScores[score.userId] || score.score > userHighScores[score.userId].score) {
-                        userHighScores[score.userId] = {
-                            userId: score.userId,
-                            score: score.score,
-                            ...usersData[score.userId]
-                        };
-                    }
-                });
-                
-                let rankings = Object.values(userHighScores).sort((a, b) => b.score - a.score);
-                
-                if (rankings.length === 0) {
-                    rankingList.innerHTML = '<li class="ranking-loading">Không có dữ liệu xếp hạng</li>';
-                    return;
-                }
-                
-                let html = '';
-                rankings.forEach((user, index) => {
-                    const positionClass = index < 3 ? `ranking-position-${index+1}` : '';
-                    const avatarHTML = user.photoURL ? `<img src="${user.photoURL}" alt="${user.name}">` : '<i class="fas fa-user"></i>';
-                    
-                    html += `
-                    <li class="ranking-item ${currentUser && user.userId === currentUser.uid ? 'current-user-highlight' : ''}">
-                        <div class="ranking-position ${positionClass}">${index + 1}</div>
-                        <div class="ranking-user">
-                            <div class="ranking-avatar">${avatarHTML}</div>
-                            <div class="ranking-name">${user.name || 'Người dùng'}</div>
-                        </div>
-                        <div class="ranking-score">${user.score} điểm</div>
-                        <div class="social-actions">
-                            <button class="social-btn challenge" data-userid="${user.userId}">
-                                <i class="fas fa-trophy"></i> Thách đấu
-                            </button>
-                            <button class="social-btn share" data-userid="${user.userId}">
-                                <i class="fas fa-share-alt"></i>
-                            </button>
-                            <button class="social-btn friend" data-userid="${user.userId}">
-                                <i class="fas fa-user-plus"></i>
-                            </button>
-                        </div>
-                    </li>
-                    `;
-                });
-                
-                rankingList.innerHTML = html;
-                
-                document.querySelectorAll('.social-btn.challenge').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        if (!currentUser) {
-                            showToast('Bạn cần đăng nhập để thách đấu!', 'error');
-                            return;
-                        }
-                        const userId = btn.getAttribute('data-userid');
-                        openChallengeModal(userId);
-                    });
-                });
-                
-                document.querySelectorAll('.social-btn.share').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const userId = btn.getAttribute('data-userid');
-                        shareUserAchievement(userId);
-                    });
-                });
-                
-                document.querySelectorAll('.social-btn.friend').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        if (!currentUser) {
-                            showToast('Bạn cần đăng nhập để thêm bạn bè!', 'error');
-                            return;
-                        }
-                        const userId = btn.getAttribute('data-userid');
-                        sendFriendRequest(userId);
-                    });
-                });
-                
-            } catch(error) {
-                console.error("Error loading rankings: ", error);
-                rankingList.innerHTML = '<li class="ranking-loading">Đã xảy ra lỗi khi tải dữ liệu.</li>';
-            }
-        }
-        
-        async function loadScoreHistory() {
-            const historyList = document.getElementById('history-list');
-            const userFilter = document.getElementById('history-user-filter').value;
-            const gameFilter = document.getElementById('history-game-filter').value;
-            
-            historyList.innerHTML = '<li class="ranking-loading">Đang tải lịch sử điểm...</li>';
-            
-            try {
-                let scoresRef = db.collection('scores').orderBy('date', 'desc');
-                
-                if (userFilter !== 'all') {
-                    scoresRef = scoresRef.where('userId', '==', userFilter);
-                }
-                if (gameFilter !== 'all') {
-                    scoresRef = scoresRef.where('game', '==', gameFilter);
-                }
-                
-                const snapshot = await scoresRef.get();
-                const scores = snapshot.docs.map(doc => doc.data());
-                
-                // Get user data for all users in the history
-                const userIds = new Set(scores.map(score => score.userId));
-                const usersRef = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', Array.from(userIds)).get();
-                const usersData = {};
-                usersRef.forEach(doc => usersData[doc.id] = doc.data());
-                
-                if (scores.length === 0) {
-                    historyList.innerHTML = '<li class="ranking-loading">Không có dữ liệu lịch sử</li>';
-                    return;
-                }
-                
-                let html = '';
-                scores.forEach(score => {
-                    const user = usersData[score.userId];
-                    const gameName = getGameName(score.game);
-                    const date = score.date.toDate().toLocaleDateString('vi-VN');
-                    const avatarHTML = user && user.photoURL ? `<img src="${user.photoURL}" alt="${user.name}">` : '<i class="fas fa-user"></i>';
-                    
-                    html += `
-                    <li class="ranking-item">
-                        <div class="ranking-user">
-                            <div class="ranking-avatar">${avatarHTML}</div>
-                            <div class="ranking-name">${user ? user.name : 'Người dùng'}</div>
-                        </div>
-                        <div class="ranking-score">${score.score} điểm</div>
-                        <div style="margin-left: 10px; color: #777; font-size: 0.9rem;">
-                            ${gameName} - ${date}
-                        </div>
-                    </li>
-                    `;
-                });
-                
-                historyList.innerHTML = html;
-            } catch(error) {
-                console.error("Error loading score history: ", error);
-                historyList.innerHTML = '<li class="ranking-loading">Đã xảy ra lỗi khi tải dữ liệu.</li>';
-            }
-        }
-        
-        async function loadFriendsList() {
-            const friendsList = document.getElementById('friends-list');
-            
-            friendsList.innerHTML = '<p class="ranking-loading">Đang tải danh sách bạn bè...</p>';
-            
-            // This is a simplified approach. A real friend system would involve a `friends` collection
-            // or a sub-collection on the user document.
-            try {
-                const usersSnapshot = await db.collection('users').limit(10).get(); // Example: Load first 10 users as "friends"
-                const friends = usersSnapshot.docs.filter(doc => doc.id !== (currentUser ? currentUser.uid : null)).map(doc => ({ id: doc.id, ...doc.data() }));
-                
-                if (friends.length === 0) {
-                    friendsList.innerHTML = '<p class="ranking-loading">Bạn chưa có bạn bè nào. Hãy thêm bạn bè để thách đấu!</p>';
-                    return;
-                }
-                
-                let html = '';
-                for (const friend of friends) {
-                    const scoresSnapshot = await db.collection('scores').where('userId', '==', friend.id).orderBy('score', 'desc').limit(1).get();
-                    const highScore = scoresSnapshot.empty ? 0 : scoresSnapshot.docs[0].data().score;
-                    const avatarHTML = friend.photoURL ? `<img src="${friend.photoURL}" alt="${friend.name}">` : '<i class="fas fa-user"></i>';
-                    
-                    html += `
-                    <div class="friend-item">
-                        <div class="friend-avatar">${avatarHTML}</div>
-                        <div class="friend-info">
-                            <div class="friend-name">${friend.name || 'Người dùng'}</div>
-                            <div class="friend-score">Điểm cao nhất: ${highScore}</div>
-                        </div>
-                        <button class="social-btn challenge" data-userid="${friend.id}">
-                            <i class="fas fa-trophy"></i> Thách đấu
-                        </button>
-                    </div>
-                    `;
-                }
-                
-                friendsList.innerHTML = html;
-                
-                document.querySelectorAll('.social-btn.challenge').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const userId = btn.getAttribute('data-userid');
-                        openChallengeModal(userId);
-                    });
-                });
-                
-            } catch(error) {
-                console.error("Error loading friends list: ", error);
-                friendsList.innerHTML = '<p class="ranking-loading">Đã xảy ra lỗi khi tải danh sách bạn bè.</p>';
-            }
-        }
-        
-        function openChallengeModal(userId) {
-            showModal(challengeModal);
-            
-            // Find the user from the ranking list to pre-populate the select
-            const user = document.querySelector(`.ranking-item[data-userid="${userId}"] .ranking-name`).textContent;
-            if (user) {
-                document.getElementById('challenge-friend').innerHTML = `<option value="${userId}" selected>${user}</option>`;
-            }
-            
-            document.querySelectorAll('.challenge-option').forEach(option => {
-                option.addEventListener('click', () => {
-                    document.querySelectorAll('.challenge-option').forEach(o => o.classList.remove('selected'));
-                    option.classList.add('selected');
-                });
-            });
-            
-            document.getElementById('send-challenge-btn').addEventListener('click', sendChallenge);
-        }
-        
-        function sendChallenge() {
-            const friendId = document.getElementById('challenge-friend').value;
-            const gameId = document.getElementById('challenge-game').value;
-            const timeOption = document.querySelector('.challenge-option.selected');
-            
-            if (!timeOption) {
-                showToast('Vui lòng chọn thời gian thách đấu', 'error');
-                return;
-            }
-            
-            const time = timeOption.getAttribute('data-time');
-            
-            // This would be a real Firestore operation, e.g., create a `challenges` document
-            // db.collection('challenges').add({
-            //     challengerId: currentUser.uid,
-            //     challengedId: friendId,
-            //     gameId: gameId,
-            //     time: time,
-            //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            //     status: 'pending'
-            // });
-            
-            showToast(`Đã gửi thách đấu ${time} phút với ${getGameName(gameId)}`, 'success');
-            challengeModal.style.display = 'none';
-        }
-        
-        function shareUserAchievement(userId) {
-            showToast('Chức năng chia sẻ thành tích đã được kích hoạt');
-        }
-        
-        function sendFriendRequest(userId) {
-            showToast('Đã gửi lời mời kết bạn');
-        }
-        
-        rankingBtn.addEventListener('click', async () => {
-            loadRankings();
-            
-            // Populate user filter for history tab
-            const userFilter = document.getElementById('history-user-filter');
-            userFilter.innerHTML = '<option value="all">Tất cả người dùng</option>';
-            
-            try {
-                const usersSnapshot = await db.collection('users').get();
-                usersSnapshot.forEach(doc => {
-                    const userData = doc.data();
-                    userFilter.innerHTML += `<option value="${doc.id}">${userData.name || 'Người dùng'}</option>`;
-                });
-            } catch (error) {
-                console.error("Error populating history user filter: ", error);
-            }
-        });
-        
+
+        // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) loginModal.style.display = 'none';
             if (e.target === profileModal) profileModal.style.display = 'none';
             if (e.target === rankingModal) rankingModal.style.display = 'none';
-            if (e.target === e.target) challengeModal.style.display = 'none';
+            if (e.target === challengeModal) challengeModal.style.display = 'none';
         });
     </script>
 </body>
