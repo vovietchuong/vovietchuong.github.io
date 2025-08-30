@@ -1,377 +1,575 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🍎 Toán Lớp 1 - Cộng Trừ 10 (Pro++)</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {margin:0; font-family:'Comic Sans MS', cursive; background:linear-gradient(135deg,#f0f9ff,#e0f7fa); display:flex; align-items:center; justify-content:center; min-height:100vh; padding:10px;}
-    .container {background:#fff; border-radius:20px; padding:20px; box-shadow:0 8px 20px rgba(0,0,0,.15); max-width:720px; width:100%; text-align:center; position:relative;}
-    h1{color:#ff6b6b; margin:0 0 5px; font-size:2rem;}
-    .subtitle{color:#0984e3; margin-bottom:15px}
-    .home-btn{position:absolute; left:20px; top:20px; padding:6px 12px; border:none; border-radius:20px; cursor:pointer; background:linear-gradient(145deg,#a29bfe,#6c5ce7); color:#fff; font-weight:bold;}
-    .mode-selector{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:50px 0 15px}
-    .mode-btn{padding:6px 14px; border:none; border-radius:20px; cursor:pointer; font-weight:bold; background:#e3f2fd; color:#1976d2; transition:.3s}
-    .mode-btn.active{background:linear-gradient(145deg,#74b9ff,#0984e3); color:#fff;}
-    .score-bar{display:flex; justify-content:space-between; align-items:center; background:linear-gradient(145deg,#ffeaa7,#fdcb6e); padding:10px 20px; border-radius:14px; margin-bottom:15px; font-weight:bold; color:#d63031;}
-    .stars{display:flex; gap:4px}
-    .star{color:#ffeaa7; font-size:1.2rem; transition:.3s}
-    .star.filled{color:#fdcb6e; text-shadow:0 0 5px #fdcb6e}
-    .question-box{background:#f8f9fa; border-radius:15px; padding:20px; margin:15px 0; box-shadow:inset 0 0 6px rgba(0,0,0,.08)}
-    .question{font-size:2.5rem; margin:5px 0; color:#2d3436}
-    .illustration{font-size:2rem; margin:10px 0; min-height:40px}
-    .answer-display{font-size:2rem; min-height:50px; background:#e3f2fd; padding:8px; border-radius:10px; color:#1976d2; margin:10px 0}
-    .answer-buttons{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin-bottom:10px}
-    .number-btn{padding:10px; font-size:1.5rem; border:none; border-radius:10px; cursor:pointer; background:linear-gradient(145deg,#74b9ff,#0984e3); color:#fff; transition:.2s}
-    .number-btn:active{transform:scale(.95)}
-    .control-buttons{display:flex; justify-content:center; gap:10px; margin-bottom:10px}
-    .control-btn{padding:10px 18px; border:none; border-radius:10px; font-weight:bold; cursor:pointer;}
-    #clear-btn{background:linear-gradient(145deg,#fab1a0,#e17055); color:#fff}
-    #submit-btn{background:linear-gradient(145deg,#55efc4,#00b894); color:#2d3436}
-    .feedback{font-size:1.2rem; min-height:30px; margin:8px 0; opacity:0; transition:.3s;}
-    .feedback.show{opacity:1}
-    .correct{color:#00b894}
-    .incorrect{color:#d63031}
-    .timer{font-weight:bold; color:#2d3436}
-    .leaderboard{margin-top:15px; text-align:left; background:#f1f5f9; padding:10px; border-radius:10px;}
-    .leaderboard h3{margin:5px 0; color:#0f172a;}
-    .leaderboard ol{padding-left:20px;}
-    canvas#confetti{position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:10}
-    .toggle-time{margin:10px 0;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cộng trừ trong phạm vi 10 - MathHub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+            width: 100%;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .game-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-label {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2e59d9;
+        }
+
+        .question-container {
+            margin: 30px 0;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2e59d9;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .answer-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .answer-input {
+            width: 100px;
+            padding: 15px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            transition: border-color 0.3s;
+        }
+
+        .answer-input:focus {
+            border-color: #4e73df;
+            outline: none;
+        }
+
+        .submit-btn {
+            padding: 15px 30px;
+            background: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-left: 10px;
+        }
+
+        .submit-btn:hover {
+            background: #2e59d9;
+        }
+
+        .feedback {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        .result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            color: #2e59d9;
+            margin-bottom: 15px;
+        }
+
+        .result-score {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1cc88a;
+            margin-bottom: 20px;
+        }
+
+        .play-again-btn {
+            padding: 12px 24px;
+            background: #4e73df;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-right: 10px;
+        }
+
+        .play-again-btn:hover {
+            background: #2e59d9;
+        }
+
+        .home-btn {
+            padding: 12px 24px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .home-btn:hover {
+            background: #5a6268;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: white;
+            padding: 16px;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 300px;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .toast.success {
+            background-color: #1cc88a;
+        }
+
+        .toast.error {
+            background-color: #e74a3b;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+            }
+            
+            .question-container {
+                font-size: 2rem;
+            }
+            
+            .answer-container {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .submit-btn {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-<canvas id="confetti"></canvas>
-<div class="container">
-  <button class="home-btn" id="home"><i class="fas fa-home"></i> Trang chủ</button>
-  <h1>🍎 Toán Lớp 1</h1>
-  <p class="subtitle">Cộng trừ trong phạm vi 10 (Pro++)</p>
-  
-  <div class="mode-selector">
-    <button class="mode-btn active" data-mode="addition">Chỉ cộng</button>
-    <button class="mode-btn" data-mode="subtraction">Chỉ trừ</button>
-    <button class="mode-btn" data-mode="both">Cả hai</button>
-  </div>
-
-  <div class="toggle-time">
-    <label><input type="checkbox" id="infinite-mode"> ⏳ Chơi vô hạn (không giới hạn thời gian)</label>
-  </div>
-  
-  <div class="score-bar">
-    <span>Điểm: <span id="score">0</span></span>
-    <span class="timer">⏱ <span id="time">60</span>s</span>
-    <div class="stars">
-      <span class="star">⭐</span>
-      <span class="star">⭐</span>
-      <span class="star">⭐</span>
+    <div class="header">
+        <a href="index.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Trang chủ
+        </a>
+        <h1>Cộng trừ trong phạm vi 10</h1>
+        <p>Rèn luyện kỹ năng tính toán cơ bản</p>
     </div>
-  </div>
-  
-  <div class="question-box">
-    <div class="question" id="question">3 + 2 = ?</div>
-    <div class="illustration" id="illustration">🍎🍎🍎 + 🍌🍌</div>
-    <div class="answer-display" id="answer-display">?</div>
-  </div>
-  
-  <div class="answer-buttons" id="answer-buttons"></div>
-  
-  <div class="control-buttons">
-    <button class="control-btn" id="clear-btn">Xóa</button>
-    <button class="control-btn" id="submit-btn">Trả lời</button>
-  </div>
-  
-  <div class="feedback" id="feedback"></div>
-  <div class="leaderboard" id="leaderboard">
-    <h3>🏆 Bảng xếp hạng</h3>
-    <ol id="leader-list"></ol>
-  </div>
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-
-<script>
-const fruits=['🍎','🍐','🍊','🍋','🍌','🍉','🍇','🍓','🍒','🍑'];
-const state={mode:'addition',score:0,streak:0,ans:'',question:{},time:60,running:false,infinite:false};
-const ui={q:document.getElementById('question'),illus:document.getElementById('illustration'),ans:document.getElementById('answer-display'),score:document.getElementById('score'),stars:document.querySelectorAll('.star'),fb:document.getElementById('feedback'),time:document.getElementById('time'),leader:document.getElementById('leader-list'),chkInf:document.getElementById('infinite-mode')};
-
-// --- Firebase setup ---
-const firebaseConfig = {
-  apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
-  authDomain: "mathhubvn.firebaseapp.com",
-  projectId: "mathhubvn",
-  storageBucket: "mathhubvn.firebasestorage.app",
-  messagingSenderId: "1001364433767",
-  appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
-  measurementId: "G-2YNQZ48JVK"
-};
-
-// Khởi tạo Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firestore();
-
-function init(){
-  genButtons();
-  bindMode();
-  newGame();
-  loadLeaderboardFromFirestore();
-  document.getElementById('home').onclick=()=>{
-    saveScoreToFirestore();
-    window.location.href='index.html';
-  };
-  document.addEventListener('keydown',handleKey);
-  ui.chkInf.onchange=()=>{state.infinite=ui.chkInf.checked; reset();};
-}
-
-function genButtons(){
-  const box=document.getElementById('answer-buttons'); 
-  for(let i=0;i<=9;i++){
-    const b=document.createElement('button'); 
-    b.textContent=i; 
-    b.className='number-btn'; 
-    b.onclick=()=>{
-      if(state.ans.length<2){
-        state.ans+=i; 
-        renderAns();
-      }
-    }; 
-    box.appendChild(b);
-  }
-}
-
-function bindMode(){
-  document.querySelectorAll('.mode-btn').forEach(btn=>btn.onclick=()=>{
-    document.querySelectorAll('.mode-btn').forEach(x=>x.classList.remove('active')); 
-    btn.classList.add('active'); 
-    state.mode=btn.dataset.mode; 
-    reset();
-  });
-}
-
-function reset(){
-  state.score=0; 
-  state.streak=0; 
-  state.ans=''; 
-  state.time= state.infinite?Infinity:60; 
-  update(); 
-  newQ(); 
-  if(!state.infinite) startTimer(); 
-  else state.running=true;
-}
-
-function newGame(){
-  reset();
-}
-
-function newQ(){
-  const isAdd= state.mode==='addition' || (state.mode==='both'&&Math.random()>.5); 
-  let a,b,op,ans; 
-  if(isAdd){
-    a=Math.floor(Math.random()*10); 
-    b=Math.floor(Math.random()*(10-a)); 
-    ans=a+b; 
-    op='+';
-  } else { 
-    a=Math.floor(Math.random()*10)+1; 
-    b=Math.floor(Math.random()*a); 
-    ans=a-b; 
-    op='-'; 
-  } 
-  state.question={a,b,op,ans}; 
-  ui.q.textContent=`${a} ${op} ${b} = ?`; 
-  ui.illus.textContent=fruits[a%fruits.length].repeat(a)+(op==='+'?' + ':' − ')+fruits[b%fruits.length].repeat(b); 
-  state.ans=''; 
-  renderAns();
-}
-
-function renderAns(){
-  ui.ans.textContent=state.ans||'?';
-}
-
-function submit(){
-  if(!state.ans) return; 
-  const val=+state.ans; 
-  if(val===state.question.ans){
-    state.score+=10; 
-    state.streak=Math.min(3,state.streak+1); 
-    feedback('Đúng 👏',true); 
-    playSound(true); 
-    if(state.streak===3) launchConfetti();
-  } else {
-    feedback(`Sai 😢. Đúng: ${state.question.ans}`,false); 
-    state.streak=0; 
-    playSound(false);
-  } 
-  update(); 
-  newQ();
-}
-
-function feedback(msg,ok){
-  ui.fb.textContent=msg; 
-  ui.fb.className='feedback show '+(ok?'correct':'incorrect'); 
-  setTimeout(()=>ui.fb.className='feedback',1500);
-}
-
-function update(){
-  ui.score.textContent=state.score; 
-  ui.stars.forEach((s,i)=>s.classList.toggle('filled',i<state.streak)); 
-  ui.time.textContent= state.infinite? '∞': state.time;
-}
-
-function startTimer(){
-  state.running=true; 
-  clearInterval(state.tid); 
-  state.tid=setInterval(()=>{
-    if(!state.running) return; 
-    state.time--; 
-    if(state.time<=0){
-      end();
-    } 
-    update();
-  },1000);
-}
-
-function end(){
-  state.running=false; 
-  feedback(`⏰ Hết giờ! Điểm: ${state.score}`,false); 
-  clearInterval(state.tid); 
-  saveScoreToFirestore();
-}
-
-// Nút
-document.getElementById('clear-btn').onclick=()=>{state.ans=''; renderAns();};
-document.getElementById('submit-btn').onclick=submit;
-
-// Âm thanh
-function playSound(ok){
-  const ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const o=ctx.createOscillator();
-  const g=ctx.createGain();
-  o.connect(g);
-  g.connect(ctx.destination);
-  o.type='sine';
-  o.frequency.value= ok?660:220;
-  g.gain.value=0.1;
-  o.start();
-  o.stop(ctx.currentTime+0.25);
-}
-
-// Confetti
-function launchConfetti(){
-  const canvas=document.getElementById('confetti');
-  const ctx=canvas.getContext('2d');
-  canvas.width=window.innerWidth;
-  canvas.height=window.innerHeight;
-  let pieces=[];
-  for(let i=0;i<150;i++){
-    pieces.push({
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height,
-      color:`hsl(${Math.random()*360},100%,50%)`,
-      ys:Math.random()*3+2,
-      size:Math.random()*5+2
-    });
-  }
-  function updateC(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    pieces.forEach(p=>{
-      p.y+=p.ys;
-      if(p.y>canvas.height)p.y=-10;
-      ctx.fillStyle=p.color;
-      ctx.fillRect(p.x,p.y,p.size,p.size);
-    }); 
-    if(state.streak===3) requestAnimationFrame(updateC);
-  }
-  updateC();
-}
-
-// --- Lưu điểm vào Firestore ---
-async function saveScoreToFirestore() {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-  
-  // Kiểm tra xem người dùng đã đăng nhập chưa
-  if (!currentUser.uid) {
-    console.log("Người dùng chưa đăng nhập, không lưu điểm");
-    return;
-  }
-  
-  const playerName = currentUser.name || "Khách";
-  const uid = currentUser.uid;
-
-  try {
-    // Lưu điểm vào collection scores (theo cấu trúc mới)
-    await db.collection("scores").add({
-      userId: uid,
-      gameId: "congtrutrongphamvi10",
-      gameName: "Cộng trừ trong phạm vi 10",
-      score: state.score,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    });
     
-    // Cũng lưu vào leaderboard để hiển thị bảng xếp hạng
-    await db.collection("leaderboard").add({
-      userId: uid,
-      name: playerName,
-      score: state.score,
-      game: "congtru10",
-      timestamp: new Date()
-    });
-    
-    loadLeaderboardFromFirestore();
-  } catch (err) {
-    console.error("Lỗi lưu điểm:", err);
-  }
-}
+    <div class="game-container">
+        <div class="game-info">
+            <div class="info-item">
+                <div class="info-label">Câu hỏi</div>
+                <div class="info-value" id="question-count">0/10</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Điểm</div>
+                <div class="info-value" id="score">0</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Thời gian</div>
+                <div class="info-value" id="timer">60</div>
+            </div>
+        </div>
+        
+        <div class="question-container" id="question">
+            <!-- Câu hỏi sẽ được hiển thị ở đây -->
+        </div>
+        
+        <div class="answer-container">
+            <input type="number" class="answer-input" id="answer" placeholder="Đáp án" min="0" max="20">
+            <button class="submit-btn" id="submit-answer">Trả lời</button>
+        </div>
+        
+        <div class="feedback" id="feedback">
+            <!-- Phản hồi sẽ được hiển thị ở đây -->
+        </div>
+        
+        <div class="result-container" id="result">
+            <div class="result-title">Kết quả của bạn</div>
+            <div class="result-score" id="final-score">0 điểm</div>
+            <div>
+                <button class="play-again-btn" id="play-again">Chơi lại</button>
+                <button class="home-btn" id="go-home">Về trang chủ</button>
+            </div>
+        </div>
+    </div>
 
-async function loadLeaderboardFromFirestore() {
-  try {
-    const snapshot = await db.collection("leaderboard")
-      .where("game", "==", "congtru10")
-      .orderBy("score", "desc")
-      .limit(5)
-      .get();
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
 
-    ui.leader.innerHTML = "";
-    snapshot.forEach((doc) => {
-      const data = doc.data();
-      const li = document.createElement("li");
-      li.textContent = `${data.name}: ${data.score} điểm`;
-      ui.leader.appendChild(li);
-    });
-  } catch (err) {
-    console.error("Lỗi tải bảng xếp hạng:", err);
-  }
-}
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
+            authDomain: "mathhubvn.firebaseapp.com",
+            projectId: "mathhubvn",
+            storageBucket: "mathhubvn.firebasestorage.app",
+            messagingSenderId: "1001364433767",
+            appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
+            measurementId: "G-2YNQZ48JVK"
+        };
 
-// Keyboard input
-function handleKey(e){
-  if(!state.running)return; 
-  if(e.key>='0'&&e.key<='9'){
-    if(state.ans.length<2){
-      state.ans+=e.key; 
-      renderAns();
-    }
-  } else if(e.key==='Backspace'){
-    state.ans=''; 
-    renderAns();
-  } else if(e.key==='Enter'){
-    submit();
-  }
-}
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const analytics = firebase.analytics();
 
-// Lưu điểm khi người dùng rời trang
-window.addEventListener('beforeunload', function() {
-  if (state.score > 0) {
-    saveScoreToFirestore();
-  }
-});
+        // DOM Elements
+        const questionElement = document.getElementById('question');
+        const answerInput = document.getElementById('answer');
+        const submitButton = document.getElementById('submit-answer');
+        const feedbackElement = document.getElementById('feedback');
+        const questionCountElement = document.getElementById('question-count');
+        const scoreElement = document.getElementById('score');
+        const timerElement = document.getElementById('timer');
+        const resultContainer = document.getElementById('result');
+        const finalScoreElement = document.getElementById('final-score');
+        const playAgainButton = document.getElementById('play-again');
+        const goHomeButton = document.getElementById('go-home');
+        const toast = document.getElementById('toast');
 
-init();
-</script>
+        // Game variables
+        let currentQuestion = {};
+        let score = 0;
+        let questionCount = 0;
+        let maxQuestions = 10;
+        let timeLeft = 60;
+        let timer;
+        let gameActive = false;
+
+        // Hàm hiển thị thông báo
+        function showToast(message, type = '') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type) toast.classList.add(type);
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Hàm tạo câu hỏi ngẫu nhiên
+        function generateQuestion() {
+            // Tạo số ngẫu nhiên từ 1 đến 10
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            
+            // Quyết định phép tính (cộng hoặc trừ)
+            const isAddition = Math.random() > 0.5;
+            
+            if (isAddition) {
+                return {
+                    question: `${num1} + ${num2} = ?`,
+                    answer: num1 + num2,
+                    type: 'addition'
+                };
+            } else {
+                // Đảm bảo kết quả không âm
+                const larger = Math.max(num1, num2);
+                const smaller = Math.min(num1, num2);
+                return {
+                    question: `${larger} - ${smaller} = ?`,
+                    answer: larger - smaller,
+                    type: 'subtraction'
+                };
+            }
+        }
+
+        // Hàm hiển thị câu hỏi
+        function displayQuestion() {
+            if (questionCount >= maxQuestions) {
+                endGame();
+                return;
+            }
+            
+            currentQuestion = generateQuestion();
+            questionElement.textContent = currentQuestion.question;
+            answerInput.value = '';
+            answerInput.focus();
+            feedbackElement.className = 'feedback';
+            feedbackElement.style.display = 'none';
+            
+            questionCount++;
+            questionCountElement.textContent = `${questionCount}/${maxQuestions}`;
+        }
+
+        // Hàm kiểm tra đáp án
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+            
+            if (isNaN(userAnswer)) {
+                showToast('Vui lòng nhập một số hợp lệ!', 'error');
+                return;
+            }
+            
+            if (userAnswer === currentQuestion.answer) {
+                // Đáp án đúng
+                score += 10;
+                scoreElement.textContent = score;
+                feedbackElement.textContent = 'Chính xác! +10 điểm';
+                feedbackElement.className = 'feedback correct';
+                feedbackElement.style.display = 'block';
+            } else {
+                // Đáp án sai
+                feedbackElement.textContent = `Sai rồi! Đáp án đúng là: ${currentQuestion.answer}`;
+                feedbackElement.className = 'feedback incorrect';
+                feedbackElement.style.display = 'block';
+            }
+            
+            // Chuyển câu hỏi tiếp theo sau 1 giây
+            setTimeout(displayQuestion, 1500);
+        }
+
+        // Hàm bắt đầu game
+        function startGame() {
+            score = 0;
+            questionCount = 0;
+            timeLeft = 60;
+            gameActive = true;
+            
+            scoreElement.textContent = score;
+            questionCountElement.textContent = `0/${maxQuestions}`;
+            timerElement.textContent = timeLeft;
+            
+            resultContainer.style.display = 'none';
+            feedbackElement.style.display = 'none';
+            
+            // Bắt đầu đếm ngược thời gian
+            clearInterval(timer);
+            timer = setInterval(updateTimer, 1000);
+            
+            // Hiển thị câu hỏi đầu tiên
+            displayQuestion();
+        }
+
+        // Hàm cập nhật bộ đếm thời gian
+        function updateTimer() {
+            timeLeft--;
+            timerElement.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                endGame();
+            }
+        }
+
+        // Hàm kết thúc game
+        function endGame() {
+            gameActive = false;
+            clearInterval(timer);
+            
+            resultContainer.style.display = 'block';
+            finalScoreElement.textContent = `${score} điểm`;
+            
+            // Lưu điểm lên Firebase nếu người dùng đã đăng nhập
+            saveScore(score);
+        }
+
+        // Hàm lưu điểm lên Firebase
+        function saveScore(score) {
+            const user = auth.currentUser;
+            
+            if (user) {
+                // Người dùng đã đăng nhập, lưu điểm
+                const scoreData = {
+                    userId: user.uid,
+                    userName: user.displayName || 'Người dùng ẩn danh',
+                    gameId: 'congtrutrongphamvi10',
+                    gameName: 'Cộng trừ trong phạm vi 10',
+                    score: score,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                
+                db.collection('scores').add(scoreData)
+                    .then(() => {
+                        console.log('Điểm đã được lưu thành công!');
+                        analytics.logEvent('game_score_saved', {
+                            game_id: 'congtrutrongphamvi10',
+                            score: score
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi lưu điểm:', error);
+                    });
+            } else {
+                // Người dùng chưa đăng nhập, lưu vào localStorage
+                const guestScore = {
+                    gameId: 'congtrutrongphamvi10',
+                    gameName: 'Cộng trừ trong phạm vi 10',
+                    score: score,
+                    timestamp: new Date().toISOString()
+                };
+                
+                localStorage.setItem('guestScore', JSON.stringify(guestScore));
+                showToast('Bạn chưa đăng nhập. Điểm sẽ không được lưu vào bảng xếp hạng.', 'error');
+            }
+        }
+
+        // Event Listeners
+        submitButton.addEventListener('click', checkAnswer);
+        
+        answerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+        playAgainButton.addEventListener('click', startGame);
+        
+        goHomeButton.addEventListener('click', () => {
+            window.location.href = 'index.html';
+        });
+
+        // Kiểm tra trạng thái đăng nhập
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // Người dùng đã đăng nhập
+                console.log('Người dùng đã đăng nhập:', user.displayName);
+            } else {
+                // Người dùng chưa đăng nhập
+                console.log('Người dùng chưa đăng nhập');
+            }
+            
+            // Bắt đầu game
+            startGame();
+        });
+
+        // Theo dõi sự kiện analytics
+        analytics.logEvent('game_started', {
+            game_name: 'Cộng trừ trong phạm vi 10'
+        });
+    </script>
 </body>
 </html>
