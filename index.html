@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MathHub - Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -14,6 +15,23 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     
     <style>
+        /* Biến CSS để dễ dàng tùy chỉnh */
+        :root {
+            --primary-color: #4e73df;
+            --primary-dark: #2e59d9;
+            --secondary-color: #ff6b6b;
+            --accent-color: #36b9cc;
+            --success-color: #1cc88a;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --light-color: #f8f9fa;
+            --dark-color: #333;
+            --text-color: #555;
+            --border-radius: 15px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -22,13 +40,52 @@
         }
 
         body {
-            background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);
-            color: #333;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: var(--text-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Hiệu ứng nền động */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .math-symbol {
+            position: absolute;
+            color: white;
+            font-size: 24px;
+            opacity: 0;
+            animation: float 15s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.5;
+            }
+            90% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
         }
 
         .header {
@@ -37,16 +94,20 @@
             color: white;
             width: 100%;
             position: relative;
+            animation: fadeInDown 1s;
         }
 
         .header h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
             font-size: 1.2rem;
             opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .user-controls {
@@ -74,6 +135,13 @@
             align-items: center;
             justify-content: center;
             font-size: 18px;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .user-avatar.large {
@@ -96,21 +164,23 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: var(--transition);
             font-weight: 500;
         }
 
         .auth-btn:hover {
             background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
         }
 
         .section-title {
             color: white;
             margin: 30px 0 15px;
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 2rem;
             width: 100%;
             max-width: 1000px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .section-divider {
@@ -124,36 +194,37 @@
         .container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
+            gap: 25px;
             width: 100%;
-            max-width: 1000px;
+            max-width: 1200px;
         }
 
         .game-card {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--border-radius);
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
             display: flex;
             flex-direction: column;
             position: relative;
+            animation: fadeInUp 0.5s;
         }
 
         .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
 
         .game-card.featured {
-            border: 3px solid #ff6b6b;
+            border: 3px solid var(--secondary-color);
         }
 
         .featured-badge {
             position: absolute;
             top: -10px;
             right: -10px;
-            background: #ff6b6b;
+            background: var(--secondary-color);
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
@@ -167,7 +238,7 @@
             position: absolute;
             top: -10px;
             left: -10px;
-            background: #36b9cc;
+            background: var(--accent-color);
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
@@ -181,7 +252,7 @@
             position: absolute;
             top: -10px;
             right: -10px;
-            background: #f6c23e;
+            background: var(--warning-color);
             color: white;
             padding: 5px 10px;
             border-radius: 20px;
@@ -198,6 +269,24 @@
             justify-content: center;
             color: white;
             font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card-img::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .game-card:hover .game-card-img::after {
+            opacity: 1;
         }
 
         .game-card-content {
@@ -209,34 +298,37 @@
 
         .game-card h3 {
             margin-bottom: 10px;
-            color: #2e59d9;
+            color: var(--primary-dark);
         }
 
         .game-card p {
             margin-bottom: 20px;
-            color: #666;
+            color: var(--text-color);
             flex-grow: 1;
+            line-height: 1.5;
         }
 
         .game-card-btn {
             display: block;
             text-align: center;
             padding: 12px;
-            background: #4e73df;
+            background: var(--primary-color);
             color: white;
             text-decoration: none;
             border-radius: 5px;
             font-weight: bold;
-            transition: background 0.3s;
+            transition: var(--transition);
             cursor: pointer;
+            border: none;
         }
 
         .game-card-btn:hover {
-            background: #2e59d9;
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .game-card-btn.featured {
-            background: #ff6b6b;
+            background: var(--secondary-color);
         }
 
         .game-card-btn.featured:hover {
@@ -244,7 +336,7 @@
         }
 
         .game-card-btn.new {
-            background: #36b9cc;
+            background: var(--accent-color);
         }
 
         .game-card-btn.new:hover {
@@ -252,7 +344,7 @@
         }
 
         .game-card-btn.popular {
-            background: #f6c23e;
+            background: var(--warning-color);
             color: #333;
         }
 
@@ -267,6 +359,7 @@
 
         .game-card-btn.coming-soon:hover {
             background: #858796;
+            transform: none;
         }
 
         .footer {
@@ -274,6 +367,7 @@
             color: white;
             text-align: center;
             padding: 20px;
+            width: 100%;
         }
 
         /* Toast notification */
@@ -281,27 +375,35 @@
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #333;
+            background-color: var(--dark-color);
             color: white;
             padding: 16px;
             border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             z-index: 1000;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: var(--transition);
             max-width: 300px;
+            display: flex;
+            align-items: center;
         }
 
         .toast.show {
             opacity: 1;
+            transform: translateY(-10px);
         }
 
         .toast.success {
-            background-color: #1cc88a;
+            background-color: var(--success-color);
         }
 
         .toast.error {
-            background-color: #e74a3b;
+            background-color: var(--danger-color);
+        }
+
+        .toast i {
+            margin-right: 10px;
+            font-size: 1.2rem;
         }
 
         /* Modal */
@@ -316,17 +418,21 @@
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s;
         }
 
         .modal-content {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--border-radius);
             width: 90%;
             max-width: 500px;
             padding: 30px;
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            animation: zoomIn 0.3s;
         }
 
         .close-modal {
@@ -336,6 +442,12 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: #777;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            color: var(--danger-color);
+            transform: rotate(90deg);
         }
 
         .auth-tabs {
@@ -351,12 +463,12 @@
             cursor: pointer;
             font-weight: 600;
             color: #777;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
 
         .auth-tab.active {
-            color: #4e73df;
-            border-bottom: 3px solid #4e73df;
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
         }
 
         .auth-form {
@@ -375,7 +487,7 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #555;
+            color: var(--text-color);
         }
 
         .form-input {
@@ -384,29 +496,31 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
-            transition: border 0.3s;
+            transition: var(--transition);
         }
 
         .form-input:focus {
-            border-color: #4e73df;
+            border-color: var(--primary-color);
             outline: none;
+            box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
         }
 
         .modal-btn {
             width: 100%;
             padding: 12px;
-            background: #4e73df;
+            background: var(--primary-color);
             color: white;
             border: none;
             border-radius: 5px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
+            transition: var(--transition);
         }
 
         .modal-btn:hover {
-            background: #2e59d9;
+            background: var(--primary-dark);
+            transform: translateY(-2px);
         }
 
         .auth-footer {
@@ -416,9 +530,14 @@
         }
 
         .auth-footer a {
-            color: #4e73df;
+            color: var(--primary-color);
             text-decoration: none;
             cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .auth-footer a:hover {
+            text-decoration: underline;
         }
 
         /* Progress section */
@@ -438,7 +557,7 @@
         }
 
         .progress-score {
-            color: #4e73df;
+            color: var(--primary-color);
             font-weight: 600;
         }
 
@@ -453,13 +572,15 @@
 
         .progress-bar-fill {
             height: 100%;
-            background-color: #4e73df;
+            background-color: var(--primary-color);
             border-radius: 4px;
         }
 
         /* New styles for score system */
         .progress-filters {
             margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
         }
 
         .progress-filters select {
@@ -467,7 +588,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: white;
-            width: 100%;
+            flex: 1;
         }
 
         .progress-item {
@@ -479,6 +600,11 @@
             background-color: #f9f9f9;
             border-radius: 5px;
             margin-bottom: 8px;
+            transition: var(--transition);
+        }
+
+        .progress-item:hover {
+            background-color: #f0f0f0;
         }
 
         .progress-info {
@@ -487,7 +613,7 @@
 
         .progress-game {
             font-weight: 600;
-            color: #2e59d9;
+            color: var(--primary-dark);
             margin-bottom: 4px;
         }
 
@@ -498,28 +624,29 @@
 
         .progress-score {
             font-weight: bold;
-            color: #1cc88a;
+            color: var(--success-color);
             font-size: 1.1rem;
         }
 
         .progress-level {
             margin-top: 4px;
             font-size: 0.85rem;
-            color: #f6c23e;
+            color: var(--warning-color);
         }
 
         .progress-item.high-score {
             background-color: #e8f5e9;
-            border-left: 4px solid #1cc88a;
+            border-left: 4px solid var(--success-color);
         }
 
         .stats-summary {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            background: #f8f9fa;
+            background: var(--light-color);
             padding: 15px;
             border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
         }
 
         .stat-item {
@@ -538,37 +665,37 @@
             display: block;
             font-size: 1.5rem;
             font-weight: bold;
-            color: #2e59d9;
+            color: var(--primary-dark);
         }
 
         .score-chart-container {
             margin-top: 20px;
             padding: 15px;
-            background-color: #f8f9fa;
+            background-color: var(--light-color);
             border-radius: 8px;
         }
 
         .score-chart-title {
             text-align: center;
             margin-bottom: 15px;
-            color: #2e59d9;
+            color: var(--primary-dark);
             font-weight: 600;
         }
 
         /* Styles mới cho bảng xếp hạng */
         .ranking-container {
             background: white;
-            border-radius: 15px;
+            border-radius: var(--border-radius);
             padding: 20px;
             margin: 20px auto;
             max-width: 800px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--box-shadow);
         }
         
         .ranking-header {
             text-align: center;
             margin-bottom: 20px;
-            color: #2e59d9;
+            color: var(--primary-dark);
         }
         
         .ranking-filters {
@@ -585,12 +712,16 @@
             border: none;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: var(--transition);
         }
         
         .ranking-filter.active {
-            background: #4e73df;
+            background: var(--primary-color);
             color: white;
+        }
+        
+        .ranking-filter:hover {
+            transform: translateY(-2px);
         }
         
         .ranking-list {
@@ -602,7 +733,7 @@
             align-items: center;
             padding: 12px 15px;
             border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s;
+            transition: var(--transition);
         }
         
         .ranking-item:hover {
@@ -658,7 +789,7 @@
         
         .ranking-score {
             font-weight: bold;
-            color: #4e73df;
+            color: var(--primary-color);
             min-width: 80px;
             text-align: right;
         }
@@ -671,9 +802,108 @@
         
         .current-user-highlight {
             background-color: #e8f4ff;
-            border-left: 4px solid #4e73df;
+            border-left: 4px solid var(--primary-color);
         }
 
+        /* Toggle Dark Mode */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(30deg);
+        }
+
+        /* Dark mode styles */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .game-card {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .game-card h3 {
+            color: #63b3ed;
+        }
+
+        body.dark-mode .game-card p {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .modal-content {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .form-input {
+            background: #4a5568;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .form-input:focus {
+            border-color: #63b3ed;
+            box-shadow: 0 0 0 3px rgba(99, 179, 237, 0.1);
+        }
+
+        body.dark-mode .form-group label {
+            color: #e2e8f0;
+        }
+
+        /* Search bar */
+        .search-container {
+            margin: 20px 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-bar {
+            display: flex;
+            width: 100%;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 25px 0 0 25px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 25px 25px 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Responsive design */
         @media (max-width: 768px) {
             .container {
                 grid-template-columns: 1fr;
@@ -687,6 +917,10 @@
             
             .header {
                 margin-bottom: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
             }
             
             .user-info {
@@ -703,10 +937,59 @@
                 flex-direction: column;
                 align-items: center;
             }
+            
+            .theme-toggle {
+                bottom: 10px;
+                left: 10px;
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Background animation -->
+    <div class="bg-animation" id="bg-animation"></div>
+
     <!-- Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
@@ -803,6 +1086,12 @@
                         <option value="nhanchianangcao">Nhân chia nâng cao lớp 3-4</option>
                         <option value="duongduapheptinh">Đường đua phép tính</option>
                     </select>
+                    <select id="time-filter">
+                        <option value="all">Tất cả thời gian</option>
+                        <option value="week">Tuần này</option>
+                        <option value="month">Tháng này</option>
+                        <option value="year">Năm nay</option>
+                    </select>
                 </div>
                 
                 <div class="stats-summary">
@@ -854,6 +1143,11 @@
         </div>
     </div>
 
+    <!-- Theme Toggle Button -->
+    <button class="theme-toggle" id="theme-toggle">
+        <i class="fas fa-moon"></i>
+    </button>
+
     <div class="header">
         <h1><i class="fas fa-calculator"></i> MathHub</h1>
         <p>Trang web giáo dục toán học - vừa CHƠI vừa HỌC - HỌC qua TRÒ CHƠI</p>
@@ -871,737 +1165,628 @@
             <button class="auth-btn" id="login-btn" style="display: block;">Đăng nhập / Đăng ký</button>
         </div>
     </div>
-    
-    <h2 class="section-title">Trò chơi hiện có</h2>
+
+    <div class="search-container">
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Tìm kiếm trò chơi toán học...">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <h2 class="section-title">Trò chơi Toán học</h2>
     <div class="section-divider"></div>
     
     <div class="container">
-        <!-- Game Toán lớp 1 - Nổi bật -->
         <div class="game-card featured">
             <div class="featured-badge">Nổi bật</div>
-            <div class="game-card-img" style="background-color: #ff6b6b;">
-                <i class="fas fa-child"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ trong phạm vi 10</h3>
-                <p>Game toán học dành cho học sinh lớp 1. Luyện tập các phép tính cộng trừ cơ bản với giao diện thân thiện và vui nhộn.</p>
-                <a href="congtrutrongphamvi10.html" class="game-card-btn featured">Chơi ngay</a>
-            </div>
-        </div>
-        
-        <!-- Game Bắn Bóng Số - Mới -->
-        <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #ff6b6b, #e55656);">
-                <i class="fas fa-bullseye"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);">
+                <i class="fas fa-basketball-ball"></i>
             </div>
             <div class="game-card-content">
                 <h3>Bắn Bóng Số</h3>
-                <p>Game toán lớp 2 thú vị. Bắn các bóng bay chứa phép tính bằng cách nhập kết quả chính xác.</p>
-                <a href="banbongsotoan2.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Rèn luyện kỹ năng tính nhẩm với trò chơi bắn bóng số đầy thú vị. Chọn đúng kết quả phép tính để bắn bóng và ghi điểm!</p>
+                <button class="game-card-btn featured" data-game="banbongsotoan2">Chơi ngay</button>
             </div>
         </div>
         
-        <!-- Game Bảng cửu chương -->
+        <div class="game-card new">
+            <div class="new-badge">Mới</div>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc 0%, #2a9eb0 100%);">
+                <i class="fas fa-road"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Đường đua phép tính</h3>
+                <p>Tham gia cuộc đua toán học đầy kịch tính. Trả lời đúng các phép tính để vượt qua đối thủ và về đích đầu tiên!</p>
+                <button class="game-card-btn new" data-game="duongduapheptinh">Chơi ngay</button>
+            </div>
+        </div>
+        
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #8e2de2, #4a00e0);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);">
+                <i class="fas fa-plus-circle"></i>
+            </div>
+            <div class="game-card-content">
+                <h3>Cộng trừ trong phạm vi 10</h3>
+                <p>Làm quen với phép cộng trừ cơ bản dành cho học sinh lớp 1. Giao diện thân thiện với hình ảnh minh họa sống động.</p>
+                <button class="game-card-btn" data-game="congtrutrongphamvi10">Chơi ngay</button>
+            </div>
+        </div>
+        
+        <div class="game-card">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);">
                 <i class="fas fa-times-circle"></i>
             </div>
             <div class="game-card-content">
                 <h3>Bảng cửu chương</h3>
-                <p>Học thuộc bảng cửu chương từ 2 đến 10 một cách dễ dàng và thú vị. Chế độ tổng hợp giúp ôn tập hiệu quả.</p>
-                <a href="bangcuuchuong.html" class="game-card-btn">Chơi ngay</a>
+                <p>Học thuộc bảng cửu chương chưa bao giờ dễ dàng đến thế. Thách thức bản thân với các cấp độ từ dễ đến khó.</p>
+                <button class="game-card-btn" data-game="bangcuuchuong">Chơi ngay</button>
             </div>
         </div>
         
-        <!-- Game Toán lớp 2 - Phổ biến -->
-        <div class="game-card">
+        <div class="game-card popular">
             <div class="popular-badge">Phổ biến</div>
-            <div class="game-card-img" style="background-color: #4e73df;">
-                <i class="fas fa-plus-circle"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e 0%, #e6b02a 100%);">
+                <i class="fas fa-calculator"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ có nhớ lớp 2</h3>
-                <p>Game toán học dành cho học sinh lớp 2. Rèn luyện kỹ năng cộng trừ có nhớ với nhiều cấp độ từ dễ đến khó.</p>
-                <a href="congtruconhotoan2.html" class="game-card-btn popular">Chơi ngay</a>
+                <p>Nâng cao kỹ năng tính toán với các phép cộng trừ có nhớ. Bài tập được thiết kế phù hợp với chương trình lớp 2.</p>
+                <button class="game-card-btn popular" data-game="congtruconhotoan2">Chơi ngay</button>
             </div>
         </div>
         
-        <!-- Cộng trừ số nguyên lớp 6 -->
         <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b 0%, #d52a1a 100%);">
                 <i class="fas fa-infinity"></i>
             </div>
             <div class="game-card-content">
                 <h3>Cộng trừ số nguyên lớp 6</h3>
-                <p>Làm chủ phép cộng trừ số nguyên âm và dương. Game dành cho học sinh lớp 6 với nhiều thử thách thú vị.</p>
-                <a href="congtrusonguyen.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Làm chủ các phép tính với số nguyên âm và dương. Trò chơi giúp hiểu sâu về khái niệm số nguyên.</p>
+                <button class="game-card-btn" data-game="congtrusonguyen">Chơi ngay</button>
             </div>
         </div>
         
-        <!-- Nhân chia nâng cao lớp 3-4 -->
         <div class="game-card">
-            <div class="new-badge">Mới</div>
-            <div class="game-card-img" style="background: linear-gradient(145deg, #6f42c1, #4e2a8e);">
+            <div class="game-card-img" style="background: linear-gradient(135deg, #5a5c69 0%, #4a4c59 100%);">
                 <i class="fas fa-divide"></i>
             </div>
             <div class="game-card-content">
                 <h3>Nhân chia nâng cao lớp 3-4</h3>
-                <p>Rèn luyện kỹ năng nhân chia với các số lớn hơn. Nhiều cấp độ từ cơ bản đến nâng cao cho học sinh lớp 3-4.</p>
-                <a href="nhanchianangcao.html" class="game-card-btn new">Chơi ngay</a>
+                <p>Thử thách với các bài toán nhân chia nâng cao. Rèn luyện tư duy logic và kỹ năng tính toán nhanh.</p>
+                <button class="game-card-btn" data-game="nhanchianangcao">Chơi ngay</button>
             </div>
         </div>
         
-        <!-- Đường đua phép tính -->
         <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(145deg, #1cc88a, #0f9d58);">
-                <i class="fas fa-flag-checkered"></i>
+            <div class="game-card-img" style="background: linear-gradient(135deg, #858796 0%, #757785 100%);">
+                <i class="fas fa-gamepad"></i>
             </div>
             <div class="game-card-content">
-                <h3>Đường đua phép tính</h3>
-                <p>Giải các phép tính toán học để đưa xe về đích. Rèn luyện kỹ năng tính toán nhanh và chính xác.</p>
-                <a href="duongduapheptinh.html" class="game-card-btn">Chơi ngay</a>
+                <h3>Trò chơi mới sắp ra mắt</h3>
+                <p>Chúng tôi đang phát triển thêm nhiều trò chơi toán học thú vị. Hãy quay lại sau để khám phá nhé!</p>
+                <button class="game-card-btn coming-soon">Sắp ra mắt</button>
             </div>
         </div>
     </div>
-    
-    <h2 class="section-title">Trò chơi sắp ra mắt</h2>
-    <div class="section-divider"></div>
-    
-    <div class="container">
-        <!-- Toán đố vui -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #f6c23e;">
-                <i class="fas fa-puzzle-piece"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Toán đố vui</h3>
-                <p>Giải các bài toán đố thú vị và rèn luyện tư duy logic. Phù hợp với mọi lứa tuổi.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-        
-        <!-- Cờ toán học -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #e74a3b;">
-                <i class="fas fa-chess-board"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cờ toán học</h3>
-                <p>Kết hợp giữa cờ vua và toán học. Chiến thắng bằng cách giải các phép tính.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-        
-        <!-- Đấu trường toán học -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #36b9cc;">
-                <i class="fas fa-trophy"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Đấu trường toán học</h3>
-                <p>Thi đấu với bạn bè và người chơi khác để trở thành nhà vô địch toán học.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
 
-        <!-- Hình học vui nhộn -->
-        <div class="game-card">
-            <div class="game-card-img" style="background-color: #8e2de2;">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Hình học vui nhộn</h3>
-                <p>Khám phá thế giới hình học qua các trò chơi thú vị. Nhận diện hình khối và tính chu vi, diện tích.</p>
-                <a href="#" class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-    </div>
-    
     <div class="footer">
-        <p>© 2025 MathHub - Website của thầy Võ Viết Chương - THPT Lê Quảng Chí</p>
-        <p>Liên hệ: gnouhcteiv@gmail.com</p>
+        <p>© 2023 MathHub - Trang web giáo dục toán học dành cho học sinh tiểu học và THCS</p>
+        <p>Liên hệ: info@mathhub.edu.vn | Điện thoại: 0123.456.789</p>
     </div>
 
-    <!-- Toast notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Font Awesome for icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    
-    <!-- Auth System -->
     <script>
-        // auth-system.js
-        class AuthSystem {
-            constructor() {
-                this.initFirebase();
-                this.setupEventListeners();
-                this.checkAuthState();
-            }
-
-            initFirebase() {
-                // Firebase configuration
-                const firebaseConfig = {
-                    apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
-                    authDomain: "mathhubvn.firebaseapp.com",
-                    projectId: "mathhubvn",
-                    storageBucket: "mathhubvn.firebasestorage.app",
-                    messagingSenderId: "1001364433767",
-                    appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
-                    measurementId: "G-2YNQZ48JVK"
-                };
-
-                // Initialize Firebase với nhiều services
-                firebase.initializeApp(firebaseConfig);
-                this.analytics = firebase.analytics();
-                this.auth = firebase.auth();
-                // Khởi tạo Firestore và Storage
-                this.firestore = firebase.firestore();
-                this.storage = firebase.storage();
-            }
-
-            setupEventListeners() {
-                // DOM Elements
-                this.loginBtn = document.getElementById('login-btn');
-                this.logoutBtn = document.getElementById('logout-btn');
-                this.userInfo = document.getElementById('user-info');
-                this.userName = document.getElementById('user-name');
-                this.loginModal = document.getElementById('login-modal');
-                this.closeModal = document.getElementById('close-modal');
-                this.loginTab = document.getElementById('login-tab');
-                this.registerTab = document.getElementById('register-tab');
-                this.loginForm = document.getElementById('login-form');
-                this.registerForm = document.getElementById('register-form');
-                this.toast = document.getElementById('toast');
-                this.profileBtn = document.getElementById('profile-btn');
-                this.rankingBtn = document.getElementById('ranking-btn');
-
-                // Event listeners
-                if (this.loginBtn) this.loginBtn.addEventListener('click', () => this.openLoginModal());
-                if (this.closeModal) this.closeModal.addEventListener('click', () => this.closeLoginModal());
-                if (this.loginTab) this.loginTab.addEventListener('click', () => this.switchToLogin());
-                if (this.registerTab) this.registerTab.addEventListener('click', () => this.switchToRegister());
-                if (this.loginForm) this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-                if (this.registerForm) this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
-                if (this.logoutBtn) this.logoutBtn.addEventListener('click', () => this.handleLogout());
-                if (this.profileBtn) this.profileBtn.addEventListener('click', () => this.openProfileModal());
-                if (this.rankingBtn) this.rankingBtn.addEventListener('click', () => this.openRankingModal());
-                
-                const forgotPassword = document.getElementById('forgot-password');
-                if (forgotPassword) forgotPassword.addEventListener('click', (e) => this.handleForgotPassword(e));
-            }
-
-            openLoginModal() {
-                if (this.loginModal) this.loginModal.style.display = 'flex';
-            }
-
-            closeLoginModal() {
-                if (this.loginModal) this.loginModal.style.display = 'none';
-            }
-
-            openProfileModal() {
-                const profileModal = document.getElementById('profile-modal');
-                if (profileModal) profileModal.style.display = 'flex';
-                
-                // Tải dữ liệu hồ sơ nếu hệ thống người dùng đã khởi tạo
-                if (window.userSystem) {
-                    window.userSystem.loadProfileData();
-                }
-            }
-
-            openRankingModal() {
-                const rankingModal = document.getElementById('ranking-modal');
-                if (rankingModal) rankingModal.style.display = 'flex';
-                
-                // Tải dữ liệu xếp hạng
-                this.loadRankings('all');
-            }
-
-            switchToLogin() {
-                this.loginTab.classList.add('active');
-                this.registerTab.classList.remove('active');
-                this.loginForm.classList.add('active');
-                this.registerForm.classList.remove('active');
-            }
-
-            switchToRegister() {
-                this.registerTab.classList.add('active');
-                this.loginTab.classList.remove('active');
-                this.registerForm.classList.add('active');
-                this.loginForm.classList.remove('active');
-            }
-
-            handleLogin(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value;
-                const password = document.getElementById('login-password').value;
-                
-                this.auth.signInWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        this.showToast('Đăng nhập thành công!', 'success');
-                        this.analytics.logEvent('login', { method: 'email' });
-                        this.closeLoginModal();
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
-                    });
-            }
-
-            handleRegister(e) {
-                e.preventDefault();
-                const name = document.getElementById('register-name').value;
-                const email = document.getElementById('register-email').value;
-                const password = document.getElementById('register-password').value;
-                const confirm = document.getElementById('register-confirm').value;
-                
-                if (password !== confirm) {
-                    this.showToast('Mật khẩu xác nhận không khớp!', 'error');
-                    return;
-                }
-                
-                this.auth.createUserWithEmailAndPassword(email, password)
-                    .then((userCredential) => {
-                        const user = userCredential.user;
-                        return user.updateProfile({
-                            displayName: name
-                        });
-                    })
-                    .then(() => {
-                        this.showToast('Đăng ký thành công!', 'success');
-                        this.analytics.logEvent('sign_up', { method: 'email' });
-                        this.switchToLogin();
-                        
-                        // Clear registration form
-                        document.getElementById('register-name').value = '';
-                        document.getElementById('register-email').value = '';
-                        document.getElementById('register-password').value = '';
-                        document.getElementById('register-confirm').value = '';
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
-                    });
-            }
-
-            handleLogout() {
-                this.auth.signOut()
-                    .then(() => {
-                        this.showToast('Đã đăng xuất!', 'success');
-                        this.analytics.logEvent('logout');
-                        // ❌ Khi logout thì xoá user khỏi localStorage
-                        localStorage.removeItem("currentUser");
-                    })
-                    .catch((error) => {
-                        this.showToast(error.message, 'error');
-                    });
-            }
-
-            handleForgotPassword(e) {
-                e.preventDefault();
-                const email = document.getElementById('login-email').value || prompt('Vui lòng nhập email của bạn:');
-                
-                if (email) {
-                    this.auth.sendPasswordResetEmail(email)
-                        .then(() => {
-                            this.showToast('Email đặt lại mật khẩu đã được gửi!', 'success');
-                        })
-                        .catch((error) => {
-                            this.showToast(error.message, 'error');
-                        });
-                }
-            }
-
-            checkAuthState() {
-                this.auth.onAuthStateChanged((user) => {
-                    if (user) {
-                        this.userName.textContent = user.displayName || user.email;
-                        this.userInfo.style.display = 'flex';
-                        this.loginBtn.style.display = 'none';
-                        
-                        // ✅ Lưu thông tin user vào localStorage để game đọc được
-                        const currentUser = {
-                            name: user.displayName || user.email,
-                            email: user.email,
-                            uid: user.uid
-                        };
-                        localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-                        // Khởi tạo hệ thống người dùng khi đã đăng nhập
-                        if (!window.userSystem && typeof UserSystem !== 'undefined') {
-                            window.userSystem = new UserSystem(this);
-                        }
-                    } else {
-                        this.userInfo.style.display = 'none';
-                        this.loginBtn.style.display = 'block';
-                        // ❌ Nếu chưa đăng nhập thì xoá currentUser
-                        localStorage.removeItem("currentUser");
-                    }
-                });
-            }
-
-            showToast(message, type = '') {
-                this.toast.textContent = message;
-                this.toast.className = 'toast';
-                if (type) this.toast.classList.add(type);
-                this.toast.classList.add('show');
-                
-                setTimeout(() => {
-                    this.toast.classList.remove('show');
-                }, 3000);
-            }
-
-            // Phương thức lưu điểm
-            saveGameScore(gameId, gameName, score, level = null) {
-                const user = this.auth.currentUser;
-                if (!user) return Promise.reject(new Error('User not authenticated'));
-                
-                const scoreData = {
-                    userId: user.uid,
-                    userName: user.displayName || 'Người dùng ẩn danh',
-                    gameId,
-                    gameName,
-                    score,
-                    level,
-                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
-                };
-                
-                return this.firestore.collection('scores').add(scoreData)
-                    .then(() => {
-                        this.analytics.logEvent('game_score_saved', {
-                            game_id: gameId,
-                            score: score
-                        });
-                        return scoreData;
-                    });
-            }
-
-            // Phương thức lấy điểm theo user
-            getUserScores() {
-                const user = this.auth.currentUser;
-                if (!user) return Promise.resolve([]);
-                
-                return this.firestore.collection('scores')
-                    .where('userId', '==', user.uid)
-                    .orderBy('timestamp', 'desc')
-                    .limit(10)
-                    .get()
-                    .then(querySnapshot => {
-                        const scores = [];
-                        querySnapshot.forEach(doc => {
-                            scores.push({ id: doc.id, ...doc.data() });
-                        });
-                        return scores;
-                    });
-            }
-
-            // Phương thức lấy dữ liệu xếp hạng
-            loadRankings(filter) {
-                const rankingList = document.getElementById('ranking-list');
-                rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
-                
-                let query = this.firestore.collection('scores');
-                
-                if (filter !== 'all') {
-                    query = query.where('gameId', '==', filter);
-                }
-                
-                query.orderBy('score', 'desc')
-                    .limit(100)
-                    .get()
-                    .then(querySnapshot => {
-                        // Nhóm điểm theo user và lấy điểm cao nhất
-                        const userScores = {};
-                        
-                        querySnapshot.forEach(doc => {
-                            const data = doc.data();
-                            const userId = data.userId;
-                            
-                            if (!userScores[userId] || data.score > userScores[userId].score) {
-                                userScores[userId] = {
-                                    userId: userId,
-                                    score: data.score,
-                                    gameName: data.gameName,
-                                    userName: data.userName || 'Người dùng ẩn danh'
-                                };
-                            }
-                        });
-                        
-                        // Chuyển đổi thành mảng và sắp xếp
-                        const rankings = Object.values(userScores).sort((a, b) => b.score - a.score);
-                        
-                        // Hiển thị kết quả
-                        this.displayRankings(rankings);
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi tải xếp hạng:', error);
-                        rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
-                    });
-            }
-
-            // Hiển thị bảng xếp hạng
-            displayRankings(rankings) {
-                const rankingList = document.getElementById('ranking-list');
-                
-                if (rankings.length === 0) {
-                    rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng.</li>';
-                    return;
-                }
-                
-                let html = '';
-                const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                
-                rankings.forEach((item, index) => {
-                    const isCurrentUser = currentUser.uid === item.userId;
-                    const positionClass = index < 3 ? `ranking-position-${index + 1}` : '';
-                    
-                    html += `
-                        <li class="ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}">
-                            <div class="ranking-position ${positionClass}">${index + 1}</div>
-                            <div class="ranking-user">
-                                <div class="ranking-avatar">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <div class="ranking-name">${item.userName}</div>
-                            </div>
-                            <div class="ranking-score">${item.score} điểm</div>
-                        </li>
-                    `;
-                });
-                
-                rankingList.innerHTML = html;
-                
-                // Thiết lập sự kiện cho bộ lọc xếp hạng
-                const rankingFilters = document.querySelectorAll('.ranking-filter');
-                rankingFilters.forEach(filter => {
-                    filter.addEventListener('click', () => {
-                        rankingFilters.forEach(f => f.classList.remove('active'));
-                        filter.classList.add('active');
-                        const filterValue = filter.dataset.filter;
-                        this.loadRankings(filterValue);
-                    });
-                });
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDummyAPIKeyForDemoPurposesOnly",
+            authDomain: "mathhub-demo.firebaseapp.com",
+            projectId: "mathhub-demo",
+            storageBucket: "mathhub-demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:abcdef123456",
+            measurementId: "G-ABCDEF1234"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const analytics = firebase.analytics();
+        
+        // DOM Elements
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const profileBtn = document.getElementById('profile-btn');
+        const rankingBtn = document.getElementById('ranking-btn');
+        const loginModal = document.getElementById('login-modal');
+        const profileModal = document.getElementById('profile-modal');
+        const rankingModal = document.getElementById('ranking-modal');
+        const closeModalBtns = document.querySelectorAll('.close-modal');
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const userInfo = document.getElementById('user-info');
+        const userName = document.getElementById('user-name');
+        const userAvatar = document.querySelector('.user-avatar');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const profileName = document.getElementById('profile-name');
+        const profileEmail = document.getElementById('profile-email');
+        const profileForm = document.getElementById('profile-form');
+        const changeAvatarBtn = document.getElementById('change-avatar-btn');
+        const avatarUpload = document.getElementById('avatar-upload');
+        const themeToggle = document.getElementById('theme-toggle');
+        const toast = document.getElementById('toast');
+        const progressList = document.getElementById('progress-list');
+        const progressFilter = document.getElementById('progress-filter');
+        const timeFilter = document.getElementById('time-filter');
+        const totalGamesEl = document.getElementById('total-games');
+        const highScoreEl = document.getElementById('high-score');
+        const averageScoreEl = document.getElementById('average-score');
+        const rankingList = document.getElementById('ranking-list');
+        const rankingFilters = document.querySelectorAll('.ranking-filter');
+        
+        // Game buttons
+        const gameButtons = document.querySelectorAll('.game-card-btn');
+        
+        // State
+        let currentUser = null;
+        let userScores = [];
+        
+        // Initialize background animation
+        function initBackgroundAnimation() {
+            const bgAnimation = document.getElementById('bg-animation');
+            const symbols = ['+', '-', '×', '÷', '=', '%', 'π', '√', 'x²', '∞', '<', '>'];
+            
+            for (let i = 0; i < 20; i++) {
+                const symbol = document.createElement('div');
+                symbol.className = 'math-symbol';
+                symbol.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                symbol.style.left = `${Math.random() * 100}%`;
+                symbol.style.animationDelay = `${Math.random() * 15}s`;
+                bgAnimation.appendChild(symbol);
             }
         }
-    </script>
-    
-    <!-- User System -->
-    <script>
-        // user-system.js
-        class UserSystem {
-            constructor(authSystem) {
-                this.authSystem = authSystem;
-                this.setupEventListeners();
+        
+        // Show toast notification
+        function showToast(message, type = '') {
+            toast.textContent = message;
+            toast.className = 'toast';
+            if (type) {
+                toast.classList.add(type);
             }
-
-            setupEventListeners() {
-                const filterElement = document.getElementById('progress-filter');
-                if (filterElement) {
-                    filterElement.addEventListener('change', () => {
-                        this.loadScores();
-                    });
-                }
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Toggle theme
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const icon = themeToggle.querySelector('i');
+            if (document.body.classList.contains('dark-mode')) {
+                icon.className = 'fas fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                icon.className = 'fas fa-moon';
+                localStorage.setItem('theme', 'light');
             }
-
-            loadProfileData() {
-                this.loadScores();
-                this.loadUserInfo();
-                this.updateAvatarDisplay();
+        }
+        
+        // Load theme from localStorage
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggle.querySelector('i').className = 'fas fa-sun';
             }
-
-            loadUserInfo() {
-                const user = this.authSystem.auth.currentUser;
-                if (user) {
-                    document.getElementById('profile-name').value = user.displayName || '';
-                    document.getElementById('profile-email').value = user.email || '';
-                }
-            }
-
-            loadScores() {
-                this.authSystem.getUserScores().then(scores => {
-                    const progressList = document.getElementById('progress-list');
-                    const filter = document.getElementById('progress-filter').value;
-                    
-                    // Lọc scores nếu cần
-                    let filteredScores = scores;
-                    if (filter !== 'all') {
-                        filteredScores = scores.filter(score => score.gameId === filter);
+        }
+        
+        // Auth state observer
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                currentUser = user;
+                userInfo.style.display = 'flex';
+                loginBtn.style.display = 'none';
+                
+                // Get user data from Firestore
+                db.collection('users').doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userName.textContent = userData.displayName || user.email;
+                        profileName.value = userData.displayName || '';
+                        profileEmail.value = user.email;
+                        
+                        // Set avatar
+                        if (userData.photoURL) {
+                            userAvatar.innerHTML = `<img src="${userData.photoURL}" alt="Avatar">`;
+                            profileAvatar.innerHTML = `<img src="${userData.photoURL}" alt="Avatar">`;
+                        } else {
+                            const initial = userData.displayName ? userData.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+                            userAvatar.innerHTML = initial;
+                            profileAvatar.innerHTML = initial;
+                        }
                     }
+                }).catch((error) => {
+                    console.error('Error getting user document:', error);
+                });
+                
+                // Load user scores
+                loadUserScores(user.uid);
+            } else {
+                currentUser = null;
+                userInfo.style.display = 'none';
+                loginBtn.style.display = 'block';
+            }
+        });
+        
+        // Load user scores
+        function loadUserScores(userId) {
+            db.collection('scores')
+                .where('userId', '==', userId)
+                .orderBy('timestamp', 'desc')
+                .limit(20)
+                .get()
+                .then((querySnapshot) => {
+                    userScores = [];
+                    querySnapshot.forEach((doc) => {
+                        userScores.push({ id: doc.id, ...doc.data() });
+                    });
                     
-                    // Cập nhật thống kê
-                    const stats = this.calculateStats(filteredScores);
-                    this.updateStatsDisplay(stats);
+                    updateProgressUI();
+                })
+                .catch((error) => {
+                    console.error('Error getting scores:', error);
+                });
+        }
+        
+        // Update progress UI
+        function updateProgressUI() {
+            const gameFilter = progressFilter.value;
+            const timeFilterValue = timeFilter.value;
+            
+            let filteredScores = userScores;
+            
+            // Filter by game
+            if (gameFilter !== 'all') {
+                filteredScores = filteredScores.filter(score => score.game === gameFilter);
+            }
+            
+            // Filter by time
+            const now = new Date();
+            if (timeFilterValue === 'week') {
+                const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+                filteredScores = filteredScores.filter(score => score.timestamp.toDate() >= oneWeekAgo);
+            } else if (timeFilterValue === 'month') {
+                const oneMonthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+                filteredScores = filteredScores.filter(score => score.timestamp.toDate() >= oneMonthAgo);
+            } else if (timeFilterValue === 'year') {
+                const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+                filteredScores = filteredScores.filter(score => score.timestamp.toDate() >= oneYearAgo);
+            }
+            
+            // Update stats
+            totalGamesEl.textContent = filteredScores.length;
+            
+            if (filteredScores.length > 0) {
+                const scores = filteredScores.map(score => score.score);
+                highScoreEl.textContent = Math.max(...scores);
+                averageScoreEl.textContent = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+                
+                // Update progress list
+                progressList.innerHTML = '';
+                filteredScores.forEach(score => {
+                    const date = score.timestamp.toDate();
+                    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
                     
-                    if (filteredScores.length === 0) {
-                        progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Chưa có dữ liệu tiến trình. Hãy chơi các trò chơi để xem tiến trình tại đây!</p>';
+                    const progressItem = document.createElement('div');
+                    progressItem.className = 'progress-item';
+                    progressItem.innerHTML = `
+                        <div class="progress-info">
+                            <div class="progress-game">${getGameName(score.game)}</div>
+                            <div class="progress-date">${formattedDate}</div>
+                            <div class="progress-level">Cấp độ: ${score.level || 'Không xác định'}</div>
+                        </div>
+                        <div class="progress-score">${score.score} điểm</div>
+                    `;
+                    
+                    progressList.appendChild(progressItem);
+                });
+            } else {
+                highScoreEl.textContent = '0';
+                averageScoreEl.textContent = '0';
+                progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Không có dữ liệu phù hợp với bộ lọc</p>';
+            }
+        }
+        
+        // Get game name from ID
+        function getGameName(gameId) {
+            const gameNames = {
+                'congtrutrongphamvi10': 'Cộng trừ trong phạm vi 10',
+                'banbongsotoan2': 'Bắn Bóng Số',
+                'bangcuuchuong': 'Bảng cửu chương',
+                'congtruconhotoan2': 'Cộng trừ có nhớ lớp 2',
+                'congtrusonguyen': 'Cộng trừ số nguyên lớp 6',
+                'nhanchianangcao': 'Nhân chia nâng cao lớp 3-4',
+                'duongduapheptinh': 'Đường đua phép tính'
+            };
+            
+            return gameNames[gameId] || gameId;
+        }
+        
+        // Load rankings
+        function loadRankings(game = 'all') {
+            rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
+            
+            let query = db.collection('scores')
+                .orderBy('score', 'desc')
+                .limit(50);
+            
+            if (game !== 'all') {
+                query = query.where('game', '==', game);
+            }
+            
+            query.get().then((querySnapshot) => {
+                const scoresByUser = {};
+                
+                querySnapshot.forEach((doc) => {
+                    const scoreData = doc.data();
+                    const userId = scoreData.userId;
+                    
+                    // Only keep the highest score for each user
+                    if (!scoresByUser[userId] || scoreData.score > scoresByUser[userId].score) {
+                        scoresByUser[userId] = {
+                            score: scoreData.score,
+                            game: scoreData.game,
+                            timestamp: scoreData.timestamp,
+                            userId: userId
+                        };
+                    }
+                });
+                
+                // Convert to array and sort
+                const topScores = Object.values(scoresByUser).sort((a, b) => b.score - a.score);
+                
+                // Get user data for top scores
+                const userIds = topScores.map(score => score.userId);
+                const usersPromises = userIds.map(userId => 
+                    db.collection('users').doc(userId).get().then(doc => ({
+                        id: userId,
+                        data: doc.exists ? doc.data() : { displayName: 'Người dùng ẩn danh' }
+                    }))
+                );
+                
+                Promise.all(usersPromises).then(users => {
+                    const userMap = {};
+                    users.forEach(user => {
+                        userMap[user.id] = user.data;
+                    });
+                    
+                    // Update ranking UI
+                    rankingList.innerHTML = '';
+                    
+                    if (topScores.length === 0) {
+                        rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng</li>';
                         return;
                     }
                     
-                    let html = '';
-                    filteredScores.forEach(scoreData => {
-                        const date = scoreData.timestamp ? scoreData.timestamp.toDate().toLocaleDateString('vi-VN') : 'Chưa xác định';
-                        const isHighScore = scoreData.score === stats.highScore;
+                    topScores.forEach((score, index) => {
+                        const userData = userMap[score.userId] || { displayName: 'Người dùng ẩn danh' };
+                        const isCurrentUser = currentUser && score.userId === currentUser.uid;
                         
-                        html += `
-                            <div class="progress-item ${isHighScore ? 'high-score' : ''}">
-                                <div class="progress-info">
-                                    <div class="progress-game">${scoreData.gameName}</div>
-                                    <div class="progress-date">${date}</div>
-                                    ${scoreData.level ? `<div class="progress-level">Cấp độ: ${scoreData.level}</div>` : ''}
+                        const rankingItem = document.createElement('li');
+                        rankingItem.className = `ranking-item ${isCurrentUser ? 'current-user-highlight' : ''}`;
+                        
+                        rankingItem.innerHTML = `
+                            <div class="ranking-position ${index < 3 ? `ranking-position-${index+1}` : ''}">${index + 1}</div>
+                            <div class="ranking-user">
+                                <div class="ranking-avatar">
+                                    ${userData.photoURL ? 
+                                        `<img src="${userData.photoURL}" alt="${userData.displayName}">` : 
+                                        userData.displayName ? userData.displayName.charAt(0).toUpperCase() : 'U'
+                                    }
                                 </div>
-                                <div class="progress-score">Điểm: ${scoreData.score}</div>
+                                <div class="ranking-name">${userData.displayName || 'Người dùng ẩn danh'}</div>
                             </div>
+                            <div class="ranking-score">${score.score} điểm</div>
                         `;
+                        
+                        rankingList.appendChild(rankingItem);
                     });
-                    
-                    progressList.innerHTML = html;
-                }).catch(error => {
-                    console.error('Lỗi khi tải điểm:', error);
                 });
-            }
-
-            calculateStats(scores) {
-                if (scores.length === 0) {
-                    return {
-                        total: 0,
-                        highScore: 0,
-                        average: 0
-                    };
-                }
-                
-                let total = scores.length;
-                let highScore = Math.max(...scores.map(s => s.score));
-                let average = scores.reduce((sum, score) => sum + score.score, 0) / total;
-                
-                return {
-                    total,
-                    highScore,
-                    average: Math.round(average)
-                };
-            }
-
-            updateStatsDisplay(stats) {
-                document.getElementById('total-games').textContent = stats.total;
-                document.getElementById('high-score').textContent = stats.highScore;
-                document.getElementById('average-score').textContent = stats.average;
-            }
-
-            updateProfile(displayName) {
-                const user = this.authSystem.auth.currentUser;
-                
-                user.updateProfile({
-                    displayName: displayName
-                }).then(() => {
-                    this.authSystem.showToast('Cập nhật hồ sơ thành công!', 'success');
-                    document.getElementById('user-name').textContent = displayName;
-                    
-                    // Cập nhật thông tin trong localStorage
-                    const currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-                    currentUser.name = displayName;
-                    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-                }).catch(error => {
-                    this.authSystem.showToast(error.message, 'error');
-                });
-            }
-
-            uploadAvatar(file) {
-                const user = this.authSystem.auth.currentUser;
-                const storageRef = this.authSystem.storage.ref();
-                const avatarRef = storageRef.child(`avatars/${user.uid}`);
-                
-                avatarRef.put(file).then(snapshot => {
-                    return snapshot.ref.getDownloadURL();
-                }).then(downloadURL => {
-                    return user.updateProfile({
-                        photoURL: downloadURL
-                    });
-                }).then(() => {
-                    this.authSystem.showToast('Cập nhật ảnh đại diện thành công!', 'success');
-                    this.updateAvatarDisplay();
-                }).catch(error => {
-                    this.authSystem.showToast(error.message, 'error');
-                });
-            }
-
-            updateAvatarDisplay() {
-                const user = this.authSystem.auth.currentUser;
-                const avatarElement = document.getElementById('profile-avatar');
-                
-                if (user.photoURL) {
-                    avatarElement.innerHTML = `<img src="${user.photoURL}" alt="Avatar">`;
-                } else {
-                    avatarElement.innerHTML = '<i class="fas fa-user"></i>';
-                }
-                
-                // Cập nhật avatar ở header nếu có
-                const headerAvatar = document.querySelector('.user-avatar:not(.large)');
-                if (headerAvatar) {
-                    if (user.photoURL) {
-                        headerAvatar.innerHTML = `<img src="${user.photoURL}" alt="Avatar">`;
-                    } else {
-                        headerAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                    }
-                }
-            }
+            }).catch((error) => {
+                console.error('Error loading rankings:', error);
+                rankingList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu</li>';
+            });
         }
-    </script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Khởi tạo hệ thống xác thực
-            window.authSystem = new AuthSystem();
+        
+        // Event Listeners
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+        });
+        
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut().then(() => {
+                showToast('Đã đăng xuất thành công', 'success');
+            }).catch((error) => {
+                showToast('Có lỗi xảy ra khi đăng xuất', 'error');
+            });
+        });
+        
+        profileBtn.addEventListener('click', () => {
+            profileModal.style.display = 'flex';
+        });
+        
+        rankingBtn.addEventListener('click', () => {
+            rankingModal.style.display = 'flex';
+            loadRankings();
+        });
+        
+        closeModalBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                profileModal.style.display = 'none';
+                rankingModal.style.display = 'none';
+            });
+        });
+        
+        loginTab.addEventListener('click', () => {
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+        
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
             
-            // Track page view
-            if (window.authSystem.analytics) {
-                window.authSystem.analytics.logEvent('home_page_view');
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    loginModal.style.display = 'none';
+                    showToast('Đăng nhập thành công!', 'success');
+                })
+                .catch((error) => {
+                    showToast('Sai email hoặc mật khẩu', 'error');
+                });
+        });
+        
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            
+            if (password !== confirm) {
+                showToast('Mật khẩu xác nhận không khớp', 'error');
+                return;
             }
             
-            // Thiết lập sự kiện cho nút hồ sơ
-            document.getElementById('profile-btn').addEventListener('click', function() {
-                document.getElementById('profile-modal').style.display = 'flex';
-                // Tải dữ liệu hồ sơ nếu cần
-                if (window.userSystem) {
-                    window.userSystem.loadProfileData();
-                }
-            });
-            
-            document.getElementById('close-profile-modal').addEventListener('click', function() {
-                document.getElementById('profile-modal').style.display = 'none';
-            });
-            
-            // Xử lý đổi avatar
-            document.getElementById('change-avatar-btn').addEventListener('click', function() {
-                document.getElementById('avatar-upload').click();
-            });
-            
-            document.getElementById('avatar-upload').addEventListener('change', function(e) {
-                if (window.userSystem && e.target.files.length > 0) {
-                    window.userSystem.uploadAvatar(e.target.files[0]);
-                }
-            });
-            
-            // Xử lý form cập nhật hồ sơ
-            document.getElementById('profile-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                const displayName = document.getElementById('profile-name').value;
-                
-                if (window.userSystem) {
-                    window.userSystem.updateProfile(displayName);
-                }
-            });
-            
-            // Đóng modal ranking
-            document.getElementById('close-ranking-modal').addEventListener('click', function() {
-                document.getElementById('ranking-modal').style.display = 'none';
-            });
-            
-            // Đóng modal khi click bên ngoài
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.style.display = 'none';
-                    }
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    
+                    return db.collection('users').doc(user.uid).set({
+                        displayName: name,
+                        email: email,
+                        createdAt: new Date()
+                    }).then(() => {
+                        loginModal.style.display = 'none';
+                        showToast('Tạo tài khoản thành công!', 'success');
+                    });
+                })
+                .catch((error) => {
+                    showToast('Có lỗi xảy ra khi tạo tài khoản', 'error');
                 });
+        });
+        
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = profileName.value;
+            
+            db.collection('users').doc(currentUser.uid).update({
+                displayName: name
+            }).then(() => {
+                userName.textContent = name;
+                showToast('Cập nhật hồ sơ thành công', 'success');
+            }).catch((error) => {
+                showToast('Có lỗi xảy ra khi cập nhật', 'error');
+            });
+        });
+        
+        changeAvatarBtn.addEventListener('click', () => {
+            avatarUpload.click();
+        });
+        
+        avatarUpload.addEventListener('change', (e) => {
+            // In a real app, you would upload the image to Firebase Storage
+            // and update the user's photoURL
+            showToast('Tính năng đổi ảnh đại diện đang được phát triển', '');
+        });
+        
+        themeToggle.addEventListener('click', toggleTheme);
+        
+        progressFilter.addEventListener('change', updateProgressUI);
+        timeFilter.addEventListener('change', updateProgressUI);
+        
+        rankingFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                rankingFilters.forEach(f => f.classList.remove('active'));
+                filter.classList.add('active');
+                loadRankings(filter.dataset.filter);
+            });
+        });
+        
+        gameButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (button.classList.contains('coming-soon')) {
+                    showToast('Trò chơi đang được phát triển. Vui lòng quay lại sau!');
+                    return;
+                }
+                
+                if (!currentUser) {
+                    showToast('Vui lòng đăng nhập để chơi game', 'error');
+                    loginModal.style.display = 'flex';
+                    return;
+                }
+                
+                const gameId = button.dataset.game;
+                showToast(`Đang chuyển hướng đến trò chơi: ${getGameName(gameId)}`, 'success');
+                
+                // In a real app, this would redirect to the game page
+                // window.location.href = `game.html?game=${gameId}`;
+                
+                // For demo purposes, we'll simulate a game session and save a score
+                setTimeout(() => {
+                    const score = Math.floor(Math.random() * 100) + 1;
+                    const level = Math.floor(Math.random() * 5) + 1;
+                    
+                    db.collection('scores').add({
+                        userId: currentUser.uid,
+                        game: gameId,
+                        score: score,
+                        level: level,
+                        timestamp: new Date()
+                    }).then(() => {
+                        showToast(`Bạn đã đạt được ${score} điểm!`, 'success');
+                        loadUserScores(currentUser.uid);
+                    }).catch((error) => {
+                        console.error('Error saving score:', error);
+                    });
+                }, 1000);
+            });
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initBackgroundAnimation();
+            loadTheme();
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+                if (e.target === profileModal) {
+                    profileModal.style.display = 'none';
+                }
+                if (e.target === rankingModal) {
+                    rankingModal.style.display = 'none';
+                }
             });
         });
     </script>
