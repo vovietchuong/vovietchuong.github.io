@@ -6,7 +6,6 @@
     <title>MathHub - Trang chủ</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-analytics-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
@@ -881,7 +880,6 @@
     </style>
 </head>
 <body>
-    <!-- Login Modal -->
     <div class="modal" id="login-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-modal">&times;</span>
@@ -935,7 +933,6 @@
         </div>
     </div>
 
-    <!-- Profile Modal -->
     <div class="modal" id="profile-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-profile-modal">&times;</span>
@@ -1008,13 +1005,11 @@
                 </div>
                 
                 <div class="pagination" id="progress-pagination">
-                    <!-- Pagination will be generated here -->
-                </div>
+                    </div>
             </div>
         </div>
     </div>
 
-    <!-- Ranking Modal -->
     <div class="modal" id="ranking-modal">
         <div class="modal-content">
             <span class="close-modal" id="close-ranking-modal">&times;</span>
@@ -1049,8 +1044,7 @@
                 <div class="ranking-filters">
                     <select id="history-user-filter">
                         <option value="all">Tất cả người dùng</option>
-                        <!-- Users will be populated here -->
-                    </select>
+                        </select>
                     <select id="history-game-filter">
                         <option value="all">Tất cả trò chơi</option>
                         <option value="congtrutrongphamvi10">Cộng trừ phạm vi 10</option>
@@ -1070,8 +1064,7 @@
                 </div>
                 
                 <div class="pagination" id="history-pagination">
-                    <!-- Pagination will be generated here -->
-                </div>
+                    </div>
             </div>
             
             <div class="ranking-tab-content" id="friends-tab" style="display: none;">
@@ -1086,7 +1079,6 @@
         </div>
     </div>
 
-    <!-- Challenge Modal -->
     <div class="modal" id="challenge-modal">
         <div class="modal-content challenge-modal">
             <span class="close-modal" id="close-challenge-modal">&times;</span>
@@ -1095,8 +1087,7 @@
             <div class="form-group">
                 <label for="challenge-friend">Chọn bạn bè</label>
                 <select id="challenge-friend" class="form-input">
-                    <!-- Friends will be populated here -->
-                </select>
+                    </select>
             </div>
             
             <div class="form-group">
@@ -1126,10 +1117,8 @@
         </div>
     </div>
 
-    <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Main Content -->
     <div class="header">
         <h1>MathHub</h1>
         <p>Học Toán vui vẻ - Nâng cao kỹ năng tính toán</p>
@@ -1291,6 +1280,8 @@
         const profileAvatar = document.getElementById('profile-avatar');
         const profileName = document.getElementById('profile-name');
         const profileEmail = document.getElementById('profile-email');
+        const changeAvatarBtn = document.getElementById('change-avatar-btn');
+        const avatarUpload = document.getElementById('avatar-upload');
         
         const loginForm = document.getElementById('login-form');
         const registerForm = document.getElementById('register-form');
@@ -1298,40 +1289,10 @@
         
         const loginTab = document.getElementById('login-tab');
         const registerTab = document.getElementById('register-tab');
-        
-        // Mock data for demonstration
-        const mockUsers = [
-            { id: 'user1', name: 'Nguyễn Văn An', email: 'an.nguyen@example.com', avatar: '', scores: [
-                { game: 'congtrutrongphamvi10', score: 95, date: '2023-10-15' },
-                { game: 'banbongsotoan2', score: 87, date: '2023-10-14' },
-                { game: 'bangcuuchuong', score: 92, date: '2023-10-13' }
-            ]},
-            { id: 'user2', name: 'Trần Thị Bình', email: 'binh.tran@example.com', avatar: '', scores: [
-                { game: 'congtrutrongphamvi10', score: 88, date: '2023-10-15' },
-                { game: 'banbongsotoan2', score: 94, date: '2023-10-14' },
-                { game: 'bangcuuchuong', score: 85, date: '2023-10-13' }
-            ]},
-            { id: 'user3', name: 'Lê Minh Châu', email: 'chau.le@example.com', avatar: '', scores: [
-                { game: 'congtrutrongphamvi10', score: 92, date: '2023-10-15' },
-                { game: 'banbongsotoan2', score: 89, date: '2023-10-14' },
-                { game: 'bangcuuchuong', score: 96, date: '2023-10-13' }
-            ]}
-        ];
-
-        const mockScores = [
-            { userId: 'user1', game: 'congtrutrongphamvi10', score: 95, date: '2023-10-15T10:30:00' },
-            { userId: 'user1', game: 'banbongsotoan2', score: 87, date: '2023-10-14T15:45:00' },
-            { userId: 'user1', game: 'bangcuuchuong', score: 92, date: '2023-10-13T09:15:00' },
-            { userId: 'user2', game: 'congtrutrongphamvi10', score: 88, date: '2023-10-15T11:20:00' },
-            { userId: 'user2', game: 'banbongsotoan2', score: 94, date: '2023-10-14T14:30:00' },
-            { userId: 'user2', game: 'bangcuuchuong', score: 85, date: '2023-10-13T16:45:00' },
-            { userId: 'user3', game: 'congtrutrongphamvi10', score: 92, date: '2023-10-15T13:15:00' },
-            { userId: 'user3', game: 'banbongsotoan2', score: 89, date: '2023-10-14T10:30:00' },
-            { userId: 'user3', game: 'bangcuuchuong', score: 96, date: '2023-10-13T15:20:00' }
-        ];
 
         // Current user state
         let currentUser = null;
+        let userProfile = null; // Store user profile data
         let userScores = [];
 
         // Event Listeners
@@ -1343,6 +1304,8 @@
         profileBtn.addEventListener('click', () => showModal(profileModal));
         rankingBtn.addEventListener('click', () => showModal(rankingModal));
         logoutBtn.addEventListener('click', handleLogout);
+        changeAvatarBtn.addEventListener('click', () => avatarUpload.click());
+        avatarUpload.addEventListener('change', handleAvatarUpload);
         
         closeModalBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1374,21 +1337,16 @@
         // Ranking tabs
         document.querySelectorAll('.ranking-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                // Remove active class from all tabs
                 document.querySelectorAll('.ranking-tab').forEach(t => t.classList.remove('active'));
-                // Add active class to clicked tab
                 tab.classList.add('active');
                 
-                // Hide all tab content
                 document.querySelectorAll('.ranking-tab-content').forEach(content => {
                     content.style.display = 'none';
                 });
                 
-                // Show the selected tab content
                 const tabId = tab.getAttribute('data-tab') + '-tab';
                 document.getElementById(tabId).style.display = 'block';
                 
-                // Load data for the selected tab
                 if (tab.getAttribute('data-tab') === 'highscores') {
                     loadRankings();
                 } else if (tab.getAttribute('data-tab') === 'history') {
@@ -1407,7 +1365,7 @@
                 loadRankings();
             });
         });
-        
+
         // Initialize
         checkAuthState();
         initProgressFilters();
@@ -1433,15 +1391,23 @@
                     currentUser = user;
                     userInfo.style.display = 'flex';
                     guestInfo.style.display = 'none';
-                    userName.textContent = user.displayName || user.email;
                     
-                    // Load user data
-                    loadUserData();
-                    loadUserScores();
+                    // Load user profile data
+                    loadUserData(user.uid);
+                    loadUserScores(user.uid);
                 } else {
                     currentUser = null;
+                    userProfile = null;
+                    userScores = [];
                     userInfo.style.display = 'none';
                     guestInfo.style.display = 'flex';
+                    // Reset profile page
+                    profileName.value = '';
+                    profileEmail.value = '';
+                    userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    updateProgressList();
+                    updateProgressStats();
                 }
             });
         }
@@ -1452,7 +1418,7 @@
             const password = document.getElementById('login-password').value;
             
             auth.signInWithEmailAndPassword(email, password)
-                .then(userCredential => {
+                .then(() => {
                     showToast('Đăng nhập thành công!');
                     loginModal.style.display = 'none';
                 })
@@ -1461,7 +1427,7 @@
                 });
         }
         
-        function handleRegister(e) {
+        async function handleRegister(e) {
             e.preventDefault();
             const name = document.getElementById('register-name').value;
             const email = document.getElementById('register-email').value;
@@ -1473,20 +1439,26 @@
                 return;
             }
             
-            auth.createUserWithEmailAndPassword(email, password)
-                .then(userCredential => {
-                    // Update profile with display name
-                    return userCredential.user.updateProfile({
-                        displayName: name
-                    });
-                })
-                .then(() => {
-                    showToast('Đăng ký thành công!');
-                    loginModal.style.display = 'none';
-                })
-                .catch(error => {
-                    showToast('Đăng ký thất bại: ' + error.message, 'error');
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                // Create a document for the new user in the `users` collection
+                await db.collection('users').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    photoURL: null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 });
+                
+                // Update the user's display name in Firebase Auth
+                await user.updateProfile({ displayName: name });
+                
+                showToast('Đăng ký thành công!');
+                loginModal.style.display = 'none';
+            } catch(error) {
+                showToast('Đăng ký thất bại: ' + error.message, 'error');
+            }
         }
         
         function handleLogout() {
@@ -1499,48 +1471,96 @@
                 });
         }
         
-        function handleProfileUpdate(e) {
+        async function handleProfileUpdate(e) {
             e.preventDefault();
-            const name = document.getElementById('profile-name').value;
+            const newName = document.getElementById('profile-name').value;
             
-            currentUser.updateProfile({
-                displayName: name
-            })
-            .then(() => {
-                showToast('Cập nhật hồ sơ thành công!');
-                userName.textContent = name;
-                profileModal.style.display = 'none';
-            })
-            .catch(error => {
-                showToast('Cập nhật thất bại: ' + error.message, 'error');
-            });
-        }
-        
-        function loadUserData() {
             if (!currentUser) return;
             
-            profileName.value = currentUser.displayName || '';
-            profileEmail.value = currentUser.email;
-            
-            // Load user avatar if exists
-            if (currentUser.photoURL) {
-                userAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
-                profileAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
-            } else {
-                userAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+            try {
+                await currentUser.updateProfile({ displayName: newName });
+                await db.collection('users').doc(currentUser.uid).update({ name: newName });
+                
+                showToast('Cập nhật hồ sơ thành công!');
+                userName.textContent = newName;
+                profileModal.style.display = 'none';
+            } catch(error) {
+                showToast('Cập nhật thất bại: ' + error.message, 'error');
             }
         }
         
-        function loadUserScores() {
-            if (!currentUser) return;
+        async function handleAvatarUpload(e) {
+            const file = e.target.files[0];
+            if (!file || !currentUser) return;
             
-            // In a real app, this would come from Firestore
-            // For demo, we'll use mock data
-            userScores = mockScores.filter(score => score.userId === 'user1');
+            const storageRef = storage.ref(`avatars/${currentUser.uid}/${file.name}`);
+            const task = storageRef.put(file);
             
-            updateProgressList();
-            updateProgressStats();
+            task.on('state_changed', 
+                (snapshot) => {
+                    // You can add progress bar here
+                    showToast('Đang tải ảnh lên...', 'info');
+                },
+                (error) => {
+                    showToast('Tải ảnh thất bại: ' + error.message, 'error');
+                },
+                () => {
+                    task.snapshot.ref.getDownloadURL().then(async (downloadURL) => {
+                        await currentUser.updateProfile({ photoURL: downloadURL });
+                        await db.collection('users').doc(currentUser.uid).update({ photoURL: downloadURL });
+                        loadUserData(currentUser.uid); // Reload to show new avatar
+                        showToast('Cập nhật ảnh đại diện thành công!');
+                    });
+                }
+            );
+        }
+        
+        async function loadUserData(uid) {
+            try {
+                const doc = await db.collection('users').doc(uid).get();
+                if (doc.exists) {
+                    userProfile = doc.data();
+                    userName.textContent = userProfile.name || 'Người dùng';
+                    
+                    // Update avatar
+                    if (userProfile.photoURL) {
+                        userAvatar.innerHTML = `<img src="${userProfile.photoURL}" alt="Avatar">`;
+                        profileAvatar.innerHTML = `<img src="${userProfile.photoURL}" alt="Avatar">`;
+                    } else {
+                        userAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                        profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
+                    }
+                    
+                    profileName.value = userProfile.name || '';
+                    profileEmail.value = userProfile.email;
+                } else {
+                    // Fallback to Firebase Auth data if `users` doc doesn't exist
+                    userName.textContent = currentUser.displayName || 'Người dùng';
+                    profileName.value = currentUser.displayName || '';
+                    profileEmail.value = currentUser.email;
+                    if (currentUser.photoURL) {
+                        userAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
+                        profileAvatar.innerHTML = `<img src="${currentUser.photoURL}" alt="Avatar">`;
+                    }
+                }
+            } catch (error) {
+                console.error("Error loading user data: ", error);
+            }
+        }
+        
+        async function loadUserScores(uid) {
+            if (!uid) return;
+            
+            try {
+                const scoresRef = db.collection('scores').where('userId', '==', uid).orderBy('date', 'desc');
+                const snapshot = await scoresRef.get();
+                userScores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                updateProgressList();
+                updateProgressStats();
+            } catch (error) {
+                console.error("Error loading user scores: ", error);
+            }
         }
         
         function initProgressFilters() {
@@ -1556,19 +1576,17 @@
             const gameFilter = document.getElementById('progress-game-filter').value;
             const sortFilter = document.getElementById('progress-sort').value;
             
-            // Filter scores
             let filteredScores = [...userScores];
             if (gameFilter !== 'all') {
                 filteredScores = filteredScores.filter(score => score.game === gameFilter);
             }
             
-            // Sort scores
             switch(sortFilter) {
                 case 'newest':
-                    filteredScores.sort((a, b) => new Date(b.date) - new Date(a.date));
+                    filteredScores.sort((a, b) => b.date.toDate() - a.date.toDate());
                     break;
                 case 'oldest':
-                    filteredScores.sort((a, b) => new Date(a.date) - new Date(b.date));
+                    filteredScores.sort((a, b) => a.date.toDate() - b.date.toDate());
                     break;
                 case 'highest':
                     filteredScores.sort((a, b) => b.score - a.score);
@@ -1578,7 +1596,6 @@
                     break;
             }
             
-            // Display scores
             if (filteredScores.length === 0) {
                 progressList.innerHTML = '<p class="no-progress" style="text-align: center; color: #777; padding: 20px;">Không có kết quả phù hợp</p>';
                 return;
@@ -1587,7 +1604,7 @@
             let html = '';
             filteredScores.forEach(score => {
                 const gameName = getGameName(score.game);
-                const date = new Date(score.date).toLocaleDateString('vi-VN');
+                const date = score.date.toDate().toLocaleDateString('vi-VN');
                 
                 html += `
                 <div class="progress-item">
@@ -1636,40 +1653,42 @@
             return games[gameId] || gameId;
         }
         
-        function loadRankings() {
+        async function loadRankings() {
             const rankingList = document.getElementById('ranking-list');
             const gameFilter = document.querySelector('.ranking-filter.active').getAttribute('data-filter');
             
             rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
             
-            // In a real app, this would come from Firestore
-            // For demo, we'll use mock data
-            setTimeout(() => {
-                let rankings = [];
+            try {
+                const scoresRef = db.collection('scores');
+                let query = scoresRef;
                 
-                // Calculate high scores for each user
-                mockUsers.forEach(user => {
-                    let userScores = mockScores.filter(score => score.userId === user.id);
-                    
-                    if (gameFilter !== 'all') {
-                        userScores = userScores.filter(score => score.game === gameFilter);
-                    }
-                    
-                    if (userScores.length > 0) {
-                        const highScore = Math.max(...userScores.map(score => score.score));
-                        rankings.push({
-                            userId: user.id,
-                            name: user.name,
-                            avatar: user.avatar,
-                            score: highScore
-                        });
+                if (gameFilter !== 'all') {
+                    query = query.where('game', '==', gameFilter);
+                }
+                
+                const snapshot = await query.get();
+                const allScores = snapshot.docs.map(doc => doc.data());
+                
+                // Process data to find high scores for each user
+                const userHighScores = {};
+                const userIds = new Set(allScores.map(score => score.userId));
+                const usersRef = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', Array.from(userIds)).get();
+                const usersData = {};
+                usersRef.forEach(doc => usersData[doc.id] = doc.data());
+                
+                allScores.forEach(score => {
+                    if (!userHighScores[score.userId] || score.score > userHighScores[score.userId].score) {
+                        userHighScores[score.userId] = {
+                            userId: score.userId,
+                            score: score.score,
+                            ...usersData[score.userId]
+                        };
                     }
                 });
                 
-                // Sort by score descending
-                rankings.sort((a, b) => b.score - a.score);
+                let rankings = Object.values(userHighScores).sort((a, b) => b.score - a.score);
                 
-                // Display rankings
                 if (rankings.length === 0) {
                     rankingList.innerHTML = '<li class="ranking-loading">Không có dữ liệu xếp hạng</li>';
                     return;
@@ -1678,15 +1697,14 @@
                 let html = '';
                 rankings.forEach((user, index) => {
                     const positionClass = index < 3 ? `ranking-position-${index+1}` : '';
+                    const avatarHTML = user.photoURL ? `<img src="${user.photoURL}" alt="${user.name}">` : '<i class="fas fa-user"></i>';
                     
                     html += `
-                    <li class="ranking-item ${user.userId === 'user1' ? 'current-user-highlight' : ''}">
+                    <li class="ranking-item ${currentUser && user.userId === currentUser.uid ? 'current-user-highlight' : ''}">
                         <div class="ranking-position ${positionClass}">${index + 1}</div>
                         <div class="ranking-user">
-                            <div class="ranking-avatar">
-                                ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}">` : '<i class="fas fa-user"></i>'}
-                            </div>
-                            <div class="ranking-name">${user.name}</div>
+                            <div class="ranking-avatar">${avatarHTML}</div>
+                            <div class="ranking-name">${user.name || 'Người dùng'}</div>
                         </div>
                         <div class="ranking-score">${user.score} điểm</div>
                         <div class="social-actions">
@@ -1706,9 +1724,12 @@
                 
                 rankingList.innerHTML = html;
                 
-                // Add event listeners to social buttons
                 document.querySelectorAll('.social-btn.challenge').forEach(btn => {
                     btn.addEventListener('click', () => {
+                        if (!currentUser) {
+                            showToast('Bạn cần đăng nhập để thách đấu!', 'error');
+                            return;
+                        }
                         const userId = btn.getAttribute('data-userid');
                         openChallengeModal(userId);
                     });
@@ -1723,40 +1744,47 @@
                 
                 document.querySelectorAll('.social-btn.friend').forEach(btn => {
                     btn.addEventListener('click', () => {
+                        if (!currentUser) {
+                            showToast('Bạn cần đăng nhập để thêm bạn bè!', 'error');
+                            return;
+                        }
                         const userId = btn.getAttribute('data-userid');
                         sendFriendRequest(userId);
                     });
                 });
                 
-            }, 1000);
+            } catch(error) {
+                console.error("Error loading rankings: ", error);
+                rankingList.innerHTML = '<li class="ranking-loading">Đã xảy ra lỗi khi tải dữ liệu.</li>';
+            }
         }
         
-        function loadScoreHistory() {
+        async function loadScoreHistory() {
             const historyList = document.getElementById('history-list');
             const userFilter = document.getElementById('history-user-filter').value;
             const gameFilter = document.getElementById('history-game-filter').value;
             
             historyList.innerHTML = '<li class="ranking-loading">Đang tải lịch sử điểm...</li>';
             
-            // In a real app, this would come from Firestore
-            // For demo, we'll use mock data
-            setTimeout(() => {
-                let scores = [...mockScores];
+            try {
+                let scoresRef = db.collection('scores').orderBy('date', 'desc');
                 
-                // Filter by user
                 if (userFilter !== 'all') {
-                    scores = scores.filter(score => score.userId === userFilter);
+                    scoresRef = scoresRef.where('userId', '==', userFilter);
                 }
-                
-                // Filter by game
                 if (gameFilter !== 'all') {
-                    scores = scores.filter(score => score.game === gameFilter);
+                    scoresRef = scoresRef.where('game', '==', gameFilter);
                 }
                 
-                // Sort by date descending
-                scores.sort((a, b) => new Date(b.date) - new Date(a.date));
+                const snapshot = await scoresRef.get();
+                const scores = snapshot.docs.map(doc => doc.data());
                 
-                // Display scores
+                // Get user data for all users in the history
+                const userIds = new Set(scores.map(score => score.userId));
+                const usersRef = await db.collection('users').where(firebase.firestore.FieldPath.documentId(), 'in', Array.from(userIds)).get();
+                const usersData = {};
+                usersRef.forEach(doc => usersData[doc.id] = doc.data());
+                
                 if (scores.length === 0) {
                     historyList.innerHTML = '<li class="ranking-loading">Không có dữ liệu lịch sử</li>';
                     return;
@@ -1764,17 +1792,16 @@
                 
                 let html = '';
                 scores.forEach(score => {
-                    const user = mockUsers.find(u => u.id === score.userId);
+                    const user = usersData[score.userId];
                     const gameName = getGameName(score.game);
-                    const date = new Date(score.date).toLocaleDateString('vi-VN');
+                    const date = score.date.toDate().toLocaleDateString('vi-VN');
+                    const avatarHTML = user && user.photoURL ? `<img src="${user.photoURL}" alt="${user.name}">` : '<i class="fas fa-user"></i>';
                     
                     html += `
                     <li class="ranking-item">
                         <div class="ranking-user">
-                            <div class="ranking-avatar">
-                                ${user.avatar ? `<img src="${user.avatar}" alt="${user.name}">` : '<i class="fas fa-user"></i>'}
-                            </div>
-                            <div class="ranking-name">${user.name}</div>
+                            <div class="ranking-avatar">${avatarHTML}</div>
+                            <div class="ranking-name">${user ? user.name : 'Người dùng'}</div>
                         </div>
                         <div class="ranking-score">${score.score} điểm</div>
                         <div style="margin-left: 10px; color: #777; font-size: 0.9rem;">
@@ -1785,20 +1812,22 @@
                 });
                 
                 historyList.innerHTML = html;
-                
-            }, 1000);
+            } catch(error) {
+                console.error("Error loading score history: ", error);
+                historyList.innerHTML = '<li class="ranking-loading">Đã xảy ra lỗi khi tải dữ liệu.</li>';
+            }
         }
         
-        function loadFriendsList() {
+        async function loadFriendsList() {
             const friendsList = document.getElementById('friends-list');
             
             friendsList.innerHTML = '<p class="ranking-loading">Đang tải danh sách bạn bè...</p>';
             
-            // In a real app, this would come from Firestore
-            // For demo, we'll use mock data
-            setTimeout(() => {
-                // For demo, show all users except current user as friends
-                const friends = mockUsers.filter(user => user.id !== 'user1');
+            // This is a simplified approach. A real friend system would involve a `friends` collection
+            // or a sub-collection on the user document.
+            try {
+                const usersSnapshot = await db.collection('users').limit(10).get(); // Example: Load first 10 users as "friends"
+                const friends = usersSnapshot.docs.filter(doc => doc.id !== (currentUser ? currentUser.uid : null)).map(doc => ({ id: doc.id, ...doc.data() }));
                 
                 if (friends.length === 0) {
                     friendsList.innerHTML = '<p class="ranking-loading">Bạn chưa có bạn bè nào. Hãy thêm bạn bè để thách đấu!</p>';
@@ -1806,18 +1835,16 @@
                 }
                 
                 let html = '';
-                friends.forEach(friend => {
-                    // Calculate high score for this friend
-                    const friendScores = mockScores.filter(score => score.userId === friend.id);
-                    const highScore = friendScores.length > 0 ? Math.max(...friendScores.map(score => score.score)) : 0;
+                for (const friend of friends) {
+                    const scoresSnapshot = await db.collection('scores').where('userId', '==', friend.id).orderBy('score', 'desc').limit(1).get();
+                    const highScore = scoresSnapshot.empty ? 0 : scoresSnapshot.docs[0].data().score;
+                    const avatarHTML = friend.photoURL ? `<img src="${friend.photoURL}" alt="${friend.name}">` : '<i class="fas fa-user"></i>';
                     
                     html += `
                     <div class="friend-item">
-                        <div class="friend-avatar">
-                            ${friend.avatar ? `<img src="${friend.avatar}" alt="${friend.name}">` : '<i class="fas fa-user"></i>'}
-                        </div>
+                        <div class="friend-avatar">${avatarHTML}</div>
                         <div class="friend-info">
-                            <div class="friend-name">${friend.name}</div>
+                            <div class="friend-name">${friend.name || 'Người dùng'}</div>
                             <div class="friend-score">Điểm cao nhất: ${highScore}</div>
                         </div>
                         <button class="social-btn challenge" data-userid="${friend.id}">
@@ -1825,11 +1852,10 @@
                         </button>
                     </div>
                     `;
-                });
+                }
                 
                 friendsList.innerHTML = html;
                 
-                // Add event listeners to challenge buttons
                 document.querySelectorAll('.social-btn.challenge').forEach(btn => {
                     btn.addEventListener('click', () => {
                         const userId = btn.getAttribute('data-userid');
@@ -1837,21 +1863,21 @@
                     });
                 });
                 
-            }, 1000);
+            } catch(error) {
+                console.error("Error loading friends list: ", error);
+                friendsList.innerHTML = '<p class="ranking-loading">Đã xảy ra lỗi khi tải danh sách bạn bè.</p>';
+            }
         }
         
         function openChallengeModal(userId) {
             showModal(challengeModal);
             
-            // In a real app, we would pre-fill the friend selection
-            const user = mockUsers.find(u => u.id === userId);
+            // Find the user from the ranking list to pre-populate the select
+            const user = document.querySelector(`.ranking-item[data-userid="${userId}"] .ranking-name`).textContent;
             if (user) {
-                document.getElementById('challenge-friend').innerHTML = `
-                    <option value="${user.id}" selected>${user.name}</option>
-                `;
+                document.getElementById('challenge-friend').innerHTML = `<option value="${userId}" selected>${user}</option>`;
             }
             
-            // Add event listeners to challenge options
             document.querySelectorAll('.challenge-option').forEach(option => {
                 option.addEventListener('click', () => {
                     document.querySelectorAll('.challenge-option').forEach(o => o.classList.remove('selected'));
@@ -1859,7 +1885,6 @@
                 });
             });
             
-            // Send challenge button
             document.getElementById('send-challenge-btn').addEventListener('click', sendChallenge);
         }
         
@@ -1874,39 +1899,52 @@
             }
             
             const time = timeOption.getAttribute('data-time');
-            showToast(`Đã gửi thách đấu ${time} phút với ${gameId} đến người chơi`, 'success');
+            
+            // This would be a real Firestore operation, e.g., create a `challenges` document
+            // db.collection('challenges').add({
+            //     challengerId: currentUser.uid,
+            //     challengedId: friendId,
+            //     gameId: gameId,
+            //     time: time,
+            //     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            //     status: 'pending'
+            // });
+            
+            showToast(`Đã gửi thách đấu ${time} phút với ${getGameName(gameId)}`, 'success');
             challengeModal.style.display = 'none';
         }
         
         function shareUserAchievement(userId) {
-            // In a real app, this would use the Web Share API
             showToast('Chức năng chia sẻ thành tích đã được kích hoạt');
         }
         
         function sendFriendRequest(userId) {
-            // In a real app, this would send a friend request
             showToast('Đã gửi lời mời kết bạn');
         }
         
-        // Initialize rankings when modal is opened
-        rankingBtn.addEventListener('click', () => {
+        rankingBtn.addEventListener('click', async () => {
             loadRankings();
             
             // Populate user filter for history tab
             const userFilter = document.getElementById('history-user-filter');
             userFilter.innerHTML = '<option value="all">Tất cả người dùng</option>';
             
-            mockUsers.forEach(user => {
-                userFilter.innerHTML += `<option value="${user.id}">${user.name}</option>`;
-            });
+            try {
+                const usersSnapshot = await db.collection('users').get();
+                usersSnapshot.forEach(doc => {
+                    const userData = doc.data();
+                    userFilter.innerHTML += `<option value="${doc.id}">${userData.name || 'Người dùng'}</option>`;
+                });
+            } catch (error) {
+                console.error("Error populating history user filter: ", error);
+            }
         });
         
-        // Close modals when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === loginModal) loginModal.style.display = 'none';
             if (e.target === profileModal) profileModal.style.display = 'none';
             if (e.target === rankingModal) rankingModal.style.display = 'none';
-            if (e.target === challengeModal) challengeModal.style.display = 'none';
+            if (e.target === e.target) challengeModal.style.display = 'none';
         });
     </script>
 </body>
