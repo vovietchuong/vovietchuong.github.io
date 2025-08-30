@@ -37,11 +37,12 @@
         
         .header-container {
             width: 100%;
-            max-width: 500px;
+            max-width: 600px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            flex-wrap: wrap;
         }
         
         .home-btn {
@@ -90,13 +91,28 @@
             box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
+        .user-profile {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(145deg, #66bb6a, #2e7d32);
+            color: white;
+            border-radius: 50px;
+            padding: 8px 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .user-profile i {
+            margin-right: 8px;
+            font-size: 1.2rem;
+        }
+        
         .container {
             background-color: white;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             padding: 30px;
             text-align: center;
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -166,10 +182,36 @@
             justify-content: center;
         }
         
+        .operation-selector {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .operation-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 20px;
+            background: #e8f5e9;
+            color: #388e3c;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .operation-btn.active {
+            background: linear-gradient(145deg, #66bb6a, #2e7d32);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
         .stats-container {
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
+            gap: 10px;
         }
         
         .stat-box {
@@ -180,10 +222,10 @@
             color: #5d4037;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             flex: 1;
-            margin: 0 5px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-width: 0;
         }
         
         .stat-value {
@@ -363,6 +405,25 @@
             border-left: 4px solid #66bb6a;
         }
         
+        .explanation-step {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .step-number {
+            background: #66bb6a;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
         .keyboard-hints {
             display: flex;
             justify-content: center;
@@ -435,6 +496,99 @@
             border-radius: 5px;
         }
         
+        .level-indicator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+        }
+        
+        .level-info {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(145deg, #5e35b1, #3949ab);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .level-info i {
+            margin-right: 8px;
+        }
+        
+        .xp-display {
+            background: linear-gradient(145deg, #ff7043, #f4511e);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .reward-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #ffd54f, #ffb300);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #5d4037;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            animation: bounce 2s infinite;
+        }
+        
+        .trophy-case {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+        
+        .trophy {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(145deg, #ffd54f, #ffb300);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #5d4037;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .trophy.locked {
+            background: linear-gradient(145deg, #e0e0e0, #bdbdbd);
+            color: #9e9e9e;
+        }
+        
+        .trophy-info {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.7rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .trophy:hover .trophy-info {
+            opacity: 1;
+        }
+        
         /* Animation for new question */
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
@@ -477,8 +631,15 @@
             animation: celebrate 0.5s ease-in-out 3;
         }
         
+        /* Bounce animation */
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
         /* Responsive design */
-        @media (max-width: 500px) {
+        @media (max-width: 600px) {
             .container {
                 padding: 20px 15px;
             }
@@ -498,6 +659,11 @@
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
+            }
+            
+            .user-profile {
+                width: 100%;
+                justify-content: center;
             }
             
             h1 {
@@ -536,6 +702,15 @@
             .stat-box {
                 margin: 5px 0;
             }
+            
+            .level-selector, .operation-selector {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .level-btn, .operation-btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -544,6 +719,15 @@
         <button class="home-btn" id="home-btn">
             <i class="fas fa-home"></i> Trang chủ MathHub
         </button>
+        
+        <div class="user-profile">
+            <i class="fas fa-user-graduate"></i>
+            <span id="user-level">Cấp 1</span>
+            <div class="reward-badge" id="reward-badge">
+                <i class="fas fa-star"></i>
+            </div>
+        </div>
+        
         <button class="sound-toggle" id="sound-toggle">
             <i class="fas fa-volume-up"></i>
         </button>
@@ -553,6 +737,17 @@
         <div class="header">
             <h1>🧮 Toán Lớp 2 🧮</h1>
             <p class="subtitle">Cộng trừ có nhớ - Thử thách toán học!</p>
+            
+            <div class="level-indicator">
+                <div class="level-info">
+                    <i class="fas fa-trophy"></i>
+                    <span id="level-display">Mức: Dễ</span>
+                </div>
+                <div class="xp-display">
+                    <i class="fas fa-bolt"></i>
+                    <span id="xp-value">0/100 XP</span>
+                </div>
+            </div>
             
             <div class="level-selector">
                 <button class="level-btn active" data-level="easy">
@@ -567,6 +762,33 @@
                     Khó
                     <span class="badge" id="hard-badge">0</span>
                 </button>
+            </div>
+            
+            <div class="operation-selector">
+                <button class="operation-btn active" data-operation="both">
+                    Cả hai
+                </button>
+                <button class="operation-btn" data-operation="addition">
+                    Chỉ cộng
+                </button>
+                <button class="operation-btn" data-operation="subtraction">
+                    Chỉ trừ
+                </button>
+            </div>
+        </div>
+        
+        <div class="trophy-case">
+            <div class="trophy" id="trophy-1">
+                <i class="fas fa-medal"></i>
+                <div class="trophy-info">Hoàn thành 10 câu</div>
+            </div>
+            <div class="trophy locked" id="trophy-2">
+                <i class="fas fa-crown"></i>
+                <div class="trophy-info">Đạt 50 điểm</div>
+            </div>
+            <div class="trophy locked" id="trophy-3">
+                <i class="fas fa-gem"></i>
+                <div class="trophy-info">Hoàn thành tất cả cấp độ</div>
             </div>
         </div>
         
@@ -647,11 +869,20 @@
             totalQuestions: 0,
             isWaiting: false,
             level: 'easy',
+            operation: 'both',
             soundEnabled: true,
+            userLevel: 1,
+            userXP: 0,
+            xpToNextLevel: 100,
             achievements: {
                 easy: 0,
                 medium: 0,
                 hard: 0
+            },
+            trophies: {
+                complete10: false,
+                score50: false,
+                allLevels: false
             }
         };
 
@@ -672,19 +903,33 @@
             homeButton: document.getElementById('home-btn'),
             soundToggle: document.getElementById('sound-toggle'),
             levelButtons: document.querySelectorAll('.level-btn'),
+            operationButtons: document.querySelectorAll('.operation-btn'),
             achievementToast: document.getElementById('achievement-toast'),
             achievementText: document.getElementById('achievement-text'),
             easyBadge: document.getElementById('easy-badge'),
             mediumBadge: document.getElementById('medium-badge'),
-            hardBadge: document.getElementById('hard-badge')
+            hardBadge: document.getElementById('hard-badge'),
+            userLevel: document.getElementById('user-level'),
+            levelDisplay: document.getElementById('level-display'),
+            xpValue: document.getElementById('xp-value'),
+            rewardBadge: document.getElementById('reward-badge'),
+            trophy1: document.getElementById('trophy-1'),
+            trophy2: document.getElementById('trophy-2'),
+            trophy3: document.getElementById('trophy-3')
         };
 
-        // Sound effects
+        // Sound effects with better base64 encoded sounds
         const sounds = {
-            correct: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间'),
-            incorrect: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间'),
-            levelup: new Audio('data:audio/wav;base64,UklGRl4QAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YToQAACBgIF/gn2DfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2BfYF9gX2Bf极空间')
+            correct: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3'),
+            incorrect: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3'),
+            levelup: new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3')
         };
+
+        // Preload sounds
+        Object.values(sounds).forEach(sound => {
+            sound.preload = 'auto';
+            sound.volume = 0.5;
+        });
 
         // Initialize game
         function initGame() {
@@ -695,6 +940,8 @@
             setupEventListeners();
             updateScoreDisplay();
             updateAchievementBadges();
+            updateUserLevelDisplay();
+            checkTrophies();
         }
 
         // Load game data from localStorage
@@ -707,6 +954,14 @@
                 gameState.totalQuestions = data.totalQuestions || 0;
                 gameState.achievements = data.achievements || { easy: 0, medium: 0, hard: 0 };
                 gameState.soundEnabled = data.soundEnabled !== undefined ? data.soundEnabled : true;
+                gameState.userLevel = data.userLevel || 1;
+                gameState.userXP = data.userXP || 0;
+                gameState.xpToNextLevel = data.xpToNextLevel || 100;
+                gameState.trophies = data.trophies || {
+                    complete10: false,
+                    score50: false,
+                    allLevels: false
+                };
                 
                 // Update sound icon
                 updateSoundIcon();
@@ -720,7 +975,11 @@
                 correctCount: gameState.correctCount,
                 totalQuestions: gameState.totalQuestions,
                 achievements: gameState.achievements,
-                soundEnabled: gameState.soundEnabled
+                soundEnabled: gameState.soundEnabled,
+                userLevel: gameState.userLevel,
+                userXP: gameState.userXP,
+                xpToNextLevel: gameState.xpToNextLevel,
+                trophies: gameState.trophies
             };
             localStorage.setItem('mathGameData', JSON.stringify(data));
         }
@@ -743,10 +1002,10 @@
             }
         }
 
-        // Generate a new math question based on level
+        // Generate a new math question based on level and operation
         function generateQuestion() {
             let num1, num2, answer, explanationText;
-            const isAddition = Math.random() > 0.5;
+            const isAddition = gameState.operation === 'both' ? Math.random() > 0.5 : gameState.operation === 'addition';
             
             switch(gameState.level) {
                 case 'easy':
@@ -762,55 +1021,128 @@
                         answer = num1 + num2;
                         elements.question.textContent = `${num1} + ${num2} = ?`;
                         
-                        // Tạo giải thích
+                        // Tạo giải thích chi tiết
                         const units = num1 % 10 + num2 % 10;
                         const tens = Math.floor(num1 / 10) + Math.floor(num2 / 10);
-                        explanationText = `Giải thích: ${num1} + ${num2} = ?<br>
-                        - Cộng hàng đơn vị: ${num1 % 10} + ${num2 % 10} = ${units} (viết ${units % 10}, nhớ ${Math.floor(units / 10)})<br>
-                        - Cộng hàng chục: ${Math.floor(num1 / 10)} + ${Math.floor(num2 / 10)} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}<br>
-                        - Kết quả: ${answer}`;
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Cộng hàng đơn vị: ${num1 % 10} + ${num2 % 10} = ${units}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Viết ${units % 10}, nhớ ${Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Cộng hàng chục: ${Math.floor(num1 / 10)} + ${Math.floor(num2 / 10)} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     } else {
-                        num1 = Math.floor(Math.random() * 20) + 25;
+                        num1 = Math.floor(Math.random() * 20) + 20;
                         num2 = Math.floor(Math.random() * 15) + 5;
                         // Đảm bảo có nhớ
                         while (num1 % 10 >= num2 % 10) {
-                            num1 = Math.floor(Math.random() * 20) + 25;
+                            num1 = Math.floor(Math.random() * 20) + 20;
                             num2 = Math.floor(Math.random() * 15) + 5;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
                         
-                        // Tạo giải thích
-                        explanationText = `Giải thích: ${num1} - ${num2} = ?<br>
-                        - Trừ hàng đơn vị: ${num1 % 10} không trừ được ${num2 % 10}, mượn 1 từ hàng chục<br>
-                        - ${10 + num1 % 10} - ${num2 % 10} = ${10 + num1 % 10 - num2 % 10}<br>
-                        - Trừ hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}<br>
-                        - Kết quả: ${answer}`;
+                        // Tạo giải thích chi tiết
+                        const units = num1 % 10;
+                        const units2 = num2 % 10;
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     }
                     break;
                     
                 case 'medium':
                     // Phép cộng/trừ có nhớ trong phạm vi 50-100
                     if (isAddition) {
-                        num1 = Math.floor(Math.random() * 30) + 35;
-                        num2 = Math.floor(Math.random() * 30) + 15;
+                        num1 = Math.floor(Math.random() * 30) + 30;
+                        num2 = Math.floor(Math.random() * 30) + 20;
                         // Đảm bảo có nhớ
                         while (num1 % 10 + num2 % 10 < 10) {
-                            num1 = Math.floor(Math.random() * 30) + 35;
-                            num2 = Math.floor(Math.random() * 30) + 15;
+                            num1 = Math.floor(Math.random() * 30) + 30;
+                            num2 = Math.floor(Math.random() * 30) + 20;
                         }
                         answer = num1 + num2;
                         elements.question.textContent = `${num1} + ${num2} = ?`;
+                        
+                        // Tạo giải thích chi tiết
+                        const units = num1 % 10 + num2 % 10;
+                        const tens = Math.floor(num1 / 10) + Math.floor(num2 / 10);
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Cộng hàng đơn vị: ${num1 % 10} + ${num2 % 10} = ${units}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Viết ${units % 10}, nhớ ${Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Cộng hàng chục: ${Math.floor(num1 / 10)} + ${Math.floor(num2 / 10)} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     } else {
-                        num1 = Math.floor(Math.random() * 40) + 50;
-                        num2 = Math.floor(Math.random() * 30) + 20;
+                        num1 = Math.floor(Math.random() * 30) + 40;
+                        num2 = Math.floor(Math.random() * 30) + 15;
                         // Đảm bảo có nhớ
                         while (num1 % 10 >= num2 % 10) {
-                            num1 = Math.floor(Math.random() * 40) + 50;
-                            num2 = Math.floor(Math.random() * 30) + 20;
+                            num1 = Math.floor(Math.random() * 30) + 40;
+                            num2 = Math.floor(Math.random() * 30) + 15;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
+                        
+                        // Tạo giải thích chi tiết
+                        const units = num1 % 10;
+                        const units2 = num2 % 10;
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     }
                     break;
                     
@@ -818,117 +1150,87 @@
                     // Phép cộng/trừ có nhớ với số lớn hơn
                     if (isAddition) {
                         num1 = Math.floor(Math.random() * 50) + 50;
-                        num2 = Math.floor(Math.random() * 50) + 50;
+                        num2 = Math.floor(Math.random() * 50) + 30;
                         // Đảm bảo có nhớ
-                        while (num1 % 10 + num2 % 10 < 10 && 
-                               Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10 < 10) {
+                        while (num1 % 10 + num2 % 10 < 10) {
                             num1 = Math.floor(Math.random() * 50) + 50;
-                            num2 = Math.floor(Math.random() * 50) + 50;
+                            num2 = Math.floor(Math.random() * 50) + 30;
                         }
                         answer = num1 + num2;
                         elements.question.textContent = `${num1} + ${num2} = ?`;
+                        
+                        // Tạo giải thích chi tiết
+                        const units = num1 % 10 + num2 % 10;
+                        const tens = Math.floor(num1 / 10) + Math.floor(num2 / 10);
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Cộng hàng đơn vị: ${num1 % 10} + ${num2 % 10} = ${units}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Viết ${units % 10}, nhớ ${Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Cộng hàng chục: ${Math.floor(num1 / 10)} + ${Math.floor(num2 / 10)} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     } else {
-                        num1 = Math.floor(Math.random() * 50) + 100;
-                        num2 = Math.floor(Math.random() * 50) + 50;
+                        num1 = Math.floor(Math.random() * 50) + 60;
+                        num2 = Math.floor(Math.random() * 50) + 25;
                         // Đảm bảo có nhớ
-                        while (num1 % 10 >= num2 % 10 && 
-                               Math.floor(num1 / 10) % 10 >= Math.floor(num2 / 10) % 10) {
-                            num1 = Math.floor(Math.random() * 50) + 100;
-                            num2 = Math.floor(Math.random() * 50) + 50;
+                        while (num1 % 10 >= num2 % 10) {
+                            num1 = Math.floor(Math.random() * 50) + 60;
+                            num2 = Math.floor(Math.random() * 50) + 25;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
+                        
+                        // Tạo giải thích chi tiết
+                        const units = num1 % 10;
+                        const units2 = num2 % 10;
+                        explanationText = `
+                            <div class="explanation-step">
+                                <span class="step-number">1</span>
+                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">2</span>
+                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">3</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">4</span>
+                                <span>Kết quả: ${answer}</span>
+                            </div>
+                        `;
                     }
                     break;
             }
-
-            gameState.currentQuestion = { 
-                num1, 
-                num2, 
-                answer, 
-                operator: isAddition ? '+' : '-',
+            
+            gameState.currentQuestion = {
+                num1,
+                num2,
+                answer,
+                operation: isAddition ? 'addition' : 'subtraction',
                 explanation: explanationText
             };
             
-            gameState.totalQuestions++;
-            updateProgressBar();
+            gameState.currentAnswer = '';
+            elements.answerDisplay.textContent = '?';
+            elements.feedback.className = 'feedback';
+            elements.feedback.textContent = '';
+            elements.explanation.style.display = 'none';
             
-            // Hiển thị gợi ý nhớ nếu cần
-            showCarryOverHint(isAddition, num1, num2);
-            
-            resetAnswer();
-            
-            // Add animation
-            elements.question.classList.remove('pop-in');
-            void elements.question.offsetWidth; // Trigger reflow
-            elements.question.classList.add('pop-in');
-        }
-
-        // Update progress bar
-        function updateProgressBar() {
-            const progressPercent = Math.min(100, (gameState.correctCount / 10) * 100);
-            elements.progressBar.style.width = `${progressPercent}%`;
-            elements.progress.textContent = `${Math.round(progressPercent)}%`;
-            
-            // Check for level up
-            if (gameState.correctCount > 0 && gameState.correctCount % 10 === 0) {
-                levelUp();
-            }
-        }
-
-        // Level up achievement
-        function levelUp() {
-            gameState.achievements[gameState.level]++;
-            updateAchievementBadges();
-            saveGameData();
-            
-            // Show achievement toast
-            elements.achievementText.textContent = `Chúc mừng! Bạn đã đạt cấp độ ${gameState.achievements[gameState.level]} ở mức ${gameState.level === 'easy' ? 'Dễ' : gameState.level === 'medium' ? 'Trung bình' : 'Khó'}!`;
-            elements.achievementToast.classList.add('show');
-            
-            // Play level up sound
-            playSound('levelup');
-            
-            // Create confetti effect
-            createConfetti();
-            
-            // Hide toast after 3 seconds
-            setTimeout(() => {
-                elements.achievementToast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Create confetti effect
-        function createConfetti() {
-            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50'];
-            
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
-                confetti.style.width = `${Math.random() * 10 + 5}px`;
-                confetti.style.height = `${Math.random() * 10 + 5}px`;
-                
-                document.body.appendChild(confetti);
-                
-                // Remove confetti after animation
-                setTimeout(() => {
-                    confetti.remove();
-                }, 5000);
-            }
-        }
-
-        // Update achievement badges
-        function updateAchievementBadges() {
-            elements.easyBadge.textContent = gameState.achievements.easy;
-            elements.mediumBadge.textContent = gameState.achievements.medium;
-            elements.hardBadge.textContent = gameState.achievements.hard;
-        }
-
-        // Hiển thị gợi ý về phép nhớ
-        function showCarryOverHint(isAddition, num1, num2) {
+            // Hiển thị carry-over nếu cần
             if (isAddition) {
                 const unitsSum = num1 % 10 + num2 % 10;
                 if (unitsSum >= 10) {
@@ -939,102 +1241,194 @@
                 }
             } else {
                 if (num1 % 10 < num2 % 10) {
-                    elements.carryOver.textContent = `Mượn 1`;
+                    elements.carryOver.textContent = 'Mượn 1';
                     elements.carryOver.classList.add('carry-animation');
                 } else {
                     elements.carryOver.textContent = '';
                 }
             }
-        }
-
-        // Reset answer
-        function resetAnswer() {
-            gameState.currentAnswer = '';
-            updateAnswerDisplay();
-            hideFeedback();
-            elements.explanation.style.display = 'none';
-        }
-
-        // Update answer display
-        function updateAnswerDisplay() {
-            elements.answerDisplay.textContent = gameState.currentAnswer || '?';
-            elements.answerDisplay.style.color = gameState.currentAnswer ? '#2d3436' : '#3949ab';
+            
+            // Animation for new question
+            elements.question.classList.remove('pop-in');
+            void elements.question.offsetWidth; // Trigger reflow
+            elements.question.classList.add('pop-in');
+            
+            // Remove carry-over animation after it completes
+            setTimeout(() => {
+                elements.carryOver.classList.remove('carry-animation');
+            }, 500);
         }
 
         // Update score display
         function updateScoreDisplay() {
             elements.score.textContent = gameState.score;
             elements.correctCount.textContent = gameState.correctCount;
+            
+            const progressPercentage = gameState.totalQuestions > 0 ? 
+                Math.min(100, Math.round((gameState.correctCount / gameState.totalQuestions) * 100)) : 0;
+            elements.progress.textContent = `${progressPercentage}%`;
+            elements.progressBar.style.width = `${progressPercentage}%`;
+            
+            // Update user level display
+            updateUserLevelDisplay();
         }
 
-        // Show feedback
-        function showFeedback(message, isCorrect) {
-            elements.feedback.textContent = message;
-            elements.feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'} show`;
+        // Update user level display
+        function updateUserLevelDisplay() {
+            elements.userLevel.textContent = `Cấp ${gameState.userLevel}`;
+            elements.xpValue.textContent = `${gameState.userXP}/${gameState.xpToNextLevel} XP`;
             
-            // Play sound
-            if (isCorrect) {
-                playSound('correct');
-                elements.feedback.classList.add('celebrate');
-            } else {
-                playSound('incorrect');
+            // Update level display text
+            let levelText = '';
+            if (gameState.level === 'easy') levelText = 'Dễ';
+            else if (gameState.level === 'medium') levelText = 'Trung bình';
+            else levelText = 'Khó';
+            
+            elements.levelDisplay.textContent = `Mức: ${levelText}`;
+        }
+
+        // Update achievement badges
+        function updateAchievementBadges() {
+            elements.easyBadge.textContent = gameState.achievements.easy;
+            elements.mediumBadge.textContent = gameState.achievements.medium;
+            elements.hardBadge.textContent = gameState.achievements.hard;
+        }
+
+        // Check and award trophies
+        function checkTrophies() {
+            // Trophy 1: Complete 10 questions
+            if (gameState.totalQuestions >= 10 && !gameState.trophies.complete10) {
+                gameState.trophies.complete10 = true;
+                showAchievement('Bạn đã hoàn thành 10 câu hỏi! Nhận huy chương đầu tiên!');
+                elements.trophy1.classList.remove('locked');
+                playSound('levelup');
             }
             
-            // Hiển thị giải thích nếu sai
-            if (!isCorrect && gameState.currentQuestion.explanation) {
-                elements.explanation.innerHTML = gameState.currentQuestion.explanation;
-                elements.explanation.style.display = 'block';
+            // Trophy 2: Score 50 points
+            if (gameState.score >= 50 && !gameState.trophies.score50) {
+                gameState.trophies.score50 = true;
+                showAchievement('Bạn đã đạt 50 điểm! Nhận huy chương thứ hai!');
+                elements.trophy2.classList.remove('locked');
+                playSound('levelup');
             }
+            
+            // Trophy 3: Complete all levels
+            if (gameState.achievements.easy >= 5 && gameState.achievements.medium >= 5 && 
+                gameState.achievements.hard >= 5 && !gameState.trophies.allLevels) {
+                gameState.trophies.allLevels = true;
+                showAchievement('Bạn đã hoàn thành tất cả cấp độ! Nhận huy chương cuối cùng!');
+                elements.trophy3.classList.remove('locked');
+                playSound('levelup');
+            }
+            
+            saveGameData();
         }
 
-        // Hide feedback
-        function hideFeedback() {
-            elements.feedback.className = 'feedback';
-            elements.feedback.classList.remove('celebrate');
+        // Show achievement toast
+        function showAchievement(text) {
+            elements.achievementText.textContent = text;
+            elements.achievementToast.classList.add('show');
+            
+            setTimeout(() => {
+                elements.achievementToast.classList.remove('show');
+            }, 3000);
         }
 
-        // Handle number input
-        function handleNumberInput(number) {
+        // Add XP and check for level up
+        function addXP(amount) {
+            gameState.userXP += amount;
+            
+            if (gameState.userXP >= gameState.xpToNextLevel) {
+                // Level up!
+                gameState.userLevel++;
+                gameState.userXP -= gameState.xpToNextLevel;
+                gameState.xpToNextLevel = Math.floor(gameState.xpToNextLevel * 1.5);
+                
+                // Animate reward badge
+                elements.rewardBadge.classList.add('celebrate');
+                setTimeout(() => {
+                    elements.rewardBadge.classList.remove('celebrate');
+                }, 1500);
+                
+                showAchievement(`Chúc mừng! Bạn đã lên cấp ${gameState.userLevel}!`);
+                playSound('levelup');
+            }
+            
+            updateUserLevelDisplay();
+            saveGameData();
+        }
+
+        // Handle number button click
+        function handleNumberClick(number) {
             if (gameState.isWaiting) return;
             
-            if (gameState.currentAnswer.length < 3) {
-                gameState.currentAnswer += number;
-                updateAnswerDisplay();
-            }
+            gameState.currentAnswer += number;
+            elements.answerDisplay.textContent = gameState.currentAnswer;
+            
+            // Animation for answer display
+            elements.answerDisplay.classList.remove('pop-in');
+            void elements.answerDisplay.offsetWidth; // Trigger reflow
+            elements.answerDisplay.classList.add('pop-in');
         }
 
-        // Handle clear input
-        function handleClearInput() {
+        // Handle clear button click
+        function handleClearClick() {
             if (gameState.isWaiting) return;
             
             gameState.currentAnswer = '';
-            updateAnswerDisplay();
+            elements.answerDisplay.textContent = '?';
         }
 
-        // Handle submit answer
-        function handleSubmitAnswer() {
-            if (gameState.isWaiting || !gameState.currentAnswer) {
-                showFeedback('Hãy nhập câu trả lời!', false);
-                return;
-            }
-
+        // Handle submit button click
+        function handleSubmitClick() {
+            if (gameState.isWaiting || gameState.currentAnswer === '') return;
+            
             const userAnswer = parseInt(gameState.currentAnswer);
+            const correctAnswer = gameState.currentQuestion.answer;
+            
+            gameState.totalQuestions++;
             gameState.isWaiting = true;
-
-            if (userAnswer === gameState.currentQuestion.answer) {
+            
+            if (userAnswer === correctAnswer) {
                 // Correct answer
-                gameState.score += 10;
+                gameState.score += gameState.level === 'easy' ? 5 : 
+                                  gameState.level === 'medium' ? 10 : 15;
                 gameState.correctCount++;
-                updateScoreDisplay();
-                showFeedback('Chính xác! 👏', true);
+                gameState.achievements[gameState.level]++;
+                
+                elements.feedback.textContent = 'Chính xác! 🎉';
+                elements.feedback.className = 'feedback show correct';
+                elements.answerDisplay.className = 'answer-display celebrate';
+                
+                // Show explanation
+                elements.explanation.innerHTML = gameState.currentQuestion.explanation;
+                elements.explanation.style.display = 'block';
+                
+                playSound('correct');
+                addXP(gameState.level === 'easy' ? 10 : 
+                     gameState.level === 'medium' ? 15 : 20);
+                
+                // Create confetti effect
+                createConfetti();
             } else {
                 // Incorrect answer
-                showFeedback(`Sai rồi! Kết quả đúng là: ${gameState.currentQuestion.answer}`, false);
+                elements.feedback.textContent = `Sai rồi! Đáp án: ${correctAnswer}`;
+                elements.feedback.className = 'feedback show incorrect';
+                elements.answerDisplay.className = 'answer-display';
+                
+                // Show explanation
+                elements.explanation.innerHTML = gameState.currentQuestion.explanation;
+                elements.explanation.style.display = 'block';
+                
+                playSound('incorrect');
+                addXP(5);
             }
-
-            // Save game data
+            
+            updateScoreDisplay();
+            updateAchievementBadges();
+            checkTrophies();
             saveGameData();
-
+            
             // Generate new question after delay
             setTimeout(() => {
                 gameState.isWaiting = false;
@@ -1042,19 +1436,24 @@
             }, 3000);
         }
 
-        // Handle home button click
-        function handleHomeButton() {
-            const confirmLeave = confirm("Bạn có muốn quay về trang chủ MathHub không?");
-            if (confirmLeave) {
-                window.location.href = "index.html";
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', 
+                           '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = `${Math.random() * 100}%`;
+                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    document.body.removeChild(confetti);
+                }, 5000);
             }
-        }
-
-        // Handle sound toggle
-        function handleSoundToggle() {
-            gameState.soundEnabled = !gameState.soundEnabled;
-            updateSoundIcon();
-            saveGameData();
         }
 
         // Handle level change
@@ -1073,60 +1472,82 @@
             generateQuestion();
         }
 
-        // Handle keyboard input
-        function handleKeyboardInput(event) {
-            if (gameState.isWaiting) return;
+        // Handle operation change
+        function handleOperationChange(operation) {
+            gameState.operation = operation;
             
-            const key = event.key;
+            // Update active button
+            elements.operationButtons.forEach(btn => {
+                if (btn.dataset.operation === operation) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
             
-            // Number keys (0-9)
-            if (key >= '0' && key <= '9') {
-                handleNumberInput(key);
-            } 
-            // Backspace and Delete keys
-            else if (key === 'Backspace' || key === 'Delete') {
-                handleClearInput();
-            } 
-            // Enter key
-            else if (key === 'Enter') {
-                handleSubmitAnswer();
-            }
+            generateQuestion();
+        }
+
+        // Toggle sound
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            updateSoundIcon();
+            saveGameData();
         }
 
         // Setup event listeners
         function setupEventListeners() {
-            // Event delegation for number buttons
-            elements.answerButtons.addEventListener('click', (event) => {
-                if (event.target.classList.contains('number-btn')) {
-                    handleNumberInput(event.target.getAttribute('data-number'));
-                }
-            });
-
-            // Clear button
-            elements.clearButton.addEventListener('click', handleClearInput);
-            
-            // Submit button
-            elements.submitButton.addEventListener('click', handleSubmitAnswer);
-            
-            // Home button
-            elements.homeButton.addEventListener('click', handleHomeButton);
-            
-            // Sound toggle button
-            elements.soundToggle.addEventListener('click', handleSoundToggle);
-            
-            // Level buttons
-            elements.levelButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    handleLevelChange(btn.dataset.level);
+            // Number buttons
+            elements.answerButtons.querySelectorAll('.number-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    handleNumberClick(button.dataset.number);
                 });
             });
             
+            // Clear button
+            elements.clearButton.addEventListener('click', handleClearClick);
+            
+            // Submit button
+            elements.submitButton.addEventListener('click', handleSubmitClick);
+            
+            // Level buttons
+            elements.levelButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleLevelChange(button.dataset.level);
+                });
+            });
+            
+            // Operation buttons
+            elements.operationButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    handleOperationChange(button.dataset.operation);
+                });
+            });
+            
+            // Sound toggle
+            elements.soundToggle.addEventListener('click', toggleSound);
+            
+            // Home button
+            elements.homeButton.addEventListener('click', () => {
+                alert('Chức năng trang chủ sẽ được cập nhật sau!');
+            });
+            
             // Keyboard support
-            document.addEventListener('keydown', handleKeyboardInput);
+            document.addEventListener('keydown', (e) => {
+                if (gameState.isWaiting) return;
+                
+                if (e.key >= '0' && e.key <= '9') {
+                    handleNumberClick(e.key);
+                } else if (e.key === 'Backspace') {
+                    handleClearClick();
+                } else if (e.key === 'Enter') {
+                    handleSubmitClick();
+                }
+            });
         }
 
-        // Initialize the game when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initGame);
+        // Initialize the game when the page loads
+        window.addEventListener('load', initGame);
     </script>
 </body>
 </html>
