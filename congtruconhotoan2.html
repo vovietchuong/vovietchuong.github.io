@@ -477,6 +477,7 @@
         .achievement-toast i {
             font-size: 1.5rem;
             margin-right: 10px;
+            color: #5d4037;
         }
         
         .progress-bar {
@@ -501,6 +502,7 @@
             justify-content: space-between;
             align-items: center;
             margin: 10px 0;
+            flex-wrap: wrap;
         }
         
         .level-info {
@@ -511,6 +513,7 @@
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: bold;
+            margin: 5px 0;
         }
         
         .level-info i {
@@ -523,6 +526,7 @@
             padding: 8px 15px;
             border-radius: 20px;
             font-weight: bold;
+            margin: 5px 0;
         }
         
         .reward-badge {
@@ -1039,39 +1043,38 @@
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Kết quả: ${tens + Math.floor(units / 10)}${units % 10} = ${answer}</span>
                             </div>
                         `;
                     } else {
-                        num1 = Math.floor(Math.random() * 20) + 20;
+                        num1 = Math.floor(Math.random() * 30) + 20;
                         num2 = Math.floor(Math.random() * 15) + 5;
                         // Đảm bảo có nhớ
                         while (num1 % 10 >= num2 % 10) {
-                            num1 = Math.floor(Math.random() * 20) + 20;
+                            num1 = Math.floor(Math.random() * 30) + 20;
                             num2 = Math.floor(Math.random() * 15) + 5;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
                         
                         // Tạo giải thích chi tiết
-                        const units = num1 % 10;
-                        const units2 = num2 % 10;
+                        const unitsBorrow = num1 % 10 < num2 % 10;
                         explanationText = `
                             <div class="explanation-step">
                                 <span class="step-number">1</span>
-                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                                <span>Hàng đơn vị: ${num1 % 10} nhỏ hơn ${num2 % 10} nên cần mượn 1 từ hàng chục</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">2</span>
-                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                                <span>Hàng đơn vị mới: ${num1 % 10 + 10} - ${num2 % 10} = ${(num1 % 10 + 10) - num2 % 10}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">3</span>
-                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10)} - 1 (đã mượn) - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Kết quả: ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}${(num1 % 10 + 10) - num2 % 10} = ${answer}</span>
                             </div>
                         `;
                     }
@@ -1080,12 +1083,12 @@
                 case 'medium':
                     // Phép cộng/trừ có nhớ trong phạm vi 50-100
                     if (isAddition) {
-                        num1 = Math.floor(Math.random() * 30) + 30;
-                        num2 = Math.floor(Math.random() * 30) + 20;
+                        num1 = Math.floor(Math.random() * 30) + 35;
+                        num2 = Math.floor(Math.random() * 30) + 15;
                         // Đảm bảo có nhớ
                         while (num1 % 10 + num2 % 10 < 10) {
-                            num1 = Math.floor(Math.random() * 30) + 30;
-                            num2 = Math.floor(Math.random() * 30) + 20;
+                            num1 = Math.floor(Math.random() * 30) + 35;
+                            num2 = Math.floor(Math.random() * 30) + 15;
                         }
                         answer = num1 + num2;
                         elements.question.textContent = `${num1} + ${num2} = ?`;
@@ -1108,39 +1111,38 @@
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Kết quả: ${tens + Math.floor(units / 10)}${units % 10} = ${answer}</span>
                             </div>
                         `;
                     } else {
-                        num1 = Math.floor(Math.random() * 30) + 40;
-                        num2 = Math.floor(Math.random() * 30) + 15;
+                        num1 = Math.floor(Math.random() * 40) + 40;
+                        num2 = Math.floor(Math.random() * 30) + 10;
                         // Đảm bảo có nhớ
                         while (num1 % 10 >= num2 % 10) {
-                            num1 = Math.floor(Math.random() * 30) + 40;
-                            num2 = Math.floor(Math.random() * 30) + 15;
+                            num1 = Math.floor(Math.random() * 40) + 40;
+                            num2 = Math.floor(Math.random() * 30) + 10;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
                         
                         // Tạo giải thích chi tiết
-                        const units = num1 % 10;
-                        const units2 = num2 % 10;
+                        const unitsBorrow = num1 % 10 < num2 % 10;
                         explanationText = `
                             <div class="explanation-step">
                                 <span class="step-number">1</span>
-                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                                <span>Hàng đơn vị: ${num1 % 10} nhỏ hơn ${num2 % 10} nên cần mượn 1 từ hàng chục</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">2</span>
-                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                                <span>Hàng đơn vị mới: ${num1 % 10 + 10} - ${num2 % 10} = ${(num1 % 10 + 10) - num2 % 10}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">3</span>
-                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10)} - 1 (đã mượn) - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Kết quả: ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}${(num1 % 10 + 10) - num2 % 10} = ${answer}</span>
                             </div>
                         `;
                     }
@@ -1161,7 +1163,8 @@
                         
                         // Tạo giải thích chi tiết
                         const units = num1 % 10 + num2 % 10;
-                        const tens = Math.floor(num1 / 10) + Math.floor(num2 / 10);
+                        const tens = Math.floor(num1 / 10) % 10 + Math.floor(num2 / 10) % 10;
+                        const hundreds = Math.floor(num1 / 100) + Math.floor(num2 / 100);
                         explanationText = `
                             <div class="explanation-step">
                                 <span class="step-number">1</span>
@@ -1173,49 +1176,66 @@
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">3</span>
-                                <span>Cộng hàng chục: ${Math.floor(num1 / 10)} + ${Math.floor(num2 / 10)} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}</span>
+                                <span>Cộng hàng chục: ${Math.floor(num1 / 10) % 10} + ${Math.floor(num2 / 10) % 10} + ${Math.floor(units / 10)} = ${tens + Math.floor(units / 10)}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Viết ${(tens + Math.floor(units / 10)) % 10}, nhớ ${Math.floor((tens + Math.floor(units / 10)) / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">5</span>
+                                <span>Cộng hàng trăm: ${Math.floor(num1 / 100)} + ${Math.floor(num2 / 100)} + ${Math.floor((tens + Math.floor(units / 10)) / 10)} = ${hundreds + Math.floor((tens + Math.floor(units / 10)) / 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">6</span>
+                                <span>Kết quả: ${hundreds + Math.floor((tens + Math.floor(units / 10)) / 10)}${(tens + Math.floor(units / 10)) % 10}${units % 10} = ${answer}</span>
                             </div>
                         `;
                     } else {
-                        num1 = Math.floor(Math.random() * 50) + 60;
-                        num2 = Math.floor(Math.random() * 50) + 25;
+                        num1 = Math.floor(Math.random() * 50) + 70;
+                        num2 = Math.floor(Math.random() * 50) + 20;
                         // Đảm bảo có nhớ
                         while (num1 % 10 >= num2 % 10) {
-                            num1 = Math.floor(Math.random() * 50) + 60;
-                            num2 = Math.floor(Math.random() * 50) + 25;
+                            num1 = Math.floor(Math.random() * 50) + 70;
+                            num2 = Math.floor(Math.random() * 50) + 20;
                         }
                         answer = num1 - num2;
                         elements.question.textContent = `${num1} - ${num2} = ?`;
                         
                         // Tạo giải thích chi tiết
-                        const units = num1 % 10;
-                        const units2 = num2 % 10;
+                        const unitsBorrow = num1 % 10 < num2 % 10;
+                        const tensBorrow = (Math.floor(num1 / 10) % 10) - (unitsBorrow ? 1 : 0) < (Math.floor(num2 / 10) % 10);
                         explanationText = `
                             <div class="explanation-step">
                                 <span class="step-number">1</span>
-                                <span>Trừ hàng đơn vị: ${units} nhỏ hơn ${units2} nên mượn 1 từ hàng chục</span>
+                                <span>Hàng đơn vị: ${num1 % 10} nhỏ hơn ${num2 % 10} nên cần mượn 1 từ hàng chục</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">2</span>
-                                <span>Hàng đơn vị: ${units + 10} - ${units2} = ${units + 10 - units2}</span>
+                                <span>Hàng đơn vị mới: ${num1 % 10 + 10} - ${num2 % 10} = ${(num1 % 10 + 10) - num2 % 10}</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">3</span>
-                                <span>Hàng chục: ${Math.floor(num1 / 10) - 1} - ${Math.floor(num2 / 10)} = ${Math.floor(num1 / 10) - 1 - Math.floor(num2 / 10)}</span>
+                                <span>Hàng chục: ${Math.floor(num1 / 10) % 10} - 1 (đã mượn) nhỏ hơn ${Math.floor(num2 / 10) % 10} nên cần mượn 1 từ hàng trăm</span>
                             </div>
                             <div class="explanation-step">
                                 <span class="step-number">4</span>
-                                <span>Kết quả: ${answer}</span>
+                                <span>Hàng chục mới: ${Math.floor(num1 / 10) % 10 + 10 - 1} - ${Math.floor(num2 / 10) % 10} = ${(Math.floor(num1 / 10) % 10 + 9) - (Math.floor(num2 / 10) % 10)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">5</span>
+                                <span>Hàng trăm: ${Math.floor(num1 / 100)} - 1 (đã mượn) - ${Math.floor(num2 / 100)} = ${Math.floor(num1 / 100) - 1 - Math.floor(num2 / 100)}</span>
+                            </div>
+                            <div class="explanation-step">
+                                <span class="step-number">6</span>
+                                <span>Kết quả: ${Math.floor(num1 / 100) - 1 - Math.floor(num2 / 100)}${(Math.floor(num1 / 10) % 10 + 9) - (Math.floor(num2 / 10) % 10)}${(num1 % 10 + 10) - num2 % 10} = ${answer}</span>
                             </div>
                         `;
                     }
                     break;
             }
             
+            // Update game state
             gameState.currentQuestion = {
                 num1,
                 num2,
@@ -1224,39 +1244,141 @@
                 explanation: explanationText
             };
             
+            // Reset current answer
             gameState.currentAnswer = '';
             elements.answerDisplay.textContent = '?';
             elements.feedback.className = 'feedback';
             elements.feedback.textContent = '';
             elements.explanation.style.display = 'none';
             
-            // Hiển thị carry-over nếu cần
-            if (isAddition) {
-                const unitsSum = num1 % 10 + num2 % 10;
-                if (unitsSum >= 10) {
-                    elements.carryOver.textContent = `Nhớ ${Math.floor(unitsSum / 10)}`;
-                    elements.carryOver.classList.add('carry-animation');
-                } else {
-                    elements.carryOver.textContent = '';
-                }
-            } else {
-                if (num1 % 10 < num2 % 10) {
-                    elements.carryOver.textContent = 'Mượn 1';
-                    elements.carryOver.classList.add('carry-animation');
-                } else {
-                    elements.carryOver.textContent = '';
-                }
-            }
-            
-            // Animation for new question
+            // Add animation to question
             elements.question.classList.remove('pop-in');
             void elements.question.offsetWidth; // Trigger reflow
             elements.question.classList.add('pop-in');
             
-            // Remove carry-over animation after it completes
-            setTimeout(() => {
+            // Show carry-over if needed
+            if (isAddition && (num1 % 10 + num2 % 10 >= 10)) {
+                elements.carryOver.textContent = `Nhớ ${Math.floor((num1 % 10 + num2 % 10) / 10)}`;
+                elements.carryOver.classList.add('carry-animation');
+            } else if (!isAddition && (num1 % 10 < num2 % 10)) {
+                elements.carryOver.textContent = `Mượn 1`;
+                elements.carryOver.classList.add('carry-animation');
+            } else {
+                elements.carryOver.textContent = '';
                 elements.carryOver.classList.remove('carry-animation');
-            }, 500);
+            }
+            
+            // Increment total questions
+            gameState.totalQuestions++;
+            updateProgress();
+        }
+
+        // Handle number button clicks
+        function handleNumberClick(number) {
+            if (gameState.isWaiting) return;
+            
+            if (gameState.currentAnswer.length < 3) {
+                gameState.currentAnswer += number;
+                elements.answerDisplay.textContent = gameState.currentAnswer;
+                
+                // Add animation to answer display
+                elements.answerDisplay.classList.remove('pop-in');
+                void elements.answerDisplay.offsetWidth; // Trigger reflow
+                elements.answerDisplay.classList.add('pop-in');
+            }
+        }
+
+        // Clear current answer
+        function clearAnswer() {
+            if (gameState.isWaiting) return;
+            
+            gameState.currentAnswer = '';
+            elements.answerDisplay.textContent = '?';
+        }
+
+        // Submit answer
+        function submitAnswer() {
+            if (gameState.isWaiting || gameState.currentAnswer === '') return;
+            
+            const userAnswer = parseInt(gameState.currentAnswer);
+            const isCorrect = userAnswer === gameState.currentQuestion.answer;
+            
+            gameState.isWaiting = true;
+            
+            if (isCorrect) {
+                // Correct answer
+                handleCorrectAnswer();
+            } else {
+                // Incorrect answer
+                handleIncorrectAnswer();
+            }
+            
+            // Save game state
+            saveGameData();
+            
+            // Move to next question after delay
+            setTimeout(() => {
+                gameState.isWaiting = false;
+                generateQuestion();
+            }, 3000);
+        }
+
+        // Handle correct answer
+        function handleCorrectAnswer() {
+            // Update score and correct count
+            gameState.score += 10;
+            gameState.correctCount++;
+            
+            // Add XP based on level
+            let xpGained = 0;
+            switch(gameState.level) {
+                case 'easy': xpGained = 5; break;
+                case 'medium': xpGained = 10; break;
+                case 'hard': xpGained = 15; break;
+            }
+            gameState.userXP += xpGained;
+            
+            // Check for level up
+            checkLevelUp();
+            
+            // Update achievements
+            gameState.achievements[gameState.level]++;
+            updateAchievementBadges();
+            
+            // Update display
+            updateScoreDisplay();
+            updateUserLevelDisplay();
+            
+            // Show feedback
+            elements.feedback.textContent = 'Chính xác! +10 điểm';
+            elements.feedback.className = 'feedback show correct';
+            
+            // Show explanation
+            elements.explanation.innerHTML = gameState.currentQuestion.explanation;
+            elements.explanation.style.display = 'block';
+            
+            // Play sound
+            playSound('correct');
+            
+            // Create confetti effect
+            createConfetti();
+            
+            // Check for trophies
+            checkTrophies();
+        }
+
+        // Handle incorrect answer
+        function handleIncorrectAnswer() {
+            // Show feedback
+            elements.feedback.textContent = `Sai rồi! Đáp án: ${gameState.currentQuestion.answer}`;
+            elements.feedback.className = 'feedback show incorrect';
+            
+            // Show explanation
+            elements.explanation.innerHTML = gameState.currentQuestion.explanation;
+            elements.explanation.style.display = 'block';
+            
+            // Play sound
+            playSound('incorrect');
         }
 
         // Update score display
@@ -1264,27 +1386,15 @@
             elements.score.textContent = gameState.score;
             elements.correctCount.textContent = gameState.correctCount;
             
-            const progressPercentage = gameState.totalQuestions > 0 ? 
-                Math.min(100, Math.round((gameState.correctCount / gameState.totalQuestions) * 100)) : 0;
-            elements.progress.textContent = `${progressPercentage}%`;
-            elements.progressBar.style.width = `${progressPercentage}%`;
-            
-            // Update user level display
-            updateUserLevelDisplay();
+            // Update progress percentage
+            updateProgress();
         }
 
-        // Update user level display
-        function updateUserLevelDisplay() {
-            elements.userLevel.textContent = `Cấp ${gameState.userLevel}`;
-            elements.xpValue.textContent = `${gameState.userXP}/${gameState.xpToNextLevel} XP`;
-            
-            // Update level display text
-            let levelText = '';
-            if (gameState.level === 'easy') levelText = 'Dễ';
-            else if (gameState.level === 'medium') levelText = 'Trung bình';
-            else levelText = 'Khó';
-            
-            elements.levelDisplay.textContent = `Mức: ${levelText}`;
+        // Update progress
+        function updateProgress() {
+            const progressPercentage = Math.min(100, Math.floor((gameState.correctCount / gameState.totalQuestions) * 100));
+            elements.progress.textContent = `${progressPercentage}%`;
+            elements.progressBar.style.width = `${progressPercentage}%`;
         }
 
         // Update achievement badges
@@ -1294,33 +1404,81 @@
             elements.hardBadge.textContent = gameState.achievements.hard;
         }
 
-        // Check and award trophies
+        // Update user level display
+        function updateUserLevelDisplay() {
+            elements.userLevel.textContent = `Cấp ${gameState.userLevel}`;
+            elements.levelDisplay.textContent = `Mức: ${getLevelName()}`;
+            elements.xpValue.textContent = `${gameState.userXP}/${gameState.xpToNextLevel} XP`;
+            
+            // Animate XP bar
+            const xpPercentage = (gameState.userXP / gameState.xpToNextLevel) * 100;
+            elements.progressBar.style.width = `${xpPercentage}%`;
+        }
+
+        // Get level name in Vietnamese
+        function getLevelName() {
+            switch(gameState.level) {
+                case 'easy': return 'Dễ';
+                case 'medium': return 'Trung bình';
+                case 'hard': return 'Khó';
+                default: return 'Dễ';
+            }
+        }
+
+        // Check for level up
+        function checkLevelUp() {
+            if (gameState.userXP >= gameState.xpToNextLevel) {
+                gameState.userLevel++;
+                gameState.userXP -= gameState.xpToNextLevel;
+                gameState.xpToNextLevel = Math.floor(gameState.xpToNextLevel * 1.5);
+                
+                // Show level up notification
+                showAchievement(`Cấp độ mới! Bây giờ bạn đang ở cấp ${gameState.userLevel}`);
+                
+                // Play level up sound
+                playSound('levelup');
+                
+                // Animate reward badge
+                elements.rewardBadge.classList.add('celebrate');
+                setTimeout(() => {
+                    elements.rewardBadge.classList.remove('celebrate');
+                }, 2000);
+                
+                // Save game state
+                saveGameData();
+                
+                // Update display
+                updateUserLevelDisplay();
+            }
+        }
+
+        // Check for trophies
         function checkTrophies() {
             // Trophy 1: Complete 10 questions
-            if (gameState.totalQuestions >= 10 && !gameState.trophies.complete10) {
+            if (!gameState.trophies.complete10 && gameState.correctCount >= 10) {
                 gameState.trophies.complete10 = true;
-                showAchievement('Bạn đã hoàn thành 10 câu hỏi! Nhận huy chương đầu tiên!');
                 elements.trophy1.classList.remove('locked');
-                playSound('levelup');
+                showAchievement('Giải thưởng: Hoàn thành 10 câu hỏi!');
             }
             
-            // Trophy 2: Score 50 points
-            if (gameState.score >= 50 && !gameState.trophies.score50) {
+            // Trophy 2: Reach 50 points
+            if (!gameState.trophies.score50 && gameState.score >= 50) {
                 gameState.trophies.score50 = true;
-                showAchievement('Bạn đã đạt 50 điểm! Nhận huy chương thứ hai!');
                 elements.trophy2.classList.remove('locked');
-                playSound('levelup');
+                showAchievement('Giải thưởng: Đạt 50 điểm!');
             }
             
-            // Trophy 3: Complete all levels
-            if (gameState.achievements.easy >= 5 && gameState.achievements.medium >= 5 && 
-                gameState.achievements.hard >= 5 && !gameState.trophies.allLevels) {
+            // Trophy 3: Complete all levels (at least 5 correct in each)
+            if (!gameState.trophies.allLevels && 
+                gameState.achievements.easy >= 5 && 
+                gameState.achievements.medium >= 5 && 
+                gameState.achievements.hard >= 5) {
                 gameState.trophies.allLevels = true;
-                showAchievement('Bạn đã hoàn thành tất cả cấp độ! Nhận huy chương cuối cùng!');
                 elements.trophy3.classList.remove('locked');
-                playSound('levelup');
+                showAchievement('Giải thưởng: Hoàn thành tất cả cấp độ!');
             }
             
+            // Save game state
             saveGameData();
         }
 
@@ -1334,202 +1492,77 @@
             }, 3000);
         }
 
-        // Add XP and check for level up
-        function addXP(amount) {
-            gameState.userXP += amount;
-            
-            if (gameState.userXP >= gameState.xpToNextLevel) {
-                // Level up!
-                gameState.userLevel++;
-                gameState.userXP -= gameState.xpToNextLevel;
-                gameState.xpToNextLevel = Math.floor(gameState.xpToNextLevel * 1.5);
-                
-                // Animate reward badge
-                elements.rewardBadge.classList.add('celebrate');
-                setTimeout(() => {
-                    elements.rewardBadge.classList.remove('celebrate');
-                }, 1500);
-                
-                showAchievement(`Chúc mừng! Bạn đã lên cấp ${gameState.userLevel}!`);
-                playSound('levelup');
-            }
-            
-            updateUserLevelDisplay();
-            saveGameData();
-        }
-
-        // Handle number button click
-        function handleNumberClick(number) {
-            if (gameState.isWaiting) return;
-            
-            gameState.currentAnswer += number;
-            elements.answerDisplay.textContent = gameState.currentAnswer;
-            
-            // Animation for answer display
-            elements.answerDisplay.classList.remove('pop-in');
-            void elements.answerDisplay.offsetWidth; // Trigger reflow
-            elements.answerDisplay.classList.add('pop-in');
-        }
-
-        // Handle clear button click
-        function handleClearClick() {
-            if (gameState.isWaiting) return;
-            
-            gameState.currentAnswer = '';
-            elements.answerDisplay.textContent = '?';
-        }
-
-        // Handle submit button click
-        function handleSubmitClick() {
-            if (gameState.isWaiting || gameState.currentAnswer === '') return;
-            
-            const userAnswer = parseInt(gameState.currentAnswer);
-            const correctAnswer = gameState.currentQuestion.answer;
-            
-            gameState.totalQuestions++;
-            gameState.isWaiting = true;
-            
-            if (userAnswer === correctAnswer) {
-                // Correct answer
-                gameState.score += gameState.level === 'easy' ? 5 : 
-                                  gameState.level === 'medium' ? 10 : 15;
-                gameState.correctCount++;
-                gameState.achievements[gameState.level]++;
-                
-                elements.feedback.textContent = 'Chính xác! 🎉';
-                elements.feedback.className = 'feedback show correct';
-                elements.answerDisplay.className = 'answer-display celebrate';
-                
-                // Show explanation
-                elements.explanation.innerHTML = gameState.currentQuestion.explanation;
-                elements.explanation.style.display = 'block';
-                
-                playSound('correct');
-                addXP(gameState.level === 'easy' ? 10 : 
-                     gameState.level === 'medium' ? 15 : 20);
-                
-                // Create confetti effect
-                createConfetti();
-            } else {
-                // Incorrect answer
-                elements.feedback.textContent = `Sai rồi! Đáp án: ${correctAnswer}`;
-                elements.feedback.className = 'feedback show incorrect';
-                elements.answerDisplay.className = 'answer-display';
-                
-                // Show explanation
-                elements.explanation.innerHTML = gameState.currentQuestion.explanation;
-                elements.explanation.style.display = 'block';
-                
-                playSound('incorrect');
-                addXP(5);
-            }
-            
-            updateScoreDisplay();
-            updateAchievementBadges();
-            checkTrophies();
-            saveGameData();
-            
-            // Generate new question after delay
-            setTimeout(() => {
-                gameState.isWaiting = false;
-                generateQuestion();
-            }, 3000);
-        }
-
         // Create confetti effect
         function createConfetti() {
-            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', 
-                           '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50'];
+            const colors = ['#f44336', '#e91e63', '#9c27b0', '#673ab7', '#3f51b5', '#2196f3', '#03a9f4', '#00bcd4', '#009688', '#4CAF50'];
             
             for (let i = 0; i < 30; i++) {
                 const confetti = document.createElement('div');
                 confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
                 confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.animation = `confettiFall ${Math.random() * 3 + 2}s linear forwards`;
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.opacity = '1';
+                
                 document.body.appendChild(confetti);
                 
-                // Remove confetti after animation completes
+                // Animation
+                confetti.style.animation = `confettiFall ${Math.random() * 2 + 2}s linear forwards`;
+                
+                // Remove after animation
                 setTimeout(() => {
-                    document.body.removeChild(confetti);
+                    confetti.remove();
                 }, 5000);
             }
         }
 
-        // Handle level change
-        function handleLevelChange(level) {
-            gameState.level = level;
-            
-            // Update active button
-            elements.levelButtons.forEach(btn => {
-                if (btn.dataset.level === level) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            generateQuestion();
-        }
-
-        // Handle operation change
-        function handleOperationChange(operation) {
-            gameState.operation = operation;
-            
-            // Update active button
-            elements.operationButtons.forEach(btn => {
-                if (btn.dataset.operation === operation) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-            
-            generateQuestion();
-        }
-
-        // Toggle sound
-        function toggleSound() {
-            gameState.soundEnabled = !gameState.soundEnabled;
-            updateSoundIcon();
-            saveGameData();
-        }
-
-        // Setup event listeners
+        // Set up event listeners
         function setupEventListeners() {
             // Number buttons
             elements.answerButtons.querySelectorAll('.number-btn').forEach(button => {
                 button.addEventListener('click', () => {
-                    handleNumberClick(button.dataset.number);
+                    handleNumberClick(button.getAttribute('data-number'));
                 });
             });
             
             // Clear button
-            elements.clearButton.addEventListener('click', handleClearClick);
+            elements.clearButton.addEventListener('click', clearAnswer);
             
             // Submit button
-            elements.submitButton.addEventListener('click', handleSubmitClick);
+            elements.submitButton.addEventListener('click', submitAnswer);
+            
+            // Home button - Sửa thành chuyển hướng đến index.html
+            elements.homeButton.addEventListener('click', () => {
+                window.location.href = 'index.html';
+            });
+            
+            // Sound toggle
+            elements.soundToggle.addEventListener('click', () => {
+                gameState.soundEnabled = !gameState.soundEnabled;
+                updateSoundIcon();
+                saveGameData();
+            });
             
             // Level buttons
             elements.levelButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    handleLevelChange(button.dataset.level);
+                    elements.levelButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    gameState.level = button.getAttribute('data-level');
+                    elements.levelDisplay.textContent = `Mức: ${getLevelName()}`;
+                    generateQuestion();
                 });
             });
             
             // Operation buttons
             elements.operationButtons.forEach(button => {
                 button.addEventListener('click', () => {
-                    handleOperationChange(button.dataset.operation);
+                    elements.operationButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    gameState.operation = button.getAttribute('data-operation');
+                    generateQuestion();
                 });
-            });
-            
-            // Sound toggle
-            elements.soundToggle.addEventListener('click', toggleSound);
-            
-            // Home button
-            elements.homeButton.addEventListener('click', () => {
-                alert('Chức năng trang chủ sẽ được cập nhật sau!');
             });
             
             // Keyboard support
@@ -1539,9 +1572,9 @@
                 if (e.key >= '0' && e.key <= '9') {
                     handleNumberClick(e.key);
                 } else if (e.key === 'Backspace') {
-                    handleClearClick();
+                    clearAnswer();
                 } else if (e.key === 'Enter') {
-                    handleSubmitClick();
+                    submitAnswer();
                 }
             });
         }
