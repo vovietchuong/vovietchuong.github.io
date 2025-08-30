@@ -13,875 +13,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
     
-    <style>
-        /* CSS styles giữ nguyên như trước */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);
-            color: #333;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: white;
-            width: 100%;
-            position: relative;
-        }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        .user-controls {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            color: white;
-            gap: 10px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        .user-avatar.large {
-            width: 80px;
-            height: 80px;
-            font-size: 2rem;
-        }
-
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .auth-btn {
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: background 0.3s;
-            font-weight: 500;
-        }
-
-        .auth-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .section-title {
-            color: white;
-            margin: 30px 0 15px;
-            text-align: center;
-            font-size: 1.8rem;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .section-divider {
-            width: 100%;
-            max-width: 1000px;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.3);
-            margin: 10px 0 30px;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        .game-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .game-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .game-card.featured {
-            border: 3px solid #ff6b6b;
-        }
-
-        .featured-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #ff6b6b;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .new-badge {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            background: #36b9cc;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .popular-badge {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background: #f6c23e;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            z-index: 10;
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .game-card-img {
-            height: 180px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 3rem;
-        }
-
-        .game-card-content {
-            padding: 20px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .game-card h3 {
-            margin-bottom: 10px;
-            color: #2e59d9;
-        }
-
-        .game-card p {
-            margin-bottom: 20px;
-            color: #666;
-            flex-grow: 1;
-        }
-
-        .game-card-btn {
-            display: block;
-            text-align: center;
-            padding: 12px;
-            background: #4e73df;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s;
-            cursor: pointer;
-        }
-
-        .game-card-btn:hover {
-            background: #2e59d9;
-        }
-
-        .game-card-btn.featured {
-            background: #ff6b6b;
-        }
-
-        .game-card-btn.featured:hover {
-            background: #e55656;
-        }
-
-        .game-card-btn.new {
-            background: #36b9cc;
-        }
-
-        .game-card-btn.new:hover {
-            background: #2a9eb0;
-        }
-
-        .game-card-btn.popular {
-            background: #f6c23e;
-            color: #333;
-        }
-
-        .game-card-btn.popular:hover {
-            background: #e6b02a;
-        }
-
-        .game-card-btn.coming-soon {
-            background: #858796;
-            cursor: not-allowed;
-        }
-
-        .game-card-btn.coming-soon:hover {
-            background: #858796;
-        }
-
-        .footer {
-            margin-top: 40px;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Toast notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background-color: #333;
-            color: white;
-            padding: 16px;
-            border-radius: 4px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            opacity: 0;
-            transition: opacity 0.3s;
-            max-width: 300px;
-        }
-
-        .toast.show {
-            opacity: 1;
-        }
-
-        .toast.success {
-            background-color: #1cc88a;
-        }
-
-        .toast.error {
-            background-color: #e74a3b;
-        }
-
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            width: 90%;
-            max-width: 600px;
-            padding: 30px;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #777;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .auth-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #777;
-            transition: all 0.3s;
-        }
-
-        .auth-tab.active {
-            color: #4e73df;
-            border-bottom: 3px solid #4e73df;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #555;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-            transition: border 0.3s;
-        }
-
-        .form-input:focus {
-            border-color: #4e73df;
-            outline: none;
-        }
-
-        .modal-btn {
-            width: 100%;
-            padding: 12px;
-            background: #4e73df;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .modal-btn:hover {
-            background: #2e59d9;
-        }
-
-        .auth-footer {
-            text-align: center;
-            margin-top: 20px;
-            color: #777;
-        }
-
-        .auth-footer a {
-            color: #4e73df;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        /* Progress section */
-        .progress-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-
-        .progress-item:last-child {
-            border-bottom: none;
-        }
-
-        .progress-game {
-            font-weight: 500;
-        }
-
-        .progress-score {
-            color: #4e73df;
-            font-weight: 600;
-        }
-
-        .progress-bar {
-            height: 8px;
-            background-color: #e9ecef;
-            border-radius: 4px;
-            margin-top: 5px;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: #4e73df;
-            border-radius: 4px;
-        }
-
-        /* New styles for score system */
-        .progress-filters {
-            margin-bottom: 15px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .progress-filters select, .progress-filters input {
-            padding: 8px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: white;
-            flex: 1;
-        }
-
-        .progress-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            border-bottom: 1px solid #f0f0f0;
-            background-color: #f9f9f9;
-            border-radius: 5px;
-            margin-bottom: 8px;
-        }
-
-        .progress-info {
-            flex-grow: 1;
-        }
-
-        .progress-game {
-            font-weight: 600;
-            color: #2e59d9;
-            margin-bottom: 4px;
-        }
-
-        .progress-date {
-            font-size: 0.85rem;
-            color: #777;
-        }
-
-        .progress-score {
-            font-weight: bold;
-            color: #1cc88a;
-            font-size: 1.1rem;
-        }
-
-        .progress-level {
-            margin-top: 4px;
-            font-size: 0.85rem;
-            color: #f6c23e;
-        }
-
-        .progress-item.high-score {
-            background-color: #e8f5e9;
-            border-left: 4px solid #1cc88a;
-        }
-
-        .stats-summary {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .stat-item {
-            text-align: center;
-            flex: 1;
-        }
-
-        .stat-label {
-            display: block;
-            font-size: 0.85rem;
-            color: #777;
-            margin-bottom: 5px;
-        }
-
-        .stat-value {
-            display: block;
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2e59d9;
-        }
-
-        .score-chart-container {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-        }
-
-        .score-chart-title {
-            text-align: center;
-            margin-bottom: 15px;
-            color: #2e59d9;
-            font-weight: 600;
-        }
-
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-            gap: 5px;
-        }
-
-        .pagination-btn {
-            padding: 8px 12px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .pagination-btn.active {
-            background: #4e73df;
-            color: white;
-        }
-
-        .pagination-btn:hover:not(.active) {
-            background: #ddd;
-        }
-
-        /* Styles mới cho bảng xếp hạng */
-        .ranking-container {
-            background: white;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 20px auto;
-            max-width: 800px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .ranking-header {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #2e59d9;
-        }
-        
-        .ranking-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .ranking-tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            cursor: pointer;
-            font-weight: 600;
-            color: #777;
-            transition: all 0.3s;
-        }
-        
-        .ranking-tab.active {
-            color: #4e73df;
-            border-bottom: 3px solid #4e73df;
-        }
-        
-        .ranking-filters {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .ranking-filter {
-            padding: 8px 16px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .ranking-filter.active {
-            background: #4e73df;
-            color: white;
-        }
-        
-        .ranking-list {
-            list-style: none;
-        }
-        
-        .ranking-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s;
-        }
-        
-        .ranking-item:hover {
-            background: #f9f9f9;
-        }
-        
-        .ranking-position {
-            font-weight: bold;
-            width: 40px;
-            text-align: center;
-            font-size: 1.2rem;
-        }
-        
-        .ranking-position-1 {
-            color: gold;
-        }
-        
-        .ranking-position-2 {
-            color: silver;
-        }
-        
-        .ranking-position-3 {
-            color: #cd7f32; /* bronze */
-        }
-        
-        .ranking-user {
-            flex-grow: 1;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .ranking-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .ranking-avatar img {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        
-        .ranking-name {
-            font-weight: 500;
-        }
-        
-        .ranking-score {
-            font-weight: bold;
-            color: #4e73df;
-            min-width: 80px;
-            text-align: right;
-        }
-        
-        .ranking-loading {
-            text-align: center;
-            padding: 20px;
-            color: #777;
-        }
-        
-        .current-user-highlight {
-            background-color: #e8f4ff;
-            border-left: 4px solid #4e73df;
-        }
-
-        /* Social features */
-        .social-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .social-btn {
-            padding: 5px 10px;
-            background: #f0f0f0;
-            border: none;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: background 0.3s;
-        }
-        
-        .social-btn:hover {
-            background: #ddd;
-        }
-        
-        .social-btn.challenge {
-            background: #ffeeba;
-        }
-        
-        .social-btn.challenge:hover {
-            background: #ffdf7e;
-        }
-        
-        .social-btn.share {
-            background: #d1ecf1;
-        }
-        
-        .social-btn.share:hover {
-            background: #abdde5;
-        }
-        
-        .social-btn.friend {
-            background: #d4edda;
-        }
-        
-        .social-btn.friend:hover {
-            background: #a8e0b5;
-        }
-
-        /* Friends system */
-        .friends-list {
-            margin-top: 20px;
-        }
-        
-        .friend-item {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .friend-item:last-child {
-            border-bottom: none;
-        }
-        
-        .friend-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-            background: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .friend-info {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .friend-name {
-            font-weight: 500;
-        }
-        
-        .friend-score {
-            font-size: 0.85rem;
-            color: #777;
-        }
-
-        /* Challenge modal */
-        .challenge-modal {
-            text-align: center;
-        }
-        
-        .challenge-options {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .challenge-option {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .challenge-option:hover {
-            background: #e9ecef;
-        }
-        
-        .challenge-option.selected {
-            background: #4e73df;
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .user-controls {
-                position: static;
-                justify-content: center;
-                margin-top: 15px;
-            }
-            
-            .header {
-                margin-bottom: 15px;
-            }
-            
-            .user-info {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .stats-summary {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
-            .ranking-filters {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .progress-filters {
-                flex-direction: column;
-            }
-            
-            .challenge-options {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <!-- Login Modal -->
@@ -1050,10 +182,6 @@
             
             <div class="ranking-tab-content" id="history-tab" style="display: none;">
                 <div class="ranking-filters">
-                    <select id="history-user-filter">
-                        <option value="all">Tất cả người dùng</option>
-                        <!-- Users will be populated here -->
-                    </select>
                     <select id="history-game-filter">
                         <option value="all">Tất cả trò chơi</option>
                         <option value="congtrutrongphamvi10">Cộng trừ phạm vi 10</option>
@@ -1117,484 +245,212 @@
             </div>
             
             <div class="form-group">
-                <label>Thời gian thách đấu</label>
-                <div class="challenge-options">
-                    <div class="challenge-option" data-time="1">1 ngày</div>
-                    <div class="challenge-option" data-time="3">3 ngày</div>
-                    <div class="challenge-option" data-time="7">1 tuần</div>
-                    <div class="challenge-option" data-time="30">1 tháng</div>
-                </div>
+                <label for="challenge-message">Lời nhắn (tuỳ chọn)</label>
+                <textarea id="challenge-message" class="form-input" placeholder="Viết lời nhắn thách đấu của bạn..." rows="3"></textarea>
             </div>
             
             <button class="modal-btn" id="send-challenge-btn">Gửi thách đấu</button>
+            
+            <div class="challenge-history" style="margin-top: 30px;">
+                <h3>Lịch sử thách đấu</h3>
+                <div id="challenge-history-list">
+                    <p style="text-align: center; color: #777; padding: 20px;">
+                        Chưa có lịch sử thách đấu.
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>MathHub</h1>
+            </div>
+            
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">Trang chủ</a>
+                <a href="games.html" class="nav-link">Trò chơi</a>
+                <a href="about.html" class="nav-link">Giới thiệu</a>
+            </nav>
+            
+            <div class="auth-section">
+                <button class="auth-btn" id="login-btn">Đăng nhập</button>
+                
+                <div class="user-info" id="user-info" style="display: none;">
+                    <div class="user-avatar" id="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="user-name" id="user-name"></span>
+                    <div class="user-dropdown">
+                        <button class="dropdown-item" id="profile-btn">
+                            <i class="fas fa-user"></i> Hồ sơ
+                        </button>
+                        <button class="dropdown-item" id="ranking-btn">
+                            <i class="fas fa-trophy"></i> Xếp hạng
+                        </button>
+                        <button class="dropdown-item" id="challenge-btn">
+                            <i class="fas fa-fist-raised"></i> Thách đấu
+                        </button>
+                        <button class="dropdown-item" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Học Toán Thật Vui!</h2>
+                <p>Khám phá thế giới toán học đầy màu sắc với các trò chơi thú vị và bổ ích. Phát triển tư duy toán học một cách tự nhiên và hiệu quả.</p>
+                <a href="games.html" class="cta-btn">Bắt đầu chơi ngay</a>
+            </div>
+            
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Math Learning">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>Tại sao chọn MathHub?</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
+                    </div>
+                    <h3>Trò chơi đa dạng</h3>
+                    <p>Hàng chục trò chơi toán học từ cơ bản đến nâng cao, phù hợp với mọi lứa tuổi.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h3>Học mà chơi</h3>
+                    <p>Phương pháp học tập thông qua trò chơi giúp tiếp thu kiến thức một cách tự nhiên.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Theo dõi tiến bộ</h3>
+                    <p>Hệ thống theo dõi và đánh giá sự tiến bộ của người học theo thời gian.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>Thử thách & Phần thưởng</h3>
+                    <p>Thách đấu bạn bè và nhận phần thưởng khi đạt thành tích cao.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Games Section -->
+    <section class="popular-games">
+        <div class="container">
+            <h2>Trò chơi phổ biến</h2>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bắn Bóng Số">
+                    </div>
+                    <div class="game-content">
+                        <h3>Bắn Bóng Số</h3>
+                        <p>Rèn luyện kỹ năng tính toán nhanh với trò chơi bắn bóng đầy thú vị.</p>
+                        <a href="games/banbongsotoan2.html" class="game-btn">Chơi ngay</a>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Bảng cửu chương">
+                    </div>
+                    <div class="game-content">
+                        <h3>Bảng cửu chương</h3>
+                        <p>Học thuộc bảng cửu chương thông qua các trò chơi tương tác vui nhộn.</p>
+                        <a href="games/bangcuuchuong.html" class="game-btn">Chơi ngay</a>
+                    </div>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Cộng trừ có nhớ">
+                    </div>
+                    <div class="game-content">
+                        <h3>Cộng trừ có nhớ</h3>
+                        <p>Luyện tập phép tính cộng trừ có nhớ với các bài toán thực tế.</p>
+                        <a href="games/congtruconhotoan2.html" class="game-btn">Chơi ngay</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="view-all">
+                <a href="games.html" class="view-all-btn">Xem tất cả trò chơi</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>MathHub</h3>
+                    <p>Nền tảng học toán qua trò chơi hàng đầu Việt Nam.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết nhanh</h4>
+                    <ul>
+                        <li><a href="index.html">Trang chủ</a></li>
+                        <li><a href="games.html">Trò chơi</a></li>
+                        <li><a href="about.html">Giới thiệu</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Hỗ trợ</h4>
+                    <ul>
+                        <li><a href="#">Hướng dẫn sử dụng</a></li>
+                        <li><a href="#">Câu hỏi thường gặp</a></li>
+                        <li><a href="#">Liên hệ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Kết nối với chúng tôi</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 MathHub. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Toast Notification -->
     <div class="toast" id="toast"></div>
 
-    <!-- Header -->
-    <div class="header">
-        <h1>MathHub</h1>
-        <p>Trung tâm trò chơi toán học dành cho học sinh tiểu học</p>
-        
-        <div class="user-controls">
-            <div class="user-info" id="user-info" style="display: none;">
-                <div class="user-avatar" id="user-avatar">
-                    <i class="fas fa-user"></i>
-                </div>
-                <span id="user-name">Người dùng</span>
-                <button class="auth-btn" id="profile-btn">Hồ sơ</button>
-                <button class="auth-btn" id="ranking-btn">Xếp hạng</button>
-                <button class="auth-btn" id="logout-btn">Đăng xuất</button>
-            </div>
-            
-            <div class="user-info" id="guest-info">
-                <button class="auth-btn" id="login-btn">Đăng nhập</button>
-                <button class="auth-btn" id="register-btn">Đăng ký</button>
-            </div>
-        </div>
-    </div>
-
-    <h2 class="section-title">Trò chơi Toán học</h2>
-    <div class="section-divider"></div>
-
-    <!-- Game Cards Container -->
-    <div class="container">
-        <!-- Game Cards -->
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);">
-                <i class="fas fa-plus-minus"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ trong phạm vi 10</h3>
-                <p>Rèn luyện kỹ năng cộng trừ cơ bản với các số trong phạm vi 10. Phù hợp với học sinh lớp 1.</p>
-                <a class="game-card-btn" href="game1.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #36b9cc 0%, #2a9eb0 100%);">
-                <i class="fas fa-basketball-ball"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Bắn Bóng Số</h3>
-                <p>Bắn bóng vào rổ với các phép tính thú vị. Giúp học sinh lớp 2 làm quen với toán học.</p>
-                <a class="game-card-btn" href="game2.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);">
-                <i class="fas fa-times"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Bảng cửu chương</h3>
-                <p>Học thuộc bảng cửu chương từ 2 đến 9 thông qua các trò chơi vui nhộn. Dành cho học sinh lớp 3.</p>
-                <a class="game-card-btn" href="game3.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #f6c23e 0%, #e6b02a 100%);">
-                <i class="fas fa-calculator"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ có nhớ lớp 2</h3>
-                <p>Thực hành các phép tính cộng trừ có nhớ với giao diện trực quan, dễ hiểu cho học sinh lớp 2.</p>
-                <a class="game-card-btn" href="game4.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #e74a3b 0%, #d52a1a 100%);">
-                <i class="fas fa-infinity"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Cộng trừ số nguyên lớp 6</h3>
-                <p>Làm quen với số nguyên âm và dương thông qua các bài tập và trò chơi thú vị.</p>
-                <a class="game-card-btn" href="game5.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #5a5c69 0%, #4a4c59 100%);">
-                <i class="fas fa-divide"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Nhân chia nâng cao lớp 3-4</h3>
-                <p>Nâng cao kỹ năng nhân chia với các bài toán có độ khó tăng dần, phù hợp học sinh lớp 3-4.</p>
-                <a class="game-card-btn" href="game6.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #4e73df 0%, #2e59d9 100%);">
-                <i class="fas fa-road"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Đường đua phép tính</h3>
-                <p>Đua xe cùng các phép tính toán học. Vượt qua chướng ngại vật bằng cách giải toán nhanh.</p>
-                <a class="game-card-btn" href="game7.html">Chơi ngay</a>
-            </div>
-        </div>
-
-        <div class="game-card">
-            <div class="game-card-img" style="background: linear-gradient(135deg, #858796 0%, #6c6e7e 100%);">
-                <i class="fas fa-question-circle"></i>
-            </div>
-            <div class="game-card-content">
-                <h3>Trò chơi mới sắp ra mắt</h3>
-                <p>Chúng tôi đang phát triển thêm nhiều trò chơi toán học thú vị khác. Hãy quay lại sau nhé!</p>
-                <a class="game-card-btn coming-soon">Sắp ra mắt</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="footer">
-        <p>© 2023 MathHub - Dự án giáo dục toán học cho học sinh tiểu học</p>
-    </div>
-
-    <script>
-        // Firebase configuration
-      const firebaseConfig = {
-  apiKey: "AIzaSyAPcaScN-HrCcxiUz_J1QrrREF9sxCfvD8",
-  authDomain: "mathhubvn.firebaseapp.com",
-  projectId: "mathhubvn",
-  storageBucket: "mathhubvn.firebasestorage.app",
-  messagingSenderId: "1001364433767",
-  appId: "1:1001364433767:web:ae1547dc7d1524a6319dc2",
-  measurementId: "G-2YNQZ48JVK"
-};
-
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        firebase.analytics();
-
-        // Initialize Firebase services
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-        const storage = firebase.storage();
-
-        // DOM Elements
-        const loginModal = document.getElementById('login-modal');
-        const profileModal = document.getElementById('profile-modal');
-        const rankingModal = document.getElementById('ranking-modal');
-        const challengeModal = document.getElementById('challenge-modal');
-        const loginBtn = document.getElementById('login-btn');
-        const registerBtn = document.getElementById('register-btn');
-        const profileBtn = document.getElementById('profile-btn');
-        const rankingBtn = document.getElementById('ranking-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const closeModalBtns = document.querySelectorAll('.close-modal');
-        const loginTab = document.getElementById('login-tab');
-        const registerTab = document.getElementById('register-tab');
-        const loginForm = document.getElementById('login-form');
-        const registerForm = document.getElementById('register-form');
-        const userInfo = document.getElementById('user-info');
-        const guestInfo = document.getElementById('guest-info');
-        const userName = document.getElementById('user-name');
-        const userAvatar = document.getElementById('user-avatar');
-        const profileName = document.getElementById('profile-name');
-        const profileEmail = document.getElementById('profile-email');
-        const profileForm = document.getElementById('profile-form');
-        const profileAvatar = document.getElementById('profile-avatar');
-        const changeAvatarBtn = document.getElementById('change-avatar-btn');
-        const avatarUpload = document.getElementById('avatar-upload');
-        const toast = document.getElementById('toast');
-
-        // Auth state listener
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in
-                userInfo.style.display = 'flex';
-                guestInfo.style.display = 'none';
-                
-                // Load user data
-                loadUserData(user);
-            } else {
-                // User is signed out
-                userInfo.style.display = 'none';
-                guestInfo.style.display = 'flex';
-            }
-        });
-
-        // Event Listeners
-        loginBtn.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-            loginTab.click();
-        });
-
-        registerBtn.addEventListener('click', () => {
-            loginModal.style.display = 'flex';
-            registerTab.click();
-        });
-
-        profileBtn.addEventListener('click', () => {
-            const user = auth.currentUser;
-            if (user) {
-                loadProfileData(user);
-                profileModal.style.display = 'flex';
-            }
-        });
-
-        rankingBtn.addEventListener('click', () => {
-            rankingModal.style.display = 'flex';
-            loadRankings();
-        });
-
-        logoutBtn.addEventListener('click', () => {
-            auth.signOut().then(() => {
-                showToast('Đã đăng xuất thành công', 'success');
-            }).catch((error) => {
-                showToast('Có lỗi xảy ra khi đăng xuất', 'error');
-            });
-        });
-
-        closeModalBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                loginModal.style.display = 'none';
-                profileModal.style.display = 'none';
-                rankingModal.style.display = 'none';
-                challengeModal.style.display = 'none';
-            });
-        });
-
-        loginTab.addEventListener('click', () => {
-            loginTab.classList.add('active');
-            registerTab.classList.remove('active');
-            loginForm.classList.add('active');
-            registerForm.classList.remove('active');
-        });
-
-        registerTab.addEventListener('click', () => {
-            registerTab.classList.add('active');
-            loginTab.classList.remove('active');
-            registerForm.classList.add('active');
-            loginForm.classList.remove('active');
-        });
-
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    loginModal.style.display = 'none';
-                    showToast('Đăng nhập thành công', 'success');
-                })
-                .catch((error) => {
-                    showToast('Email hoặc mật khẩu không đúng', 'error');
-                });
-        });
-
-        registerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const name = document.getElementById('register-name').value;
-            const email = document.getElementById('register-email').value;
-            const password = document.getElementById('register-password').value;
-            const confirm = document.getElementById('register-confirm').value;
-            
-            if (password !== confirm) {
-                showToast('Mật khẩu xác nhận không khớp', 'error');
-                return;
-            }
-            
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Update user profile with name
-                    return userCredential.user.updateProfile({
-                        displayName: name
-                    }).then(() => {
-                        // Create user document in Firestore
-                        return db.collection('users').doc(userCredential.user.uid).set({
-                            name: name,
-                            email: email,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            avatarUrl: ''
-                        });
-                    });
-                })
-                .then(() => {
-                    loginModal.style.display = 'none';
-                    showToast('Đăng ký thành công', 'success');
-                })
-                .catch((error) => {
-                    showToast('Đăng ký thất bại: ' + error.message, 'error');
-                });
-        });
-
-        profileForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const user = auth.currentUser;
-            const newName = profileName.value;
-            
-            if (user) {
-                // Update profile in Firebase Auth
-                user.updateProfile({
-                    displayName: newName
-                }).then(() => {
-                    // Update user document in Firestore
-                    return db.collection('users').doc(user.uid).update({
-                        name: newName
-                    });
-                }).then(() => {
-                    // Update UI
-                    userName.textContent = newName;
-                    showToast('Cập nhật hồ sơ thành công', 'success');
-                }).catch((error) => {
-                    showToast('Có lỗi xảy ra khi cập nhật hồ sơ', 'error');
-                });
-            }
-        });
-
-        changeAvatarBtn.addEventListener('click', () => {
-            avatarUpload.click();
-        });
-
-        avatarUpload.addEventListener('change', (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                uploadAvatar(file);
-            }
-        });
-
-        // Functions
-        function loadUserData(user) {
-            // Load user data from Firestore
-            db.collection('users').doc(user.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        userName.textContent = userData.name || user.displayName || 'Người dùng';
-                        
-                        // Load avatar if exists
-                        if (userData.avatarUrl) {
-                            userAvatar.innerHTML = `<img src="${userData.avatarUrl}" alt="Avatar">`;
-                        }
-                    } else {
-                        // Create user document if it doesn't exist
-                        db.collection('users').doc(user.uid).set({
-                            name: user.displayName || 'Người dùng',
-                            email: user.email,
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            avatarUrl: ''
-                        });
-                        userName.textContent = user.displayName || 'Người dùng';
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error loading user data:', error);
-                    userName.textContent = user.displayName || 'Người dùng';
-                });
-        }
-
-        function loadProfileData(user) {
-            profileName.value = user.displayName || '';
-            profileEmail.value = user.email;
-            
-            // Load user data from Firestore
-            db.collection('users').doc(user.uid).get()
-                .then((doc) => {
-                    if (doc.exists) {
-                        const userData = doc.data();
-                        
-                        // Load avatar if exists
-                        if (userData.avatarUrl) {
-                            profileAvatar.innerHTML = `<img src="${userData.avatarUrl}" alt="Avatar">`;
-                        } else {
-                            profileAvatar.innerHTML = '<i class="fas fa-user"></i>';
-                        }
-                        
-                        // Load user progress
-                        loadUserProgress(user.uid);
-                    }
-                });
-        }
-
-        function uploadAvatar(file) {
-            const user = auth.currentUser;
-            if (!user) return;
-            
-            // Create a storage reference
-            const storageRef = storage.ref(`avatars/${user.uid}`);
-            
-            // Upload file
-            const uploadTask = storageRef.put(file);
-            
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Progress monitoring can be added here
-                }, 
-                (error) => {
-                    showToast('Có lỗi xảy ra khi tải lên ảnh', 'error');
-                }, 
-                () => {
-                    // Upload completed successfully
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        // Update user document in Firestore
-                        return db.collection('users').doc(user.uid).update({
-                            avatarUrl: downloadURL
-                        });
-                    }).then(() => {
-                        // Update UI
-                        profileAvatar.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Avatar">`;
-                        userAvatar.innerHTML = `<img src="${URL.createObjectURL(file)}" alt="Avatar">`;
-                        showToast('Cập nhật ảnh đại diện thành công', 'success');
-                    }).catch((error) => {
-                        showToast('Có lỗi xảy ra khi cập nhật ảnh', 'error');
-                    });
-                }
-            );
-        }
-
-        function loadUserProgress(userId) {
-            // This would load the user's game progress from Firestore
-            // For now, we'll just show a placeholder message
-            document.getElementById('total-games').textContent = '0';
-            document.getElementById('high-score').textContent = '0';
-            document.getElementById('average-score').textContent = '0';
-        }
-
-        function loadRankings() {
-            // This would load rankings from Firestore
-            // For now, we'll just show a placeholder message
-            document.getElementById('ranking-list').innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
-        }
-
-        function showToast(message, type) {
-            toast.textContent = message;
-            toast.className = 'toast ' + type;
-            toast.classList.add('show');
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Close modals when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === loginModal) loginModal.style.display = 'none';
-            if (e.target === profileModal) profileModal.style.display = 'none';
-            if (e.target === rankingModal) rankingModal.style.display = 'none';
-            if (e.target === challengeModal) challengeModal.style.display = 'none';
-        });
-
-        // Initialize page
-        document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is logged in
-            const user = auth.currentUser;
-            if (user) {
-                userInfo.style.display = 'flex';
-                guestInfo.style.display = 'none';
-                loadUserData(user);
-            } else {
-                userInfo.style.display = 'none';
-                guestInfo.style.display = 'flex';
-            }
-        });
-    </script>
+    <script src="auth-system.js"></script>
+    <script src="user-system.js"></script>
 </body>
 </html>

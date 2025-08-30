@@ -4,6 +4,7 @@ class AuthSystem {
         this.initFirebase();
         this.setupEventListeners();
         this.checkAuthState();
+        this.scoresPerPage = 10; // Số điểm mỗi trang
     }
 
     initFirebase() {
@@ -82,6 +83,9 @@ class AuthSystem {
         
         // Tải dữ liệu xếp hạng
         this.loadRankings('all');
+        
+        // Thiết lập sự kiện cho các tab xếp hạng
+        this.setupRankingTabs();
     }
 
     switchToLogin() {
@@ -188,7 +192,8 @@ class AuthSystem {
                 const currentUser = {
                     name: user.displayName || user.email,
                     email: user.email,
-                    uid: user.uid
+                    uid: user.uid,
+                    photoURL: user.photoURL || ''
                 };
                 localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
@@ -288,6 +293,8 @@ class AuthSystem {
     // Phương thức lấy dữ liệu xếp hạng
     async loadRankings(filter) {
         const rankingList = document.getElementById('ranking-list');
+        if (!rankingList) return;
+        
         rankingList.innerHTML = '<li class="ranking-loading">Đang tải dữ liệu xếp hạng...</li>';
         
         try {
@@ -324,6 +331,7 @@ class AuthSystem {
     // Hiển thị bảng xếp hạng
     displayRankings(rankings) {
         const rankingList = document.getElementById('ranking-list');
+        if (!rankingList) return;
         
         if (rankings.length === 0) {
             rankingList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu xếp hạng.</li>';
@@ -354,6 +362,11 @@ class AuthSystem {
         rankingList.innerHTML = html;
         
         // Thiết lập sự kiện cho bộ lọc xếp hạng
+        this.setupRankingFilters();
+    }
+
+    // Thiết lập bộ lọc xếp hạng
+    setupRankingFilters() {
         const rankingFilters = document.querySelectorAll('.ranking-filter');
         rankingFilters.forEach(filter => {
             filter.addEventListener('click', () => {
@@ -363,6 +376,184 @@ class AuthSystem {
                 this.loadRankings(filterValue);
             });
         });
+    }
+
+    // Thiết lập tab xếp hạng
+    setupRankingTabs() {
+        const rankingTabs = document.querySelectorAll('.ranking-tab');
+        const rankingTabContents = document.querySelectorAll('.ranking-tab-content');
+        
+        rankingTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabName = tab.dataset.tab;
+                
+                // Xử lý tab active
+                rankingTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Xử lý nội dung tab
+                rankingTabContents.forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                const activeContent = document.getElementById(`${tabName}-tab`);
+                if (activeContent) {
+                    activeContent.style.display = 'block';
+                    
+                    // Tải dữ liệu cho tab tương ứng
+                    if (tabName === 'highscores') {
+                        this.loadRankings('all');
+                    } else if (tabName === 'history') {
+                        this.loadHistoryScores();
+                    } else if (tabName === 'friends') {
+                        this.loadFriendsList();
+                    }
+                }
+            });
+        });
+    }
+
+    // Tải lịch sử điểm
+    async loadHistoryScores(page = 1) {
+        const historyList = document.getElementById('history-list');
+        if (!historyList) return;
+        
+        historyList.innerHTML = '<li class="ranking-loading">Đang tải lịch sử điểm...</li>';
+        
+        try {
+            let query = this.firestore.collection('scores');
+            
+            // Áp dụng bộ lọc game nếu có
+            const gameFilter = document.getElementById('history-game-filter').value;
+            if (gameFilter !== 'all') {
+                query = query.where('gameId', '==', gameFilter);
+            }
+            
+            // Lấy tổng số document để phân trang
+            const countQuery = await query.count().get();
+            const totalScores = countQuery.data().count;
+            const totalPages = Math.ceil(totalScores / this.scoresPerPage);
+            
+            // Lấy dữ liệu với phân trang
+            const snapshot = await query
+                .orderBy('timestamp', 'desc')
+                .limit(this.scoresPerPage)
+                .offset((page - 1) * this.scoresPerPage)
+                .get();
+            
+            const scores = [];
+            snapshot.forEach(doc => {
+                scores.push({ id: doc.id, ...doc.data() });
+            });
+            
+            // Hiển thị kết quả
+            this.displayHistoryScores(scores, page, totalPages);
+        } catch (error) {
+            console.error('Lỗi khi tải lịch sử điểm:', error);
+            historyList.innerHTML = '<li class="ranking-loading">Có lỗi xảy ra khi tải dữ liệu.</li>';
+        }
+    }
+
+    // Hiển thị lịch sử điểm
+    displayHistoryScores(scores, currentPage, totalPages) {
+        const historyList = document.getElementById('history-list');
+        const pagination = document.getElementById('history-pagination');
+        
+        if (scores.length === 0) {
+            historyList.innerHTML = '<li class="ranking-loading">Chưa có dữ liệu lịch sử điểm.</li>';
+            pagination.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        scores.forEach(score => {
+            const date = score.timestamp ? score.timestamp.toDate().toLocaleDateString('vi-VN') : 'Chưa xác định';
+            
+            html += `
+                <li class="ranking-item">
+                    <div class="ranking-user">
+                        <div class="ranking-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div class="ranking-name">${score.userName}</div>
+                            <div class="ranking-game" style="font-size: 0.8rem; color: #777;">${score.gameName}</div>
+                        </div>
+                    </div>
+                    <div class="ranking-score">${score.score} điểm</div>
+                    <div style="font-size: 0.8rem; color: #777; min-width: 100px; text-align: right;">${date}</div>
+                </li>
+            `;
+        });
+        
+        historyList.innerHTML = html;
+        
+        // Tạo phân trang
+        this.createPagination(pagination, currentPage, totalPages, 'history');
+    }
+
+    // Tạo phân trang
+    createPagination(element, currentPage, totalPages, type) {
+        if (totalPages <= 1) {
+            element.innerHTML = '';
+            return;
+        }
+        
+        let html = '';
+        
+        // Nút Previous
+        if (currentPage > 1) {
+            html += `<button class="pagination-btn" data-page="${currentPage - 1}" data-type="${type}">←</button>`;
+        }
+        
+        // Các trang
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage) {
+                html += `<button class="pagination-btn active" data-page="${i}" data-type="${type}">${i}</button>`;
+            } else if (
+                i === 1 || 
+                i === totalPages || 
+                (i >= currentPage - 1 && i <= currentPage + 1)
+            ) {
+                html += `<button class="pagination-btn" data-page="${i}" data-type="${type}">${i}</button>`;
+            } else if (
+                i === currentPage - 2 || 
+                i === currentPage + 2
+            ) {
+                html += `<span class="pagination-ellipsis">...</span>`;
+            }
+        }
+        
+        // Nút Next
+        if (currentPage < totalPages) {
+            html += `<button class="pagination-btn" data-page="${currentPage + 1}" data-type="${type}">→</button>`;
+        }
+        
+        element.innerHTML = html;
+        
+        // Thêm sự kiện cho các nút phân trang
+        element.querySelectorAll('.pagination-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const page = parseInt(btn.dataset.page);
+                const type = btn.dataset.type;
+                
+                if (type === 'history') {
+                    this.loadHistoryScores(page);
+                }
+            });
+        });
+    }
+
+    // Tải danh sách bạn bè (placeholder)
+    loadFriendsList() {
+        const friendsList = document.getElementById('friends-list');
+        if (!friendsList) return;
+        
+        friendsList.innerHTML = `
+            <p style="text-align: center; padding: 20px; color: #777;">
+                Tính năng bạn bè sẽ được phát triển trong phiên bản tiếp theo.
+            </p>
+        `;
     }
 }
 
@@ -398,6 +589,24 @@ document.addEventListener('DOMContentLoaded', function() {
     if (closeRankingModal) {
         closeRankingModal.addEventListener('click', () => {
             document.getElementById('ranking-modal').style.display = 'none';
+        });
+    }
+    
+    // Đóng modal challenge
+    const closeChallengeModal = document.getElementById('close-challenge-modal');
+    if (closeChallengeModal) {
+        closeChallengeModal.addEventListener('click', () => {
+            document.getElementById('challenge-modal').style.display = 'none';
+        });
+    }
+    
+    // Thiết lập bộ lọc lịch sử điểm
+    const historyGameFilter = document.getElementById('history-game-filter');
+    if (historyGameFilter) {
+        historyGameFilter.addEventListener('change', () => {
+            if (window.authSystem) {
+                window.authSystem.loadHistoryScores(1);
+            }
         });
     }
 });
